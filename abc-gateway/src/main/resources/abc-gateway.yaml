@@ -1,0 +1,12 @@
+server:
+  servlet:
+    context-path: /dev-api
+
+security:
+  ignore:
+    whites:
+      - /auth/login
+  captcha:
+    enabled: true
+    ### math/char
+    type: math

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="abc-api-system" />
+        <module name="abc-common-redis" />
+        <module name="abc-gateway" />
+        <module name="abc-system" />
+        <module name="abc-modules" />
+        <module name="abc-common-security" />
+        <module name="abc-common-datascope" />
+        <module name="abc-common-core" />
+        <module name="abc-auth" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>
