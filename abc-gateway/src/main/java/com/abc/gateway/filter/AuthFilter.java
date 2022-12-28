@@ -53,6 +53,7 @@ public class AuthFilter implements GlobalFilter, Ordered
             #   ignore:
             #     whites:
             #       - /auth/login
+            #       - /auth/logout
         *  */
         if (StringUtils.matches(url, ignoreWhite.getWhites()))
         {

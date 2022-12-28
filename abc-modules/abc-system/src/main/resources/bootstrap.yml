@@ -13,6 +13,7 @@ spring:
         file-extension: yaml
 
 
+
 mybatis-plus:
   # 指定 mapper.xml 的位置
   mapper-locations: classpath:mapper/**/*.xml
