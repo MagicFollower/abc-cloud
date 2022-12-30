@@ -24,3 +24,9 @@ mybatis-plus:
   configuration:
     #默认开启驼峰命名法，可以不用设置该属性
     map-underscore-to-camel-case: true
+
+# MyBatis分页插件配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  default-count: true
