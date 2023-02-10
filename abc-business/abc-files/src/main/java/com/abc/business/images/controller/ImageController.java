@@ -30,7 +30,7 @@ public class ImageController {
     }
 
     /**
-     * 根据表单属性解析出Multipart，可以使用@RequestPart、也可以使用@RequestParam
+     * 根据表单属性解析出Multipart，可以使用@RequestPart、也可以使用@RequestParam.
      *
      * @param fileArray 多文件
      */
