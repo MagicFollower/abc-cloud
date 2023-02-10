@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./qs.min.js"></script>
+</head>
+<body>
+<script type="application/javascript">
+    let qs = Qs;
+    let a = {name: "xiaoMing", age: 18, hobby: ["hobby-1", "hobby-2", "hobby-3"]};
+    /*
+        默认：
+        addQueryPrefix➡️默认false
+        arrayFormat➡️默认indices
+    */
+    console.log(qs.stringify(a));                            // name=xiaoMing&age=18&hobby%5B0%5D=hobby-1&hobby%5B1%5D=hobby-2&hobby%5B2%5D=hobby-3
+    console.log(qs.stringify(a, {addQueryPrefix: true}));    // ?name=xiaoMing&age=18&hobby%5B0%5D=hobby-1&hobby%5B1%5D=hobby-2&hobby%5B2%5D=hobby-3
+    console.log(qs.stringify(a, {arrayFormat: "indices"}));  // name=xiaoMing&age=18&hobby%5B0%5D=hobby-1&hobby%5B1%5D=hobby-2&hobby%5B2%5D=hobby-3
+    console.log(qs.stringify(a, {arrayFormat: "repeat"}));   // name=xiaoMing&age=18&hobby=hobby-1&hobby=hobby-2&hobby=hobby-3
+    console.log(qs.stringify(a, {arrayFormat: "comma"}));    // name=xiaoMing&age=18&hobby=hobby-1%2Chobby-2%2Chobby-3
+
+    /*
+        默认：
+            1. addQueryPrefix ➡️默认false
+            2. 可以正常解析三种类型的数组
+
+     */
+    console.log(qs.parse("name=xiaoMing&age=18&hobby%5B0%5D=hobby-1&hobby%5B1%5D=hobby-2&hobby%5B2%5D=hobby-3"));
+    console.log(qs.parse("name=xiaoMing&age=18&hobby=hobby-1&hobby=hobby-2&hobby=hobby-3"));
+    console.log(qs.parse("?name=xiaoMing&age=18&hobby=hobby-1&hobby=hobby-2&hobby=hobby-3"));
+    console.log(qs.parse("?name=xiaoMing&age=18&hobby=hobby-1%2Chobby-2%2Chobby-3", {ignoreQueryPrefix: true}));
+</script>
+
+</body>
+</html>

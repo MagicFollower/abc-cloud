@@ -56,10 +56,23 @@ public class ImageController {
             }
         }
     }
-    
-    
+
+    /**
+     * qs.stringify(a, {arrayFormat: "repeat"})  ->  默认indices
+     * qs.stringify(a, {addQueryPrefix: true})   ->  默认false
+     *
+     * qs.parse("name=xiaoMing&age=18&hobby=hobby-1&hobby=hobby-2&hobby=hobby-3")
+     * qs.parse("?name=xiaoMing&age=18&hobby=hobby-1%2Chobby-2%2Chobby-3", {ignoreQueryPrefix: true})
+     *
+     * @param ids
+     */
     @PostMapping("/test")
-    public void test(@RequestBody UpdateDTO updateDTO, @RequestAttribute("uid") String userId){
+    public void test(String[] ids){
+        System.out.println("ids = " + ids);
+    }
+    
+    @PostMapping("/test2")
+    public void test2(@RequestBody UpdateDTO updateDTO, @RequestAttribute("uid") String userId){
         System.out.println("updateDTO = " + updateDTO);
     }
 
