@@ -1,11 +1,18 @@
 package com.abc.business.images.controller;
 
 import com.abc.business.images.domain.dto.ImageUploadDTO;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -48,5 +55,21 @@ public class ImageController {
                 throw new RuntimeException(e);
             }
         }
+    }
+    
+    
+    @PostMapping("/test")
+    public void test(@RequestBody UpdateDTO updateDTO, @RequestAttribute("uid") String userId){
+        System.out.println("updateDTO = " + updateDTO);
+    }
+
+
+    @Getter
+    @Setter
+    @Accessors(chain = true)
+    @NoArgsConstructor
+    @AllArgsConstructor
+    static class UpdateDTO {
+        List<String> ids;
     }
 }
