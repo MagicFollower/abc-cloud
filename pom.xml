@@ -15,6 +15,8 @@
         <module>abc-gateway</module>
         <module>abc-modules</module>
         <module>abc-modules/abc-system</module>
+        <module>abc-business</module>
+        <module>abc-business/abc-files</module>
     </modules>
 
     <properties>
