@@ -18,5 +18,9 @@
         <module name="abc-auth" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="abc-business" target="11" />
+      <module name="abc-files" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
