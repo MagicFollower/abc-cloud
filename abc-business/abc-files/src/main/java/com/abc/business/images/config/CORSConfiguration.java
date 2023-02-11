@@ -11,6 +11,7 @@ public class CORSConfiguration {
 
     /**
      * 注意：跨域会导致页面获取不到response-headers！
+     *
      * @return WebMvcConfigurer
      */
     @Bean

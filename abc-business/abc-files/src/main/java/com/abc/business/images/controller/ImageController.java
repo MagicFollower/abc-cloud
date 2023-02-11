@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
@@ -69,11 +70,14 @@ public class ImageController {
     @GetMapping("/download_s1")
     public void singleDownload1(HttpServletResponse response) {
         // final String filename = "abc.png";
-        final String filename = "Java面试必知必会.pdf";
+        // final String filename = "Java面试必知必会.pdf";
+        final String filename = "abc.xlsx";
         ClassPathResource classPathResource = new ClassPathResource(filename);
         try (InputStream is = classPathResource.getInputStream(); OutputStream os = response.getOutputStream()) {
-            // response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, StandardCharsets.UTF_8));
-            // response.addHeader("Content-Length", "" + is.available());
+            // 需要主动暴露Content-Disposition，否则Axios获取不到响应头的这个header属性
+            response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, StandardCharsets.UTF_8));
+            response.addHeader("Content-Length", "" + is.available());
 
             is.transferTo(response.getOutputStream());
             //final int BUFFER_SIZE = 10 * 1024 * 1024;
