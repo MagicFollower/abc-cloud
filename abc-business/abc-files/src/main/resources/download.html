@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件预览与下载</title>
+    <script src="./axios.min.js"></script>
+    <script>
+        function downloadFile() {
+            let axios1 = axios.create({
+                baseURL: 'http://127.0.0.1:9091',
+                timeout: 30000,
+                // 默认是json类型数据
+                headers: {
+                    // 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+                    'Content-Type': 'application/json; charset=utf-8'
+                }
+            });
+            // 从后台获取数据
+            axios1.get('/images/download_s', {
+                responseType: 'blob'
+            }).then(res => {
+                const url = window.URL.createObjectURL(new Blob([res.data]))
+                const link = document.createElement('a')
+                link.href = url
+                link.setAttribute('download', '003_阿甘正传.flv') // 下载文件的名称及文件类型后缀
+                document.body.appendChild(link)
+                link.click()
+                document.body.removeChild(link) // 下载完成移除元素
+                window.URL.revokeObjectURL(url) // 释放掉blob对象
+            });
+        }
+    </script>
+</head>
+<body>
+
+<button onclick="downloadFile()">下载文件</button>
+</body>
+</html>

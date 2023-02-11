@@ -6,12 +6,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.Arrays;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 
@@ -57,25 +62,46 @@ public class ImageController {
         }
     }
 
+    @GetMapping("/download_s1")
+    public void singleDownload(HttpServletResponse response) {
+        final String filename = "abc.png";
+        ClassPathResource classPathResource = new ClassPathResource(filename);
+        try (InputStream is = classPathResource.getInputStream(); OutputStream os = response.getOutputStream()) {
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, StandardCharsets.UTF_8));
+            response.addHeader("Content-Length", "" + is.available());
+
+            is.transferTo(response.getOutputStream());
+            //final int BUFFER_SIZE = 10 * 1024 * 1024;
+            //byte[] buf = new byte[BUFFER_SIZE];
+            //int read;
+            //while ((read = is.read(buf, 0, BUFFER_SIZE)) >= 0) {
+            //    os.write(buf, 0, read);
+            //}
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
     /**
      * qs.stringify(a, {arrayFormat: "repeat"})  ->  默认indices
      * qs.stringify(a, {addQueryPrefix: true})   ->  默认false
-     *
+     * <p>
      * qs.parse("name=xiaoMing&age=18&hobby=hobby-1&hobby=hobby-2&hobby=hobby-3")
      * qs.parse("?name=xiaoMing&age=18&hobby=hobby-1%2Chobby-2%2Chobby-3", {ignoreQueryPrefix: true})
      *
      * @param ids
      */
     @PostMapping("/test")
-    public void test(String[] ids){
+    public void test(String[] ids) {
         System.out.println("ids = " + ids);
     }
-    
+
     @PostMapping("/test2")
-    public void test2(@RequestBody UpdateDTO updateDTO, @RequestAttribute("uid") String userId){
+    public void test2(@RequestBody UpdateDTO updateDTO, @RequestAttribute("uid") String userId) {
         System.out.println("updateDTO = " + updateDTO);
     }
-
 
     @Getter
     @Setter
@@ -84,5 +110,9 @@ public class ImageController {
     @AllArgsConstructor
     static class UpdateDTO {
         List<String> ids;
+    }
+
+    private static String getContentType(String fileName) {
+        return MediaTypeFactory.getMediaType(fileName).orElse(MediaType.TEXT_PLAIN).getType();
     }
 }
