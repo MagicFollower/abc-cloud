@@ -9,11 +9,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CORSConfiguration {
 
-    /**
-     * 注意：跨域会导致页面获取不到response-headers！
-     *
-     * @return WebMvcConfigurer
-     */
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
