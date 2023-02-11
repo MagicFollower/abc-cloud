@@ -16,7 +16,7 @@
                 }
             });
             // 从后台获取数据
-            axios1.get('/images/download_s', {
+            axios1.get('/images/download_s1', {
                 responseType: 'blob'
             }).then(res => {
                 const url = window.URL.createObjectURL(new Blob([res.data], {type: "image/png"}))

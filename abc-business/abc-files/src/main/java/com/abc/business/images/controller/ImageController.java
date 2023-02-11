@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
@@ -62,13 +61,19 @@ public class ImageController {
         }
     }
 
+    /**
+     * 使用Content-Disposition进行图片下载
+     *
+     * @param response HttpServletResponse
+     */
     @GetMapping("/download_s1")
-    public void singleDownload(HttpServletResponse response) {
-        final String filename = "abc.png";
+    public void singleDownload1(HttpServletResponse response) {
+        // final String filename = "abc.png";
+        final String filename = "Java面试必知必会.pdf";
         ClassPathResource classPathResource = new ClassPathResource(filename);
         try (InputStream is = classPathResource.getInputStream(); OutputStream os = response.getOutputStream()) {
-            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, StandardCharsets.UTF_8));
-            response.addHeader("Content-Length", "" + is.available());
+            // response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, StandardCharsets.UTF_8));
+            // response.addHeader("Content-Length", "" + is.available());
 
             is.transferTo(response.getOutputStream());
             //final int BUFFER_SIZE = 10 * 1024 * 1024;
@@ -82,7 +87,28 @@ public class ImageController {
         }
     }
 
+    /**
+     * 使用自定义header的方式，实现图片下载（推荐）
+     * 1. 文件长度推荐从File中获取length():long, InputStream中的available()返回的数据为int型，大小阈值2G.
+     *
+     * @param response HttpServletResponse
+     */
+    @GetMapping("/download_s2")
+    public void singleDownload2(HttpServletResponse response) {
+        final String filename = "abc.png";
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        response.setHeader("Access-Control-Expose-Headers", "File-Name,File-Type");
+        response.addHeader("File-Name", "" + filename);
+        response.addHeader("File-Type", "" + getContentType(filename));
 
+        ClassPathResource classPathResource = new ClassPathResource(filename);
+        try (InputStream is = classPathResource.getInputStream()) {
+            response.addHeader("Content-Length", "" + classPathResource.getFile().length());
+            is.transferTo(response.getOutputStream());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * qs.stringify(a, {arrayFormat: "repeat"})  ->  默认indices
