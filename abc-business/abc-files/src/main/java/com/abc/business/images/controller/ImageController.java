@@ -1,12 +1,15 @@
 package com.abc.business.images.controller;
 
 import com.abc.business.images.domain.dto.ImageUploadDTO;
+import com.abc.business.utils.ZipUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.util.Base64Utils;
@@ -17,12 +20,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 /**
  * @author trivis
  */
+@Slf4j
 @RestController
 @RequestMapping("/images")
 public class ImageController {
@@ -30,8 +36,7 @@ public class ImageController {
     @PostMapping("/upload_s")
     public void singleImageImport(@RequestBody ImageUploadDTO imageUploadInfo) {
 
-        try (BufferedOutputStream bo = new BufferedOutputStream(new FileOutputStream("backup-" + imageUploadInfo
-                .getFilename()))) {
+        try (BufferedOutputStream bo = new BufferedOutputStream(new FileOutputStream("backup-" + imageUploadInfo.getFilename()))) {
             bo.write(Base64Utils.decodeFromString(imageUploadInfo.getImage()));
             bo.flush();
         } catch (IOException e) {
@@ -51,14 +56,90 @@ public class ImageController {
 
         for (MultipartFile multipartFile : fileArray) {
             String filename = Objects.requireNonNull(multipartFile.getOriginalFilename());
-            try (
-                    OutputStream os = new FileOutputStream(filename);
-                    InputStream is = multipartFile.getInputStream();
-            ) {
+            try (OutputStream os = new FileOutputStream(filename); InputStream is = multipartFile.getInputStream()) {
                 is.transferTo(os);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    /**
+     * 批量导出图片到zip（指定大小）
+     *
+     * @param response HttpServletResponse
+     */
+    @GetMapping("/download_zip")
+    public void zipDownload(HttpServletResponse response) {
+        final String zipFilename = "files.zip";
+        int zipLength = 0;
+        List<String> filenames = new ArrayList<>();
+        List<File> fileList = new ArrayList<>();
+        filenames.add("abc.png");
+        filenames.add("Java面试必知必会.pdf");
+        filenames.add("abc.xlsx");
+        filenames.add("abc.xlsx");
+        for (String filename : filenames) {
+            try {
+                File file = new ClassPathResource(filename).getFile();
+                fileList.add(file);
+                zipLength += file.length();
+            } catch (IOException e) {
+                // todo log
+                throw new RuntimeException(e);
+            }
+        }
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Content-Disposition");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" +
+                URLEncoder.encode(zipFilename, StandardCharsets.UTF_8));
+        response.setHeader(HttpHeaders.CONTENT_LENGTH, "" + zipLength * 2);
+
+        String password = "123456";
+        try {
+            ZipUtils.init(password).to(response.getOutputStream(), fileList);
+        } catch (Exception e) {
+            log.error("文件下载异常", e);
+        }
+    }
+
+    /**
+     * 批量导出图片到zip（不指定大小）
+     *
+     * @param response HttpServletResponse
+     */
+    @GetMapping("/download_zip1")
+    public void zipDownload1(HttpServletResponse response) {
+        final String zipFilename = "files.zip";
+        List<String> filenames = new ArrayList<>();
+        List<File> fileList = new ArrayList<>();
+        filenames.add("abc.png");
+        filenames.add("Java面试必知必会.pdf");
+        filenames.add("abc.xlsx");
+        filenames.add("abc.xlsx");
+        filenames.add("abc.xlsx");
+        for (String filename : filenames) {
+            try {
+                File file = new ClassPathResource(filename).getFile();
+                fileList.add(file);
+            } catch (IOException e) {
+                // todo log
+                throw new RuntimeException(e);
+            }
+        }
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Content-Disposition");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" +
+                URLEncoder.encode(zipFilename, StandardCharsets.UTF_8));
+
+        String password = "123456";
+        try {
+            // ZipUtils.init().to(response.getOutputStream(), fileList);
+            ZipUtils.init(password).to(response.getOutputStream(), fileList);
+        } catch (Exception e) {
+            log.error("文件下载异常", e);
+            // 重置reset，使得return返回数据生效（忽略response中下载相关配置）
+            // 正常不会这么做，必须确保下载正常，下载接口不提供返回值。如果异常，需要手动排查。
+            // response.reset();
+            // return "error";
         }
     }
 
@@ -73,7 +154,7 @@ public class ImageController {
         // final String filename = "Java面试必知必会.pdf";
         final String filename = "abc.xlsx";
         ClassPathResource classPathResource = new ClassPathResource(filename);
-        try (InputStream is = classPathResource.getInputStream(); OutputStream os = response.getOutputStream()) {
+        try (InputStream is = classPathResource.getInputStream()) {
             // 需要主动暴露Content-Disposition，否则Axios获取不到响应头的这个header属性
             response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
             response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, StandardCharsets.UTF_8));
@@ -122,16 +203,17 @@ public class ImageController {
      * qs.parse("name=xiaoMing&age=18&hobby=hobby-1&hobby=hobby-2&hobby=hobby-3")
      * qs.parse("?name=xiaoMing&age=18&hobby=hobby-1%2Chobby-2%2Chobby-3", {ignoreQueryPrefix: true})
      *
-     * @param ids
+     * @param ids ids
      */
     @PostMapping("/test")
     public void test(String[] ids) {
-        System.out.println("ids = " + ids);
+        System.out.println("ids = " + Arrays.toString(ids));
     }
 
     @PostMapping("/test2")
     public void test2(@RequestBody UpdateDTO updateDTO, @RequestAttribute("uid") String userId) {
         System.out.println("updateDTO = " + updateDTO);
+        System.out.println(userId);
     }
 
     @Getter
