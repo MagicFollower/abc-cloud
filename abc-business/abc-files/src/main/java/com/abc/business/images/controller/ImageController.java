@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.io.inputstream.ZipInputStream;
+import net.lingala.zip4j.model.LocalFileHeader;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -20,10 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author trivis
@@ -44,6 +44,69 @@ public class ImageController {
             throw new RuntimeException(e);
         }
 
+    }
+
+    /**
+     * 解析ZIP
+     * 1. 提取所有文件到指定目录
+     *
+     * @param zipFile zip格式压缩文件
+     */
+    @PostMapping("/upload_zip")
+    public String imageZipImport(@RequestPart("file") MultipartFile zipFile) {
+        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+        try(FileOutputStream fos = new FileOutputStream("." + uuid)) {
+            zipFile.getInputStream().transferTo(fos);
+        }catch (IOException e) {
+            log.error(e.getMessage());
+            return "false";
+        }
+
+        final String p = "123456";
+        try(ZipFile zipFile1 = new ZipFile("." + uuid, p.toCharArray())){
+            // /destination_directory -> C盘
+            // destination_directory  -> 当前目录
+            zipFile1.extractAll("destination_directory");
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            return "false";
+        } finally {
+            boolean ignored = new File("." + uuid).delete();
+        }
+
+        return "ok";
+    }
+
+    /**
+     * 解析ZIP（压缩包内不包含目录）
+     * 1. 获取ZIP文件输入流，包装为ZipInputStream
+     * 2. 读取至OutputStream
+     *
+     * @param zipFile zip格式压缩文件
+     */
+    @PostMapping("/upload_zip1")
+    public String imageZipImport1(@RequestPart("file") MultipartFile zipFile) {
+        String dirName = zipFile.getOriginalFilename();
+        dirName = dirName == null ? "_files" : dirName.substring(0, dirName.indexOf("."));
+        File dirFile = new File(dirName);
+        boolean ignored = dirFile.mkdir();
+
+        final String password = "123456";
+        LocalFileHeader localFileHeader;
+        try (InputStream inputStream = zipFile.getInputStream();
+             ZipInputStream zipInputStream = new ZipInputStream(inputStream, password.toCharArray())) {
+            while ((localFileHeader = zipInputStream.getNextEntry()) != null) {
+                File extractedFile = new File(dirFile, localFileHeader.getFileName());
+                try (OutputStream outputStream = new FileOutputStream(extractedFile)) {
+                    zipInputStream.transferTo(outputStream);
+                }
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            return "error";
+        }
+
+        return "ok";
     }
 
     /**
@@ -72,7 +135,6 @@ public class ImageController {
     @GetMapping("/download_zip")
     public void zipDownload(HttpServletResponse response) {
         final String zipFilename = "files.zip";
-        int zipLength = 0;
         List<String> filenames = new ArrayList<>();
         List<File> fileList = new ArrayList<>();
         filenames.add("abc.png");
@@ -83,7 +145,6 @@ public class ImageController {
             try {
                 File file = new ClassPathResource(filename).getFile();
                 fileList.add(file);
-                zipLength += file.length();
             } catch (IOException e) {
                 // todo log
                 throw new RuntimeException(e);
@@ -92,7 +153,6 @@ public class ImageController {
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Content-Disposition");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" +
                 URLEncoder.encode(zipFilename, StandardCharsets.UTF_8));
-        response.setHeader(HttpHeaders.CONTENT_LENGTH, "" + zipLength * 2);
 
         String password = "123456";
         try {
