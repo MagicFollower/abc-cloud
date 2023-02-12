@@ -128,41 +128,6 @@ public class ImageController {
     }
 
     /**
-     * 批量导出图片到zip（指定大小）
-     *
-     * @param response HttpServletResponse
-     */
-    @GetMapping("/download_zip")
-    public void zipDownload(HttpServletResponse response) {
-        final String zipFilename = "files.zip";
-        List<String> filenames = new ArrayList<>();
-        List<File> fileList = new ArrayList<>();
-        filenames.add("abc.png");
-        filenames.add("Java面试必知必会.pdf");
-        filenames.add("abc.xlsx");
-        filenames.add("abc.xlsx");
-        for (String filename : filenames) {
-            try {
-                File file = new ClassPathResource(filename).getFile();
-                fileList.add(file);
-            } catch (IOException e) {
-                // todo log
-                throw new RuntimeException(e);
-            }
-        }
-        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Content-Disposition");
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" +
-                URLEncoder.encode(zipFilename, StandardCharsets.UTF_8));
-
-        String password = "123456";
-        try {
-            ZipUtils.init(password).to(response.getOutputStream(), fileList);
-        } catch (Exception e) {
-            log.error("文件下载异常", e);
-        }
-    }
-
-    /**
      * 批量导出图片到zip（不指定大小）
      *
      * @param response HttpServletResponse
