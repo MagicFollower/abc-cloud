@@ -78,6 +78,7 @@ public class ImageController {
             response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
             response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, StandardCharsets.UTF_8));
             response.addHeader("Content-Length", "" + is.available());
+            response.addHeader("Content-Type", MediaType.TEXT_XML_VALUE);
 
             is.transferTo(response.getOutputStream());
             //final int BUFFER_SIZE = 10 * 1024 * 1024;
