@@ -35,6 +35,8 @@
         <pagehelper.boot.version>1.4.6</pagehelper.boot.version>
         <dynamic-ds.version>3.5.2</dynamic-ds.version>
         <swagger.fox.version>3.0.0</swagger.fox.version>
+
+        <easyexcel.version>3.2.1</easyexcel.version>
     </properties>
 
     <dependencyManagement>
@@ -94,11 +96,12 @@
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper.boot.version}</version>
             </dependency>
-            <!-- excel工具 -->
+
+            <!-- easyexcel -->
             <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi-ooxml</artifactId>
-                <version>${poi.version}</version>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>${easyexcel.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -114,6 +117,17 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.24</version>
+        </dependency>
+        <!-- mapstruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.5.3.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>1.5.3.Final</version>
         </dependency>
     </dependencies>
 

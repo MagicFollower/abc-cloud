@@ -1,4 +1,4 @@
-package com.abc.business.images;
+package com.abc.business;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
