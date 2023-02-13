@@ -47,6 +47,26 @@ public class ImageController {
     }
 
     /**
+     * 将上传的文件封装为zip，存储在本地
+     * 1. MultipartFile可以获取输入文件流，如何将流写入zip输出流
+     *
+     * @param zipFiles MultipartFile Array
+     * @return "ok"/"error"
+     */
+    @PostMapping("/upload")
+    public String imageImportZip(@RequestPart("files") MultipartFile[] zipFiles) {
+        File file = new File("default.zip");
+        try {
+            ZipUtils.init().to(file, zipFiles);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            return "error";
+        }
+
+        return "ok";
+    }
+
+    /**
      * 解析ZIP
      * 1. 提取所有文件到指定目录
      *
@@ -114,7 +134,7 @@ public class ImageController {
      *
      * @param fileArray 多文件
      */
-    @PostMapping("/upload")
+    @PostMapping("/upload1")
     public void multiImageImport(@RequestPart("files") MultipartFile[] fileArray) {
 
         for (MultipartFile multipartFile : fileArray) {

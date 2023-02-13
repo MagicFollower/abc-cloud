@@ -66,7 +66,7 @@ public class ExcelController {
     @GetMapping("/download")
     public void excelDownload(HttpServletResponse response) {
         final String filename = "default.xlsx";
-        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Content-Disposition");
+        // response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Content-Disposition");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" +
                 URLEncoder.encode(filename, StandardCharsets.UTF_8));
 

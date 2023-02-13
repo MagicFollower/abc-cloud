@@ -5,6 +5,7 @@ import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.model.enums.AesKeyStrength;
 import net.lingala.zip4j.model.enums.CompressionMethod;
 import net.lingala.zip4j.model.enums.EncryptionMethod;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.List;
@@ -75,13 +76,39 @@ public class ZipUtils {
             }
         }
     }
+    public void to(OutputStream outputStream, MultipartFile[] files) throws IOException {
+        try (ZipOutputStream zos = initializeZipOutputStream(outputStream, zipParameters.isEncryptFiles(), password)) {
+            for (MultipartFile file : files) {
 
+                // Entry size has to be set if you want to add entries of STORE compression method (no compression)
+                // This is not required for deflate compression
+                if (zipParameters.getCompressionMethod() == CompressionMethod.STORE) {
+                    zipParameters.setEntrySize(file.getSize());
+                }
+
+                zipParameters.setFileNameInZip(file.getOriginalFilename());
+                zos.putNextEntry(zipParameters);
+
+                try (InputStream inputStream = file.getInputStream()) {
+                    inputStream.transferTo(zos);
+                }
+                zos.closeEntry();
+            }
+        }
+    }
     public long to(File outputZipFile, List<File> fileList) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(outputZipFile)) {
             to(fos, fileList);
         }
         return outputZipFile.length();
     }
+    public long to(File outputZipFile, MultipartFile[] files) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(outputZipFile)) {
+            to(fos, files);
+        }
+        return outputZipFile.length();
+    }
+
 
     /**
      * 使用OutputStream初始化ZipOutputStream
