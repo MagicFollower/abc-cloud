@@ -16,9 +16,14 @@
                 }
             });
             // 从后台获取数据
-            axios1.get('/images/download_s1', {
-                responseType: 'blob'
-            }).then(res => {
+            axios1.get('/images/download_from_zip',
+                {
+                    params: {
+                        filename: "x-pack-sql-jdbc-8.6.1..jar",
+                    },
+                    responseType: 'blob'
+                }
+            ).then(res => {
                 const filename = res.headers['content-disposition'].split("filename=")[1];
                 const url = window.URL.createObjectURL(new Blob([res.data]))
                 const link = document.createElement('a')
@@ -27,6 +32,8 @@
                 document.body.appendChild(link)
                 link.click()
                 window.URL.revokeObjectURL(url) // 释放掉blob对象
+            }).catch(e=>{
+                console.log(e)
             });
         }
     </script>

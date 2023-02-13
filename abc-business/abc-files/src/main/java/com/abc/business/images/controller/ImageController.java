@@ -1,11 +1,12 @@
 package com.abc.business.images.controller;
 
 import com.abc.business.images.domain.dto.ImageUploadDTO;
+import com.abc.business.images.domain.entity.zip.ZipInfo;
+import com.abc.business.images.service.ZipService;
 import com.abc.business.utils.ZipUtils;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
+import lombok.*;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import net.lingala.zip4j.ZipFile;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;
 import org.springframework.util.Base64Utils;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,8 +32,11 @@ import java.util.*;
  */
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/images")
 public class ImageController {
+
+    private final ZipService zipInfoService;
 
     @PostMapping("/upload_s")
     public void singleImageImport(@RequestBody ImageUploadDTO imageUploadInfo) {
@@ -47,23 +52,99 @@ public class ImageController {
     }
 
     /**
-     * 将上传的文件封装为zip，存储在本地
-     * 1. MultipartFile可以获取输入文件流，如何将流写入zip输出流
+     * 1. 将上传的文件封装为zip，存储在本地
+     * 2. 将数据源元信息写入MySQL
      *
      * @param zipFiles MultipartFile Array
      * @return "ok"/"error"
      */
     @PostMapping("/upload")
     public String imageImportZip(@RequestPart("files") MultipartFile[] zipFiles) {
-        File file = new File("default.zip");
-        try {
-            ZipUtils.init().to(file, zipFiles);
-        } catch (IOException e) {
-            log.error(e.getMessage());
+        final String compressType = "zip";
+        long size = 0;
+        String md5Digest = "";
+        StringBuilder md5DigestTemp = new StringBuilder();
+        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+        String name = "." + uuid;
+        // 获取文件MD5
+        List<Map<String, Object>> filesInfo = new ArrayList<>();
+        for (MultipartFile zipFile : zipFiles) {
+            try (InputStream is = zipFile.getInputStream()) {
+                long si = zipFile.getSize();
+                String md5i = DigestUtils.md5DigestAsHex(is);
+                size += si;
+                md5DigestTemp.append(md5i);
+                Map<String, Object> t = new HashMap<>();
+                t.put("name", zipFile.getOriginalFilename());
+                t.put("size", si);
+                t.put("md5", md5i);
+                filesInfo.add(t);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        md5Digest = DigestUtils.md5DigestAsHex(md5DigestTemp.toString().getBytes(StandardCharsets.UTF_8));
+
+        // name、size、md5Digest、compressType、filesInfo
+        System.out.println(name);
+        System.out.println(size);
+        System.out.println(md5Digest);
+        System.out.println(compressType);
+        System.out.println(JSONObject.toJSONString(filesInfo, JSONWriter.Feature.PrettyFormat));
+
+        ZipInfo zipInfo = new ZipInfo(uuid, name, size, md5Digest, compressType, JSONObject.toJSONString(filesInfo));
+        if (zipInfoService.save(zipInfo)) {
+            File file = new File(name);
+            try {
+                ZipUtils.init().to(file, zipFiles);
+            } catch (IOException e) {
+                log.error(e.getMessage());
+                return "error";
+            }
+        } else {
+            log.error("insert data error!");
             return "error";
         }
 
         return "ok";
+    }
+
+    /**
+     * 关于下载文件时的异常？
+     * 1. 直接throw异常即可，前端即可获取500
+     * 2. 如果触发下载，则正常返回200
+     *
+     * @param filename 文件名
+     * @param response HttpServletResponse
+     */
+    @GetMapping("/download_from_zip")
+    public void downloadSingleFileFromZip(String filename, HttpServletResponse response) {
+        // 检测文件是否存在
+        ZipInfo zipInfo = zipInfoService.locateBy(filename);
+        if (zipInfo == null) {
+            log.error("文件不存在：" + filename);
+            throw new RuntimeException("文件不存在：" + filename);
+        }
+
+        try (ZipFile zipFile1 = new ZipFile(zipInfo.getName())) {
+            zipFile1.extractFile(filename, ".tmp");
+        } catch (IOException e) {
+            log.error("ZIP文件不存在：" + zipInfo.getName());
+            throw new RuntimeException(e);
+        }
+
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Content-Disposition");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" +
+                URLEncoder.encode(filename, StandardCharsets.UTF_8));
+        File tf = new File(".tmp", filename);
+        try (FileInputStream fis = new FileInputStream(tf)) {
+            fis.transferTo(response.getOutputStream());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e);
+        } finally {
+            boolean ignored = tf.delete();
+        }
     }
 
     /**
@@ -75,15 +156,15 @@ public class ImageController {
     @PostMapping("/upload_zip")
     public String imageZipImport(@RequestPart("file") MultipartFile zipFile) {
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-        try(FileOutputStream fos = new FileOutputStream("." + uuid)) {
+        try (FileOutputStream fos = new FileOutputStream("." + uuid)) {
             zipFile.getInputStream().transferTo(fos);
-        }catch (IOException e) {
+        } catch (IOException e) {
             log.error(e.getMessage());
             return "false";
         }
 
         final String p = "123456";
-        try(ZipFile zipFile1 = new ZipFile("." + uuid, p.toCharArray())){
+        try (ZipFile zipFile1 = new ZipFile("." + uuid, p.toCharArray())) {
             // /destination_directory -> C盘
             // destination_directory  -> 当前目录
             zipFile1.extractAll("destination_directory");
