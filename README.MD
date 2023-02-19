@@ -63,6 +63,8 @@ spring:
 
 ![02_分页实际操作.png](https://github.com/MagicFollower/abc-cloud/blob/main/doc/images/02_%E5%88%86%E9%A1%B5%E5%AE%9E%E9%99%85%E6%93%8D%E4%BD%9C.png?raw=true)
 
+![03_表格分页数据对象TableDataInfo.png](https://github.com/MagicFollower/abc-cloud/blob/main/doc/images/03_%E8%A1%A8%E6%A0%BC%E5%88%86%E9%A1%B5%E6%95%B0%E6%8D%AE%E5%AF%B9%E8%B1%A1.png?raw=true)
+
 
 
 
