@@ -19,15 +19,12 @@ import java.util.List;
  * 3.依赖com.abc.common.core.constant.Constants<br>
  */
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
-    public static final String SPACE = " ";
     public static final String EMPTY = "";
+    public static final String SPACE = " ";
     public static final String CR = "\r";
     public static final String LF = "\n";
     public static final String CRLF = "\r\n";
 
-    /**
-     * 下划线
-     */
     private static final char SEPARATOR = '_';
 
     /**
@@ -39,22 +36,22 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * @return 结果
      */
     public static boolean isHttp(String link) {
-        return startsWithIgnoreCase(link, Constants.HTTP) || startsWithIgnoreCase(link, Constants.HTTPS);
+        return containsAny(link, Constants.HTTP, Constants.HTTPS);
     }
 
     /**
-     * 是否包含字符串<br>
+     * 判断给定的集合collection中是否包含数组array （存在）<br>
      * 示例：<br>
-     * 1. StringUtils.inStringIgnoreCase(uri, ".json", ".xml")<br>
+     * 1. StringUtils.containsAny(role.getPermissions(), Convert.toStrArray(permission))<br>
      *
-     * @param str      验证字符串
-     * @param strArray 字符串组
-     * @return 包含返回true
+     * @param collection 给定的集合
+     * @param array      给定的数组
+     * @return boolean 结果
      */
-    public static boolean inStringIgnoreCase(String str, String... strArray) {
-        if (isNotBlank(str) && !isEmpty(strArray)) {
-            for (String s : strArray) {
-                if (str.equalsIgnoreCase(trim(s))) {
+    public static boolean containsAny(Collection<String> collection, String... array) {
+        if (!isEmpty(collection) && !isEmpty(array)) {
+            for (String str : array) {
+                if (collection.contains(str)) {
                     return true;
                 }
             }
@@ -82,53 +79,9 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return StrFormatter.format(template, params);
     }
 
-    /* ####################################################################################### */
-    /* ### 字符串模式匹配                                                                        */
-    /* ### 查找指定字符串是否匹配指定字符串列表中的任意一个字符串                                        */
-    /* ### API名称兼容PatternMatchUtils#simpleMatch(S,S)、PatternMatchUtils#simpleMatch(S[],S)   */
-    /* ####################################################################################### */
-
-    public static boolean simpleMatch(List<String> strList, String str) {
-        if (isEmpty(str) || isEmpty(strList)) {
-            return false;
-        }
-        for (String pattern : strList) {
-            if (simpleMatch(pattern, str)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean simpleMatch(String[] strArray, String str) {
-        if (isEmpty(str) || isEmpty(strArray)) {
-            return false;
-        }
-        for (String pattern : strArray) {
-            if (simpleMatch(pattern, str)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 判断url是否与规则配置:<br>
-     * ? 表示单个字符;<br>
-     * * 表示一层路径内的任意字符串，不可跨层级;<br>
-     * ** 表示任意层路径;<br>
-     *
-     * @param pattern 匹配规则
-     * @param url     需要匹配的url
-     * @return 是否匹配
-     */
-    public static boolean simpleMatch(String pattern, String url) {
-        AntPathMatcher matcher = new AntPathMatcher();
-        return matcher.match(pattern, url);
-    }
-
     /* ################################################################################ */
     /* ### 去空格(统一使用trim、trimLeading、trimTrailing)                                 */
+    /* ### commons-lang3中的strip、stripStart、stripEnd对于null返回的是null                */
     /* ### 1.9开始新增了3个strip相关方法, 这里使用commons-lang3中StringUtils#strip*替代       */
     /* ################################################################################ */
 
@@ -219,8 +172,53 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return sb.toString();
     }
 
+    /* ####################################################################################### */
+    /* ### 字符串模式匹配                                                                        */
+    /* ### 查找指定字符串是否匹配指定字符串列表中的任意一个字符串                                        */
+    /* ### API名称兼容PatternMatchUtils#simpleMatch(S,S)、PatternMatchUtils#simpleMatch(S[],S)   */
+    /* ####################################################################################### */
+
+    public static boolean simpleMatch(List<String> strList, String str) {
+        if (isEmpty(str) || isEmpty(strList)) {
+            return false;
+        }
+        for (String pattern : strList) {
+            if (simpleMatch(pattern, str)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean simpleMatch(String[] strArray, String str) {
+        if (isEmpty(str) || isEmpty(strArray)) {
+            return false;
+        }
+        for (String pattern : strArray) {
+            if (simpleMatch(pattern, str)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 判断url是否与规则配置:<br>
+     * ? 表示单个字符;<br>
+     * * 表示一层路径内的任意字符串，不可跨层级;<br>
+     * ** 表示任意层路径;<br>
+     *
+     * @param pattern 匹配规则
+     * @param url     需要匹配的url
+     * @return 是否匹配
+     */
+    public static boolean simpleMatch(String pattern, String url) {
+        AntPathMatcher matcher = new AntPathMatcher();
+        return matcher.match(pattern, url);
+    }
+
     /* ######################################################################### */
-    /* ### 其他: 集合、数组是否为空；集合中是否包含数组中的某个元素/所有元素                */
+    /* ### 其他: 集合、数组是否为空                                                  */
     /* ######################################################################### */
 
     /**
@@ -234,11 +232,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     }
     public static boolean isNotNull(Object object) {
         return object != null;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> T cast(Object obj) {
-        return (T) obj;
     }
 
     /**
@@ -267,47 +260,5 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
     public static boolean isNotEmpty(Object[] objects) {
         return !isEmpty(objects);
-    }
-
-    /**
-     * 判断给定的集合collection中是否包含数组array （存在）<br>
-     * 示例：<br>
-     * 1. StringUtils.containsAny(role.getPermissions(), Convert.toStrArray(permission))<br>
-     *
-     * @param collection 给定的集合
-     * @param array      给定的数组
-     * @return boolean 结果
-     */
-    public static boolean containsAny(Collection<String> collection, String... array) {
-        if (!isEmpty(collection) && !isEmpty(array)) {
-            for (String str : array) {
-                if (collection.contains(str)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 判断给定的集合collection中是否全部包含数组array （全部）<br>
-     * 示例：<br>
-     * 1. StringUtils.containsAll(role.getPermissions(), Convert.toStrArray(permission))<br>
-     *
-     * @param collection 给定的集合
-     * @param array      给定的数组
-     * @return boolean 结果
-     */
-    public static boolean containsAll(Collection<String> collection, String... array) {
-        boolean t = true;
-        if (!isEmpty(collection) && !isEmpty(array)) {
-            for (String str : array) {
-                if (!collection.contains(str)) {
-                    t = false;
-                    break;
-                }
-            }
-        }
-        return t;
     }
 }
