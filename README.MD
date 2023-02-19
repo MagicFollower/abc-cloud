@@ -51,6 +51,26 @@ spring:
 
 
 #### 三、分页操作
+> 官方文档：`https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/HowToUse.md`
+
+```xml
+<!-- Pagehelper 1.4.6 -->
+<dependency>
+    <groupId>com.github.pagehelper</groupId>
+    <artifactId>pagehelper-spring-boot-starter</artifactId>
+</dependency>
+```
+> SpringBoot基本配置
+
+```yaml
+# MyBatis分页插件配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: false
+  default-count: false
+```
+
+> 核心类关系与基本使用
 
 - PageUtils
 - ServletUtils
