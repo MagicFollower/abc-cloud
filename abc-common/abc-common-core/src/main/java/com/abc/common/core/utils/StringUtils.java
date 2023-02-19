@@ -11,9 +11,12 @@ import java.util.List;
  * 字符串工具类（基于commons-lang3#StringUtils）<br>
  * -> org.apache.commons.lang3.StringUtils是一个独立的功能强大的字符串工具（比spring-core中的StringUtils提供了更多通用的API）<br>
  * <br>
- * 需要引入spring-core：<br>
+ * ⬇️依赖项⬇️<br>
+ * 1.需要引入spring-core：<br>
  * -> org.springframework.util.AntPathMatcher用于模式匹配<br>
  * -> spring-core引入后，可以使用PatternMatchUtils简易版字符串模式匹配工具<br>
+ * 2.依赖com.abc.common.core.text.*<br>
+ * 3.依赖com.abc.common.core.constant.Constants<br>
  */
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
     public static final String SPACE = " ";
