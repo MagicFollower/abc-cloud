@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * 数据过滤处理
- * 
+ *
  * @author abc
  */
 @Aspect
@@ -67,13 +67,16 @@ public class DataScopeAspect
     {
         // 获取当前的用户
         LoginUser loginUser = SecurityUtils.getLoginUser();
-        if (StringUtils.isNotNull(loginUser))
+        if (!StringUtils.isNull(loginUser))
         {
             SysUser currentUser = loginUser.getSysUser();
             // 如果是超级管理员，则不过滤数据
-            if (StringUtils.isNotNull(currentUser) && !currentUser.isAdmin())
+            if (!StringUtils.isNull(currentUser) && !currentUser.isAdmin())
             {
-                String permission = StringUtils.defaultIfEmpty(controllerDataScope.permission(), SecurityContextHolder.getPermission());
+                String permission = controllerDataScope.permission();
+                if(!StringUtils.isNotBlank(controllerDataScope.permission())){
+                    permission = SecurityContextHolder.getPermission();
+                }
                 dataScopeFilter(joinPoint, currentUser, controllerDataScope.deptAlias(),
                         controllerDataScope.userAlias(), permission);
             }
@@ -82,7 +85,7 @@ public class DataScopeAspect
 
     /**
      * 数据范围过滤
-     * 
+     *
      * @param joinPoint 切点
      * @param user 用户
      * @param deptAlias 部门别名
@@ -101,7 +104,7 @@ public class DataScopeAspect
             {
                 continue;
             }
-            if (StringUtils.isNotEmpty(permission) && StringUtils.isNotEmpty(role.getPermissions())
+            if (StringUtils.isNotEmpty(permission) && !StringUtils.isEmpty(role.getPermissions())
                     && !StringUtils.containsAny(role.getPermissions(), Convert.toStrArray(permission)))
             {
                 continue;
@@ -145,7 +148,7 @@ public class DataScopeAspect
         if (StringUtils.isNotBlank(sqlString.toString()))
         {
             Object params = joinPoint.getArgs()[0];
-            if (StringUtils.isNotNull(params) && params instanceof BaseEntity)
+            if (!StringUtils.isNull(params) && params instanceof BaseEntity)
             {
                 BaseEntity baseEntity = (BaseEntity) params;
                 baseEntity.getParams().put(DATA_SCOPE, " AND (" + sqlString.substring(4) + ")");
@@ -159,7 +162,7 @@ public class DataScopeAspect
     private void clearDataScope(final JoinPoint joinPoint)
     {
         Object params = joinPoint.getArgs()[0];
-        if (StringUtils.isNotNull(params) && params instanceof BaseEntity)
+        if (!StringUtils.isNull(params) && params instanceof BaseEntity)
         {
             BaseEntity baseEntity = (BaseEntity) params;
             baseEntity.getParams().put(DATA_SCOPE, "");

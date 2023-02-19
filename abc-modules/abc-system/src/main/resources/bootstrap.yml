@@ -28,5 +28,5 @@ mybatis-plus:
 # MyBatis分页插件配置
 pagehelper:
   helper-dialect: mysql
-  reasonable: true
-  default-count: true
+  reasonable: false
+  default-count: false
