@@ -144,6 +144,12 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
     /* ######################################################################### */
     /* ### 驼峰下划线互转                                                          */
+    /*  StringUtils.toCamelCase("dict_type");  -> dictType                      */
+    /*  StringUtils.toCamelCase("Dict_type");  -> dictType                      */
+    /*  StringUtils.toCamelCase("Dict_tyPe");  -> dictType                      */
+    /*  StringUtils.toUnderScoreCase("dictType");  -> dict_type                 */
+    /*  StringUtils.toUnderScoreCase("DictTyPe");  -> dict_type                 */
+    /*  StringUtils.toUnderScoreCase("DictType");  -> dict_ty_pe                */
     /* ######################################################################### */
 
     /**
