@@ -6,16 +6,21 @@ import org.springframework.util.AntPathMatcher;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
- * 字符串工具类
+ * 字符串工具类（基于commons-lang3#StringUtils）<br>
+ * -> org.apache.commons.lang3.StringUtils是一个独立的功能强大的字符串工具（比spring-core中的StringUtils提供了更多通用的API）<br>
+ * <br>
+ * 需要引入spring-core：<br>
+ * -> org.springframework.util.AntPathMatcher用于模式匹配<br>
+ * -> spring-core引入后，可以使用PatternMatchUtils简易版字符串模式匹配工具<br>
  */
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
-    /**
-     * 空字符串
-     */
-    private static final String NULLSTR = "";
+    public static final String SPACE = " ";
+    public static final String EMPTY = "";
+    public static final String CR = "\r";
+    public static final String LF = "\n";
+    public static final String CRLF = "\r\n";
 
     /**
      * 下划线
@@ -23,141 +28,32 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     private static final char SEPARATOR = '_';
 
     /**
-     * 获取参数不为空值
+     * 是否为http(s)://开头<br>
+     * 示例：<br>
+     * 1. StringUtils.isHttp(link)<br>
      *
-     * @param value defaultValue 要判断的value
-     * @return value 返回值
-     */
-    public static <T> T nvl(T value, T defaultValue) {
-        return value != null ? value : defaultValue;
-    }
-
-    /**
-     * * 判断一个Collection是否为空， 包含List，Set，Queue
-     *
-     * @param coll 要判断的Collection
-     * @return true：为空 false：非空
-     */
-    public static boolean isEmpty(Collection<?> coll) {
-        return isNull(coll) || coll.isEmpty();
-    }
-
-    /**
-     * * 判断一个Collection是否非空，包含List，Set，Queue
-     *
-     * @param coll 要判断的Collection
-     * @return true：非空 false：空
-     */
-    public static boolean isNotEmpty(Collection<?> coll) {
-        return !isEmpty(coll);
-    }
-
-    /**
-     * * 判断一个对象数组是否为空
-     *
-     * @param objects 要判断的对象数组
-     *                * @return true：为空 false：非空
-     */
-    public static boolean isEmpty(Object[] objects) {
-        return isNull(objects) || (objects.length == 0);
-    }
-
-    /**
-     * * 判断一个对象数组是否非空
-     *
-     * @param objects 要判断的对象数组
-     * @return true：非空 false：空
-     */
-    public static boolean isNotEmpty(Object[] objects) {
-        return !isEmpty(objects);
-    }
-
-    /**
-     * * 判断一个Map是否为空
-     *
-     * @param map 要判断的Map
-     * @return true：为空 false：非空
-     */
-    public static boolean isEmpty(Map<?, ?> map) {
-        return isNull(map) || map.isEmpty();
-    }
-
-    /**
-     * * 判断一个Map是否为空
-     *
-     * @param map 要判断的Map
-     * @return true：非空 false：空
-     */
-    public static boolean isNotEmpty(Map<?, ?> map) {
-        return !isEmpty(map);
-    }
-
-    /**
-     * * 判断一个字符串是否为空串
-     *
-     * @param str String
-     * @return true：为空 false：非空
-     */
-    public static boolean isEmpty(String str) {
-        return isNull(str) || NULLSTR.equals(str.trim());
-    }
-
-    /**
-     * * 判断一个字符串是否为非空串
-     *
-     * @param str String
-     * @return true：非空串 false：空串
-     */
-    public static boolean isNotEmpty(String str) {
-        return !isEmpty(str);
-    }
-
-    /**
-     * * 判断一个对象是否为空
-     *
-     * @param object Object
-     * @return true：为空 false：非空
-     */
-    public static boolean isNull(Object object) {
-        return object == null;
-    }
-
-    /**
-     * * 判断一个对象是否非空
-     *
-     * @param object Object
-     * @return true：非空 false：空
-     */
-    public static boolean isNotNull(Object object) {
-        return !isNull(object);
-    }
-
-    /**
-     * * 判断一个对象是否是数组类型（Java基本型别的数组）
-     *
-     * @param object 对象
-     * @return true：是数组 false：不是数组
-     */
-    public static boolean isArray(Object object) {
-        return isNotNull(object) && object.getClass().isArray();
-    }
-
-
-    /**
-     * 判断是否为空，并且不是空白字符
-     *
-     * @param str 要判断的value
+     * @param link 链接
      * @return 结果
      */
-    public static boolean hasText(String str) {
-        return (str != null && !str.isEmpty() && containsText(str));
+    public static boolean isHttp(String link) {
+        return startsWithIgnoreCase(link, Constants.HTTP) || startsWithIgnoreCase(link, Constants.HTTPS);
     }
 
-    private static boolean containsText(CharSequence str) {
-        int strLen = str.length();
-        for (int i = 0; i < strLen; i++) {
-            if (!Character.isWhitespace(str.charAt(i))) {
-                return true;
+    /**
+     * 是否包含字符串<br>
+     * 示例：<br>
+     * 1. StringUtils.inStringIgnoreCase(uri, ".json", ".xml")<br>
+     *
+     * @param str      验证字符串
+     * @param strArray 字符串组
+     * @return 包含返回true
+     */
+    public static boolean inStringIgnoreCase(String str, String... strArray) {
+        if (isNotBlank(str) && !isEmpty(strArray)) {
+            for (String s : strArray) {
+                if (str.equalsIgnoreCase(trim(s))) {
+                    return true;
+                }
             }
         }
         return false;
@@ -169,7 +65,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * 如果想输出 {} 使用 \\转义 { 即可，如果想输出 {} 之前的 \ 使用双转义符 \\\\ 即可<br>
      * 例：<br>
      * 通常使用：format("this is {} for {}", "a", "b") -> this is a for b<br>
-     * 转义{}： format("this is \\{} for {}", "a", "b") -> this is \{} for a<br>
+     * 转义{}： format("this is \\{} for {}", "a", "b") -> this is {} for a<br>
      * 转义\： format("this is \\\\{} for {}", "a", "b") -> this is \a for b<br>
      *
      * @param template 文本模板，被替换的部分用 {} 表示
@@ -177,41 +73,78 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * @return 格式化后的文本
      */
     public static String format(String template, Object... params) {
-        if (isEmpty(params) || isEmpty(template)) {
+        if (isEmpty(params) || isNotBlank(template)) {
             return template;
         }
         return StrFormatter.format(template, params);
     }
 
-    /**
-     * 是否为http(s)://开头
-     *
-     * @param link 链接
-     * @return 结果
-     */
-    public static boolean ishttp(String link) {
-        return StringUtils.startsWithAny(link, Constants.HTTP, Constants.HTTPS);
+    /* ####################################################################################### */
+    /* ### 字符串模式匹配                                                                        */
+    /* ### 查找指定字符串是否匹配指定字符串列表中的任意一个字符串                                        */
+    /* ### API名称兼容PatternMatchUtils#simpleMatch(S,S)、PatternMatchUtils#simpleMatch(S[],S)   */
+    /* ####################################################################################### */
+
+    public static boolean simpleMatch(List<String> strList, String str) {
+        if (isEmpty(str) || isEmpty(strList)) {
+            return false;
+        }
+        for (String pattern : strList) {
+            if (simpleMatch(pattern, str)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean simpleMatch(String[] strArray, String str) {
+        if (isEmpty(str) || isEmpty(strArray)) {
+            return false;
+        }
+        for (String pattern : strArray) {
+            if (simpleMatch(pattern, str)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
-     * 判断给定的set列表中是否包含数组array 判断给定的数组array中是否包含给定的元素value
+     * 判断url是否与规则配置:<br>
+     * ? 表示单个字符;<br>
+     * * 表示一层路径内的任意字符串，不可跨层级;<br>
+     * ** 表示任意层路径;<br>
      *
-     * @param collection 给定的集合
-     * @param array      给定的数组
-     * @return boolean 结果
+     * @param pattern 匹配规则
+     * @param url     需要匹配的url
+     * @return 是否匹配
      */
-    public static boolean containsAny(Collection<String> collection, String... array) {
-        if (isEmpty(collection) || isEmpty(array)) {
-            return false;
-        } else {
-            for (String str : array) {
-                if (collection.contains(str)) {
-                    return true;
-                }
-            }
-            return false;
-        }
+    public static boolean simpleMatch(String pattern, String url) {
+        AntPathMatcher matcher = new AntPathMatcher();
+        return matcher.match(pattern, url);
     }
+
+    /* ################################################################################ */
+    /* ### 去空格(统一使用trim、trimLeading、trimTrailing)                                 */
+    /* ### 1.9开始新增了3个strip相关方法, 这里使用commons-lang3中StringUtils#strip*替代       */
+    /* ################################################################################ */
+
+    public static String trim(String str) {
+        return (str == null ? "" : strip(str));
+    }
+
+    public static String trimLeading(String str) {
+        return (str == null ? "" : stripStart(str, null));
+    }
+
+    public static String trimTrailing(String str) {
+        return (str == null ? "" : stripEnd(str, null));
+    }
+
+
+    /* ######################################################################### */
+    /* ### 驼峰下划线互转                                                          */
+    /* ######################################################################### */
 
     /**
      * 驼峰转下划线命名
@@ -225,7 +158,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         boolean preCharIsUpperCase = true;
         // 当前字符是否大写
         boolean curreCharIsUpperCase = true;
-        // 下一字符是否大写
+        // 下一个字符是否大写
         boolean nexteCharIsUpperCase = true;
         for (int i = 0; i < str.length(); i++) {
             char c = str.charAt(i);
@@ -250,37 +183,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
 
         return sb.toString();
-    }
-
-
-    /**
-     * 将下划线大写方式命名的字符串转换为驼峰式。如果转换前的下划线大写方式命名的字符串为空，则返回空字符串。 例如：HELLO_WORLD->HelloWorld
-     *
-     * @param name 转换前的下划线大写方式命名的字符串
-     * @return 转换后的驼峰式命名的字符串
-     */
-    public static String convertToCamelCase(String name) {
-        StringBuilder result = new StringBuilder();
-        // 快速检查
-        if (name == null || name.isEmpty()) {
-            // 没必要转换
-            return "";
-        } else if (!name.contains("_")) {
-            // 不含下划线，仅将首字母大写
-            return name.substring(0, 1).toUpperCase() + name.substring(1);
-        }
-        // 用下划线将原始字符串分割
-        String[] camels = name.split("_");
-        for (String camel : camels) {
-            // 跳过原始字符串中开头、结尾的下换线或双重下划线
-            if (camel.isEmpty()) {
-                continue;
-            }
-            // 首字母大写
-            result.append(camel.substring(0, 1).toUpperCase());
-            result.append(camel.substring(1).toLowerCase());
-        }
-        return result.toString();
     }
 
     /**
@@ -308,62 +210,21 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return sb.toString();
     }
 
-    /**
-     * 查找指定字符串是否匹配指定字符串列表中的任意一个字符串
-     *
-     * @param str  指定字符串
-     * @param strs 需要检查的字符串数组
-     * @return 是否匹配
-     */
-    public static boolean matches(String str, List<String> strs) {
-        if (isEmpty(str) || isEmpty(strs)) {
-            return false;
-        }
-        for (String pattern : strs) {
-            if (isMatch(pattern, str)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    /* ######################################################################### */
+    /* ### 其他: 集合、数组是否为空；集合中是否包含数组中的某个元素/所有元素                */
+    /* ######################################################################### */
 
     /**
-     * 判断url是否与规则配置:
-     * ? 表示单个字符;
-     * * 表示一层路径内的任意字符串，不可跨层级;
-     * ** 表示任意层路径;
+     * * 判断一个对象是否为空
      *
-     * @param pattern 匹配规则
-     * @param url     需要匹配的url
-     * @return
+     * @param object Object
+     * @return true：为空 false：非空
      */
-    public static boolean isMatch(String pattern, String url) {
-        AntPathMatcher matcher = new AntPathMatcher();
-        return matcher.match(pattern, url);
+    public static boolean isNull(Object object) {
+        return object == null;
     }
-
-    /**
-     * 是否包含字符串
-     *
-     * @param str  验证字符串
-     * @param strs 字符串组
-     * @return 包含返回true
-     */
-    public static boolean inStringIgnoreCase(String str, String... strs) {
-        if (str != null && strs != null) {
-            for (String s : strs) {
-                if (str.equalsIgnoreCase(trim(s))) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    /**
-     * 去空格
-     */
-    public static String trim(String str) {
-        return (str == null ? "" : str.trim());
+    public static boolean isNotNull(Object object) {
+        return object != null;
     }
 
     @SuppressWarnings("unchecked")
@@ -372,41 +233,72 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * 数字左边补齐0，使之达到指定长度。注意，如果数字转换为字符串后，长度大于size，则只保留 最后size个字符。
+     * 判断一个Collection是否为空， 包含List，Set，Queue
      *
-     * @param num  数字对象
-     * @param size 字符串指定长度
-     * @return 返回数字的字符串格式，该字符串为指定长度。
+     * @param coll 要判断的Collection
+     * @return true：为空 false：非空
      */
-    public static String padding(final Number num, final int size) {
-        return padding(num.toString(), size, '0');
+    public static boolean isEmpty(Collection<?> coll) {
+        return isNull(coll) || coll.isEmpty();
+    }
+
+    public static boolean isNotEmpty(Collection<?> coll) {
+        return !isEmpty(coll);
     }
 
     /**
-     * 字符串左补齐。如果原始字符串s长度大于size，则只保留最后size个字符。
+     * * 判断一个对象数组是否为空
      *
-     * @param s    原始字符串
-     * @param size 字符串指定长度
-     * @param c    用于补齐的字符
-     * @return 返回指定长度的字符串，由原字符串左补齐或截取得到。
+     * @param objects 要判断的对象数组
+     *                * @return true：为空 false：非空
      */
-    public static String padding(final String s, final int size, final char c) {
-        final StringBuilder sb = new StringBuilder(size);
-        if (s != null) {
-            final int len = s.length();
-            if (s.length() <= size) {
-                for (int i = size - len; i > 0; i--) {
-                    sb.append(c);
+    public static boolean isEmpty(Object[] objects) {
+        return isNull(objects) || (objects.length == 0);
+    }
+
+    public static boolean isNotEmpty(Object[] objects) {
+        return !isEmpty(objects);
+    }
+
+    /**
+     * 判断给定的集合collection中是否包含数组array （存在）<br>
+     * 示例：<br>
+     * 1. StringUtils.containsAny(role.getPermissions(), Convert.toStrArray(permission))<br>
+     *
+     * @param collection 给定的集合
+     * @param array      给定的数组
+     * @return boolean 结果
+     */
+    public static boolean containsAny(Collection<String> collection, String... array) {
+        if (!isEmpty(collection) && !isEmpty(array)) {
+            for (String str : array) {
+                if (collection.contains(str)) {
+                    return true;
                 }
-                sb.append(s);
-            } else {
-                return s.substring(len - size, len);
-            }
-        } else {
-            for (int i = size; i > 0; i--) {
-                sb.append(c);
             }
         }
-        return sb.toString();
+        return false;
+    }
+
+    /**
+     * 判断给定的集合collection中是否全部包含数组array （全部）<br>
+     * 示例：<br>
+     * 1. StringUtils.containsAll(role.getPermissions(), Convert.toStrArray(permission))<br>
+     *
+     * @param collection 给定的集合
+     * @param array      给定的数组
+     * @return boolean 结果
+     */
+    public static boolean containsAll(Collection<String> collection, String... array) {
+        boolean t = true;
+        if (!isEmpty(collection) && !isEmpty(array)) {
+            for (String str : array) {
+                if (!collection.contains(str)) {
+                    t = false;
+                    break;
+                }
+            }
+        }
+        return t;
     }
 }
