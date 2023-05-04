@@ -1,6 +1,7 @@
 package com.abc.system.common.request;
 
 import com.abc.system.common.exception.BizException;
+import com.abc.system.common.page.PageInfo;
 import lombok.Data;
 
 import java.io.Serializable;

@@ -17,6 +17,6 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class BaseResponse<T> extends AbstractResponse implements Serializable {
-    private Long total;
+    private long total;
     private T result;
 }

@@ -1,8 +1,10 @@
-package com.abc.system.common.request;
+package com.abc.system.common.page;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 /**
  * 系统内部分页实体（供AbstractRequest使用）
@@ -12,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PageInfo {
+public class PageInfo implements Serializable {
     private int pageNum = 1;
     private int pageSize = 10;
 }
