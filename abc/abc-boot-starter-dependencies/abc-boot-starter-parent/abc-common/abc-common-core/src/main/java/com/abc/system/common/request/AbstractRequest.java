@@ -8,6 +8,7 @@ import java.io.Serializable;
 /**
  * 系统内部Service层请求基类
  * 1.Controller层请继承并抽象出AbstractBaseRequest,你可以把一些模板参数封装在内部，例如公司编号）
+ * 2.Service层直接继承该抽象类
  */
 @Data
 public abstract class AbstractRequest implements Serializable {
