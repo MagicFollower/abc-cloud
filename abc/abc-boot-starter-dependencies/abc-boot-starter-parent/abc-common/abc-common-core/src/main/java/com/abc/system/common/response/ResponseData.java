@@ -23,7 +23,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 public class ResponseData<T> implements Serializable {
-    private boolean success;
+    private Boolean success;
     private int code;
     private String message;
     private T result;
