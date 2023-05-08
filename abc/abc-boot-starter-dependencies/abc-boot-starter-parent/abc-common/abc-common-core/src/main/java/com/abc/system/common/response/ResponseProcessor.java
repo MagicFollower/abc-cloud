@@ -13,10 +13,10 @@ import java.io.Serializable;
  * @param <T> 响应体中result数据类型（基本实体、实体集合）
  * @Description 响应处理器工具，Controller层使用，提供统一的API，用于快速生成ResponseData。<br>
  * → 成功：<br>
- *     → new ResponseData泛型().setData(response.getResult(), response.getMsg());<br>
+ *     → new ResponseProcessor泛型().setData(response.getResult(), response.getMsg());<br>
  * → 异常：<br>
- *     → new ResponseData空泛型().setErrorMessage(be.getErrorCode, be.getMessage);<br>
- *     → new ResponseData空泛型().setErrorMessage(SystemReturnCodeConstants.SYSTEM_ERROR.getCode(),
+ *     → new ResponseProcessor空泛型().setErrorMessage(be.getErrorCode, be.getMessage);<br>
+ *     → new ResponseProcessor空泛型().setErrorMessage(SystemReturnCodeConstants.SYSTEM_ERROR.getCode(),
  *                                               SystemReturnCodeConstants.SYSTEM_ERROR.getMessage());<br>
  * ⚠️提示：ResponseData在此处忽略泛型<br>
  * 1.setErrorMsg在提供内部错误编号和信息时，将会封装为ResponseErrorData至result中，使controller层代码泛型统一为T<br>

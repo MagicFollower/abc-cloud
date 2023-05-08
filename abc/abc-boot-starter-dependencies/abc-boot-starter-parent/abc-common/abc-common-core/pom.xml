@@ -42,6 +42,13 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok-mapstruct-binding</artifactId>
         </dependency>
+
+        <!-- 引入abc-common-exception -->
+        <dependency>
+            <groupId>com.abc</groupId>
+            <artifactId>abc-common-exception</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
