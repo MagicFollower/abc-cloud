@@ -1,7 +1,6 @@
 package com.abc.system.common.response;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -16,7 +15,16 @@ import java.io.Serializable;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class BaseResponse<T> extends AbstractResponse implements Serializable {
     private long total;
     private T result;
+
+    @Builder
+    public BaseResponse(String code, String msg, long total, T result) {
+        super(code, msg);
+        this.total = total;
+        this.result = result;
+    }
 }

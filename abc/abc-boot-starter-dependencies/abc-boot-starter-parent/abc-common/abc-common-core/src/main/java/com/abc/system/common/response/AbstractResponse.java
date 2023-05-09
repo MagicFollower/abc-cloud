@@ -1,6 +1,8 @@
 package com.abc.system.common.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -11,6 +13,8 @@ import java.io.Serializable;
  * 2.msg:String  → 命名不同，区别于异常基类中的message
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class AbstractResponse implements Serializable {
     protected String code;
     protected String msg;
