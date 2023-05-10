@@ -20,6 +20,7 @@
         <module>abc-common-redis</module>
         <module>abc-common-dao</module>
         <module>abc-common-minio</module>
+        <module>abc-common-file-generator</module>
     </modules>
 
     <properties>
@@ -28,6 +29,7 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- spring-boot start -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter</artifactId>
@@ -35,11 +37,28 @@
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-configuration-processor</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <!-- spring-boot end -->
+
+            <!-- data-redis -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-data-redis</artifactId>
                 <version>${spring-boot.version}</version>
             </dependency>
 
             <!-- DAO-start -->
+            <!-- 1.TK-Mybatis -->
+            <!-- 2.Mybatis-Plus -->
+            <!-- 3.PageHelper -->
+            <!-- 4.MySQL-connector -->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
@@ -62,23 +81,24 @@
             </dependency>
             <!-- DAO-end -->
 
-            <!-- MINIO-start -->
+            <!-- MINIO -->
             <dependency>
                 <groupId>io.minio</groupId>
                 <artifactId>minio</artifactId>
                 <version>${minio.version}</version>
             </dependency>
+
+            <!-- freemarker、flying-saucer-pdf -->
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-web</artifactId>
-                <version>${spring-boot.version}</version>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>${free-marker.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-configuration-processor</artifactId>
-                <version>${spring-boot.version}</version>
+                <groupId>org.xhtmlrenderer</groupId>
+                <artifactId>flying-saucer-pdf</artifactId>
+                <version>${flying-saucer-pdf.version}</version>
             </dependency>
-            <!-- MINIO-end -->
 
             <dependency>
                 <groupId>org.apache.commons</groupId>

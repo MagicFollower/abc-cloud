@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.abc.system.common.filegenerator.config.FreemarkerProperties,\
+  com.abc.system.common.filegenerator.autoconfig.GenerateFileAutoConfiguration

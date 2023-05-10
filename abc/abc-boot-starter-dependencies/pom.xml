@@ -45,6 +45,9 @@
         <minio.version>8.5.2</minio.version>
         <!-- MINIO-end -->
 
+        <free-marker.version>2.3.32</free-marker.version>
+        <flying-saucer-pdf.version>9.1.22</flying-saucer-pdf.version>
+
         <!-- TOOLS-start -->
         <commoms-lang3.version>3.12.0</commoms-lang3.version>
         <fastjson2.version>2.0.29</fastjson2.version>

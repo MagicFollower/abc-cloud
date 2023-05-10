@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>abc-common-redis</artifactId>
+    <artifactId>abc-common-file-generator</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -18,15 +18,26 @@
     </properties>
 
     <dependencies>
-        <!-- data-redis -->
+        <!-- common-core -->
+        <dependency>
+            <groupId>com.abc</groupId>
+            <artifactId>abc-common-core</artifactId>
+        </dependency>
+
+        <!-- 模板引擎 -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
+        <!-- PDF导出渲染工具 -->
+        <dependency>
+            <groupId>org.xhtmlrenderer</groupId>
+            <artifactId>flying-saucer-pdf</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <!-- 用于Redis序列化器 -->
-        <dependency>
-            <groupId>com.alibaba.fastjson2</groupId>
-            <artifactId>fastjson2</artifactId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
         </dependency>
     </dependencies>
 

@@ -18,7 +18,7 @@
     </properties>
 
     <dependencies>
-        <!-- web模块,移除版本内置的snakeyaml，手动替换为新版 -->
+        <!-- web模块,移除版本内置的snakeyaml，手动升级-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
