@@ -114,11 +114,11 @@
 >     throw new BizException(be.getErrorCode(), be.getMessage())
 >     ```
 >
-> -  Exception未知异常👉<u>***这里使用getCause作为BizException的消息体***</u>！
+> -  Exception未知异常👉<u>***统一使用getMessage作为BizException的消息体 ***</u>！
 >
 >   -  ```java
 >      log.error(">>>>xxx|xxx|xxx:{}<<<", e.getMessage(), e)
->      throw new BizException(SystemRetCodeConstants.SYSTEM_ERROR.getCode(), e.getCause())
+>      throw new BizException(SystemRetCodeConstants.SYSTEM_ERROR.getCode(), e.getMessage())
 >      ```
 >
 > 2.3.6 填充响应体
