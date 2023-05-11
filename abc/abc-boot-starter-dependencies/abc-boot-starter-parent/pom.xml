@@ -31,12 +31,17 @@
             </dependency>
             <dependency>
                 <groupId>com.abc</groupId>
-                <artifactId>abc-common-dao</artifactId>
+                <artifactId>abc-common-exception</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.abc</groupId>
-                <artifactId>abc-common-exception</artifactId>
+                <artifactId>abc-common-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.abc</groupId>
+                <artifactId>abc-common-dao</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
