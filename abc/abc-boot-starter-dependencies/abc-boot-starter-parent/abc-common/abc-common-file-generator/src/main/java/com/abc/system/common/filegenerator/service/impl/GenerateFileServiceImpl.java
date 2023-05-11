@@ -1,6 +1,6 @@
 package com.abc.system.common.filegenerator.service.impl;
 
-import com.abc.system.common.exception.BaseException;
+import com.abc.system.common.exception.base.BaseException;
 import com.abc.system.common.exception.BizException;
 import com.abc.system.common.filegenerator.constant.GenerateFileContentTypeEnum;
 import com.abc.system.common.filegenerator.constant.GenerateFileRetCodeConstants;

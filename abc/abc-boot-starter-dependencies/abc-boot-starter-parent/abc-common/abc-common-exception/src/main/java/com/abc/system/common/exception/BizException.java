@@ -1,5 +1,7 @@
 package com.abc.system.common.exception;
 
+import com.abc.system.common.exception.base.BaseException;
+
 /**
  * 系统内部自定义业务异常（BusinessException->缩写BizException）
  */

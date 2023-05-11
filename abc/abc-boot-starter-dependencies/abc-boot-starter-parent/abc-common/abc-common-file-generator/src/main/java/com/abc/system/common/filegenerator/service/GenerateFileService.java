@@ -1,6 +1,6 @@
 package com.abc.system.common.filegenerator.service;
 
-import com.abc.system.common.exception.BaseException;
+import com.abc.system.common.exception.base.BaseException;
 import com.abc.system.common.filegenerator.vo.ExportFileRequest;
 
 import javax.servlet.http.HttpServletResponse;
