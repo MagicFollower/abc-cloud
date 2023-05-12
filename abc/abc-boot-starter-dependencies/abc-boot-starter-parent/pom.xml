@@ -24,6 +24,7 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- abc-common -->
             <dependency>
                 <groupId>com.abc</groupId>
                 <artifactId>abc-common-core</artifactId>
