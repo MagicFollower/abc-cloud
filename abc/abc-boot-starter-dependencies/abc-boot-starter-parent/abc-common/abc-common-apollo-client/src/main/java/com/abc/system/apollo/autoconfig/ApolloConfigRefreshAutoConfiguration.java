@@ -3,6 +3,7 @@ package com.abc.system.apollo.autoconfig;
 import com.abc.system.apollo.context.EnvironmentChangeEvent;
 import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.ConfigService;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,7 +48,7 @@ public class ApolloConfigRefreshAutoConfiguration implements ApplicationContextA
     private String[] namespaces;
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(@NonNull ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 
