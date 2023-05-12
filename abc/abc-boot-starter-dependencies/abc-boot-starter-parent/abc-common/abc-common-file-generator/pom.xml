@@ -37,10 +37,6 @@
 
         <dependency>
             <groupId>com.abc</groupId>
-            <artifactId>abc-common-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.abc</groupId>
             <artifactId>abc-common-web</artifactId>
         </dependency>
     </dependencies>
