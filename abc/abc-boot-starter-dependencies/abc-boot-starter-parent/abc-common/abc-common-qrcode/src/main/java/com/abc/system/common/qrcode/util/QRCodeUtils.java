@@ -1,7 +1,7 @@
 package com.abc.system.common.qrcode.util;
 
 import com.abc.system.common.constant.SystemRetCodeConstants;
-import com.abc.system.common.exception.ValidateException;
+import com.abc.system.common.exception.BizException;
 import com.abc.system.common.qrcode.constant.ImageTypeEnum;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -48,9 +48,9 @@ public class QRCodeUtils {
      * @param width   二维码宽度
      * @param height  二维码高度
      * @param stream  输出流
-     * @throws ValidateException 校验异常
+     * @throws BizException BizException
      */
-    public static void createQRCode(String content, int width, int height, OutputStream stream) throws ValidateException {
+    public static void createQRCode(String content, int width, int height, OutputStream stream) throws BizException {
         Map<EncodeHintType, Object> hints = getHintTypeObjectMap();
         BitMatrix bitMatrix = null;
         try {
@@ -59,7 +59,7 @@ public class QRCodeUtils {
             MatrixToImageWriter.writeToStream(bitMatrix, ImageTypeEnum.JPEG.getCode(), stream);
         } catch (Exception e) {
             log.error(">>>>>>>>>>> create QR code failed|exception: <<<<<<<<<<<", e);
-            throw new ValidateException(SystemRetCodeConstants.SYSTEM_BUSINESS.getMessage(), "二维码生成失败，请稍候重试");
+            throw new BizException(SystemRetCodeConstants.SYSTEM_BUSINESS.getMessage(), "二维码生成失败，请稍候重试");
         } finally {
             if (Objects.nonNull(bitMatrix)) {
                 bitMatrix.clear();
@@ -81,9 +81,9 @@ public class QRCodeUtils {
      * @param width   二维码宽度
      * @param height  二维码高度
      * @return 前端src直接使用的Base64字符串
-     * @throws ValidateException 校验异常
+     * @throws BizException 校验异常
      */
-    public static String createQRCodeString(String content, int width, int height) throws ValidateException {
+    public static String createQRCodeString(String content, int width, int height) throws BizException {
         Map<EncodeHintType, Object> hints = getHintTypeObjectMap();
         BitMatrix bitMatrix = null;
         try {
@@ -93,7 +93,7 @@ public class QRCodeUtils {
             return getImageBase64Str(image, ImageTypeEnum.JPEG.getCode());
         } catch (Exception e) {
             log.error(">>>>>>>>>>> create QR code convert base64 encoder failed|exception: <<<<<<<<<<<", e);
-            throw new ValidateException(SystemRetCodeConstants.SYSTEM_BUSINESS.getMessage(), "二维码生成失败，请稍候重试");
+            throw new BizException(SystemRetCodeConstants.SYSTEM_BUSINESS.getMessage(), "二维码生成失败，请稍候重试");
         } finally {
             if (Objects.nonNull(bitMatrix)) {
                 bitMatrix.clear();
