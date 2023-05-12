@@ -60,6 +60,11 @@
                 <artifactId>abc-common-redis</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.abc</groupId>
+                <artifactId>abc-common-distributed-lock</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

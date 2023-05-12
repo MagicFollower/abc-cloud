@@ -22,6 +22,7 @@
         <module>abc-common-dao</module>
         <module>abc-common-minio</module>
         <module>abc-common-file-generator</module>
+        <module>abc-common-distributed-lock</module>
     </modules>
 
     <properties>
@@ -58,6 +59,11 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-data-redis</artifactId>
                 <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${redisson-spring-boot-starter.version}</version>
             </dependency>
 
             <!-- DAO-start -->

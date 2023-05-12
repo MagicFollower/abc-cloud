@@ -49,6 +49,8 @@
         <free-marker.version>2.3.32</free-marker.version>
         <flying-saucer-pdf.version>9.1.22</flying-saucer-pdf.version>
 
+        <redisson-spring-boot-starter.version>3.20.1</redisson-spring-boot-starter.version>
+
         <!-- TOOLS-start -->
         <commoms-lang3.version>3.12.0</commoms-lang3.version>
         <fastjson2.version>2.0.29</fastjson2.version>
