@@ -56,6 +56,9 @@
         <!-- 条形码、二维码 -->
         <google-zxing.version>3.5.1</google-zxing.version>
 
+        <!-- Apollo-Client -->
+        <apollo-client.version>2.1.0</apollo-client.version>
+
         <!-- TOOLS-start -->
         <commoms-lang3.version>3.12.0</commoms-lang3.version>
         <fastjson2.version>2.0.29</fastjson2.version>
