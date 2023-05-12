@@ -28,13 +28,14 @@
             <artifactId>minio</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.abc</groupId>
-            <artifactId>abc-common-core</artifactId>
-        </dependency>
+        <!-- 使用到web模块中的Multipart -->
         <dependency>
             <groupId>com.abc</groupId>
             <artifactId>abc-common-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.abc</groupId>
+            <artifactId>abc-common-core</artifactId>
         </dependency>
     </dependencies>
 
