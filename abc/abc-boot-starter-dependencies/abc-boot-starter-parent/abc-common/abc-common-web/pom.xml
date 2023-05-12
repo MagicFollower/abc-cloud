@@ -33,11 +33,6 @@
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.abc</groupId>
-            <artifactId>abc-common-core</artifactId>
-        </dependency>
     </dependencies>
 
 </project>
