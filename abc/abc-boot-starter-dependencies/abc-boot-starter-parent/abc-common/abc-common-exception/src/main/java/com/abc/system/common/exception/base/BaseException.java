@@ -1,21 +1,17 @@
 package com.abc.system.common.exception.base;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 /**
  * 系统内部自定义异常基类
  * 1.errorCode:String
  * 2.message:String
  *   2.1 使用message属性是为了与Throwable接口中message保持一致，从而与普通异常在调用获取异常消息API时保持一致性。
  */
-@Getter
-@Setter
-@NoArgsConstructor
 public class BaseException extends RuntimeException{
     protected String errorCode;
     protected String message;
+
+    public BaseException() {
+    }
 
     public BaseException(String errorCode) {
         this.errorCode = errorCode;
@@ -41,4 +37,21 @@ public class BaseException extends RuntimeException{
         this.message = message;
     }
 
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

@@ -18,10 +18,10 @@
     </properties>
 
     <dependencies>
-        <!-- common-core -->
         <dependency>
-            <groupId>com.abc</groupId>
-            <artifactId>abc-common-core</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!-- 模板引擎 -->
@@ -36,8 +36,12 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
+            <groupId>com.abc</groupId>
+            <artifactId>abc-common-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.abc</groupId>
+            <artifactId>abc-common-web</artifactId>
         </dependency>
     </dependencies>
 

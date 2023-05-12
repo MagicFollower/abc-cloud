@@ -18,12 +18,6 @@
     </properties>
 
     <dependencies>
-        <!-- 核心包 -->
-        <dependency>
-            <groupId>com.abc</groupId>
-            <artifactId>abc-common-core</artifactId>
-        </dependency>
-
         <!-- web模块,移除版本内置的snakeyaml，手动升级-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -38,6 +32,11 @@
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.abc</groupId>
+            <artifactId>abc-common-core</artifactId>
         </dependency>
     </dependencies>
 

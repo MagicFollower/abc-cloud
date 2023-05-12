@@ -18,15 +18,16 @@
     </properties>
 
     <dependencies>
-        <!-- data-redis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <!-- 用于Redis序列化器 -->
+
+        <!-- 使用common-core中的fastjson2作为redis的序列化器 -->
+        <!-- 约定，一旦使用到核心包中工具请直接依赖core模块，禁止在各个模块中单独定义第三方工具包 -->
         <dependency>
-            <groupId>com.alibaba.fastjson2</groupId>
-            <artifactId>fastjson2</artifactId>
+            <groupId>com.abc</groupId>
+            <artifactId>abc-common-core</artifactId>
         </dependency>
     </dependencies>
 
