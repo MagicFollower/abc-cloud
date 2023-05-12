@@ -23,6 +23,7 @@
         <module>abc-common-minio</module>
         <module>abc-common-file-generator</module>
         <module>abc-common-distributed-lock</module>
+        <module>abc-common-qrcode</module>
     </modules>
 
     <properties>
@@ -60,11 +61,25 @@
                 <artifactId>spring-boot-starter-data-redis</artifactId>
                 <version>${spring-boot.version}</version>
             </dependency>
+            <!-- distributed-lock -->
             <dependency>
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson-spring-boot-starter</artifactId>
                 <version>${redisson-spring-boot-starter.version}</version>
             </dependency>
+
+            <!-- 二维码、条形码 -->
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>core</artifactId>
+                <version>${google-zxing.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>javase</artifactId>
+                <version>${google-zxing.version}</version>
+            </dependency>
+
 
             <!-- DAO-start -->
             <!-- 1.TK-Mybatis -->

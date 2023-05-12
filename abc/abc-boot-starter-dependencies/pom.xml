@@ -46,10 +46,15 @@
         <minio.version>8.5.2</minio.version>
         <!-- MINIO-end -->
 
+        <!-- Freemarker模板引擎、PDF解析引擎 -->
         <free-marker.version>2.3.32</free-marker.version>
         <flying-saucer-pdf.version>9.1.22</flying-saucer-pdf.version>
 
+        <!-- 分布式锁 -->
         <redisson-spring-boot-starter.version>3.20.1</redisson-spring-boot-starter.version>
+
+        <!-- 条形码、二维码 -->
+        <google-zxing.version>3.5.1</google-zxing.version>
 
         <!-- TOOLS-start -->
         <commoms-lang3.version>3.12.0</commoms-lang3.version>
