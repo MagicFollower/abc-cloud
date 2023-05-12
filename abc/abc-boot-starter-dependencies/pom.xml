@@ -33,6 +33,7 @@
     <properties>
         <java.version>1.8</java.version>
         <spring-boot.version>2.7.11</spring-boot.version>
+        <snakeyaml.version>2.0</snakeyaml.version>
 
         <!-- DAO-start -->
         <mybatis-plus-boot-starter.version>3.5.3.1</mybatis-plus-boot-starter.version>
