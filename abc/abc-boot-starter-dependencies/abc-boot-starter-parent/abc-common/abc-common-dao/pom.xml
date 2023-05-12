@@ -37,6 +37,11 @@
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>${pagehelper-spring-boot-starter.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.abc</groupId>
+            <artifactId>abc-common-core</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
