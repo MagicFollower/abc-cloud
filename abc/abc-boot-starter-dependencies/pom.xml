@@ -59,6 +59,9 @@
         <!-- Apollo-Client -->
         <apollo-client.version>2.1.0</apollo-client.version>
 
+        <!-- Dubbo -->
+        <dubbo.version>3.2.0</dubbo.version>
+
         <!-- TOOLS-start -->
         <commoms-lang3.version>3.12.0</commoms-lang3.version>
         <fastjson2.version>2.0.29</fastjson2.version>

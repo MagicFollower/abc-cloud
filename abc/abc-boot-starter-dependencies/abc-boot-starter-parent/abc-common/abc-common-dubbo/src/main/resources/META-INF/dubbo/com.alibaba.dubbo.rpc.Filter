@@ -1,0 +1,2 @@
+consumerTraceFilter=com.abc.system.common.dubbo.filter.ConsumerDubboTraceFilter
+providerTraceFilter=com.abc.system.common.dubbo.filter.ProviderDubboTraceIdFilter

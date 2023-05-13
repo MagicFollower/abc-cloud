@@ -25,6 +25,7 @@
         <module>abc-common-distributed-lock</module>
         <module>abc-common-qrcode</module>
         <module>abc-common-apollo-client</module>
+        <module>abc-common-dubbo</module>
     </modules>
 
     <properties>
@@ -86,6 +87,18 @@
                 <groupId>com.ctrip.framework.apollo</groupId>
                 <artifactId>apollo-client</artifactId>
                 <version>${apollo-client.version}</version>
+            </dependency>
+
+            <!-- dubbo -->
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-spring-boot-starter</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-metadata-report-zookeeper</artifactId>
+                <version>${dubbo.version}</version>
             </dependency>
 
             <!-- DAO-start -->
