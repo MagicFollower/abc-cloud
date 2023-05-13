@@ -14,10 +14,6 @@ public class RpcConstants {
      * RPC上下文传递的traceId
      */
     public static final String RPC_TRACE_ID = "_traceId";
-    /**
-     * RPC上下文传递的Elastic Apm traceId
-     */
-    public static final String ELASTIC_APM_TRACE_ID = "_apmTraceId";
 
     private RpcConstants() {
 

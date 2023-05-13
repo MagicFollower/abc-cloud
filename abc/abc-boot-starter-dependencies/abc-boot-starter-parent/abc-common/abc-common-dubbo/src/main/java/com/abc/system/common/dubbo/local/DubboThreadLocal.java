@@ -13,7 +13,7 @@ public class DubboThreadLocal {
     /**
      * 保存当前线程上下文信息
      */
-    private static final ThreadLocal<String> CACHE = new ThreadLocal<String>();
+    private static final ThreadLocal<String> CACHE = new ThreadLocal<>();
 
     /**
      * 获取当前线程euid
