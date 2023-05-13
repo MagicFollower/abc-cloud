@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: fastlink-business-goods
+  main:
+    banner-mode: off
+    web-application-type: none
+
+dubbo:
+  application:
+    name: ${spring.application.name}
+  registry:
+    address: zookeeper://127.0.0.1:2181
+  scan:
+    base-packages: com.abc.business.fastlink.goods.service.impl
+  protocol:
+    name: dubbo
+    port: 10011
+  provider:
+    timeout: 30000
