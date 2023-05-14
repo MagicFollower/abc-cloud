@@ -15,12 +15,15 @@
     <description>abc-fastlink业务侧</description>
     <modules>
         <module>abc-fastlink-business-goods</module>
+        <module>abc-fastlink-business-order</module>
+        <module>abc-fastlink-business-portal</module>
     </modules>
 
     <properties>
         <java.version>1.8</java.version>
         <abc-common.version>0.0.1-SNAPSHOT</abc-common.version>
         <abc-fastlink-business-goods-api.version>0.0.1-SNAPSHOT</abc-fastlink-business-goods-api.version>
+        <abc-fastlink-business-order-api.version>0.0.1-SNAPSHOT</abc-fastlink-business-order-api.version>
     </properties>
 
 </project>

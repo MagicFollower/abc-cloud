@@ -1,0 +1,13 @@
+server:
+  port: 9999
+spring:
+  application:
+    name: abc-fastlink-business-portal
+  main:
+    banner-mode: off
+
+dubbo:
+  application:
+    name: ${spring.application.name}
+  registry:
+    address: zookeeper://127.0.0.1:2181
