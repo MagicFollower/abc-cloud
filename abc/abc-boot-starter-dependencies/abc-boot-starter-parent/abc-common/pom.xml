@@ -22,7 +22,6 @@
         <module>abc-common-dao</module>
         <module>abc-common-minio</module>
         <module>abc-common-file-generator</module>
-        <module>abc-common-distributed-lock</module>
         <module>abc-common-qrcode</module>
         <module>abc-common-apollo-client</module>
         <module>abc-common-dubbo</module>

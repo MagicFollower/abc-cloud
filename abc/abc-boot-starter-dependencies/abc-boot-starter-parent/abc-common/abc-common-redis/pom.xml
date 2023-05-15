@@ -10,6 +10,10 @@
     </parent>
 
     <artifactId>abc-common-redis</artifactId>
+    <description>
+        1.data-redis → 用于基本操作；
+        2.redisson → 用于分布式锁、基本操作；
+    </description>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -21,6 +25,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
         </dependency>
 
         <!-- 使用common-core中的fastjson2作为redis的序列化器 -->
