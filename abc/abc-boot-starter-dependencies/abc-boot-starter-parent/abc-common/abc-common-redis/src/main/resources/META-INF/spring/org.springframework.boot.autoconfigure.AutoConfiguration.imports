@@ -1,2 +1,2 @@
-com.abc.common.redis.configure.RedisConfig
-com.abc.common.redis.service.RedisService
+com.abc.system.common.redis.config.RedisConfig
+com.abc.system.common.redis.service.RedisService
