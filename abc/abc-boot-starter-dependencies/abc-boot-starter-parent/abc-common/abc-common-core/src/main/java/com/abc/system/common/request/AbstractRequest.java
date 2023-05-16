@@ -27,5 +27,5 @@ public abstract class AbstractRequest implements Serializable {
      *
      * @throws BizException 校验失败时，抛出BizException
      */
-    abstract void requestCheck() throws BizException;
+    protected abstract void requestCheck() throws BizException;
 }

@@ -34,6 +34,13 @@
             <artifactId>abc-common-dubbo</artifactId>
             <version>${abc-common.version}</version>
         </dependency>
+
+        <!-- 下方依赖仅供测试使用，随时可以删除 -->
+        <dependency>
+            <groupId>com.abc</groupId>
+            <artifactId>abc-common-redis</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
