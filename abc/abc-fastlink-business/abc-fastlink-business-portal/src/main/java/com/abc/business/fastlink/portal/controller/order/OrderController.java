@@ -86,7 +86,10 @@ public class OrderController {
     private PageResponse<?> queryFromCache(PageInfo pageInfo) {
         if (pageInfo.getPageNum() == 1) {
             try {
-                int cachedTotal = Integer.parseInt(RedissonUtils.getValue(CACHE_DATA_TOTAL_KEY));
+                String cachedTotalStr = RedissonUtils.getValue(CACHE_DATA_TOTAL_KEY);
+                // cachedTotalStr == null时，表示缓存已被移除
+                if (cachedTotalStr == null) return null;
+                int cachedTotal = Integer.parseInt(cachedTotalStr);
                 int cachedDataCount = RedissonUtils.getZSetCount(CACHE_DATA_KEY);
                 // 缓存中包含所有数据，但是pageSize>=真实数据总记录数
                 if (((pageInfo.getPageSize() >= cachedTotal) && (cachedTotal == cachedDataCount)) ||
