@@ -84,12 +84,14 @@ spring:
             max-active: 30
     ```
 
-  - redisson-spring-boot-starter:3.18.0使用的是自定义的连接池
+  - redisson-spring-boot-starter:3.18.0使用的是自定义的连接池（***↪️默认会引入spring-boot-starter-data-redis***）
 
     - [redisson/redisson-spring-boot-starter at master · redisson/redisson (github.com)](https://github.com/redisson/redisson/tree/master/redisson-spring-boot-starter#spring-boot-starter)
 
-    - 注意：redisson默认的springboot配置项目不支持指定database
+    - 注意：两种接口，两种配置，但是只有一种配置会生效（配置之间存在优先级）
 
+      -  ![redisson-spring-boot-starter配置优先级.png](https://github.com/MagicFollower/abc-cloud/blob/main/abc/abc-boot-starter-dependencies/abc-boot-starter-parent/abc-common/img/common-redis/redisson-spring-boot-starter%E9%85%8D%E7%BD%AE%E4%BC%98%E5%85%88%E7%BA%A7.png?raw=true)
+      
       ```yaml
       spring:
         redis:
@@ -136,13 +138,13 @@ spring:
       - redisson配置中idleConnectionTimeout、connectTimeout、timeout分别表示什么？
 
         - 在Redisson的配置中，`idleConnectionTimeout`、`connectTimeout`、`timeout`三个参数分别表示：
-
+      
           - `idleConnectionTimeout`：空闲连接超时时间，当连接池中的连接空闲时间超过该值时，连接会被自动关闭。默认值是30秒。
           - `connectTimeout`：连接超时时间，当连接建立超过该时间时，会抛出异常。默认值是10000毫秒。
           - `timeout`：命令执行超时时间，当命令执行时间超过该值时，会抛出异常。默认值是3000毫秒。
 
           这三个参数都是关于Redis连接的超时时间设置，但是它们之间有一些差异：
-
+      
           - `idleConnectionTimeout`是关于连接空闲时间的超时设置，即连接在空闲一段时间后会被自动关闭，主要影响连接池的性能。
           - `connectTimeout`是连接建立的超时时间设置，即连接在建立一段时间后如果没有建立成功就会抛出异常。
           - `timeout`是命令执行的超时时间设置，即命令执行在一定时间内没有响应就会抛出异常。
@@ -152,14 +154,14 @@ spring:
       - redisson配置中retryAttempts、retryInterval、failedSlaveReconnectionInterval、failedSlaveCheckInterval分别表示什么？
 
         - 在Redisson的配置中，`retryAttempts`、`retryInterval`、`failedSlaveReconnectionInterval`、`failedSlaveCheckInterval`四个参数分别表示：
-
+      
           - `retryAttempts`：Redis命令重试次数，当Redis命令执行失败时，会自动重试该命令的次数。默认值是3次。
           - `retryInterval`：Redis命令重试间隔时间，当Redis命令执行失败后，重试该命令的时间间隔。默认值是1500毫秒。
           - `failedSlaveReconnectionInterval`：从节点连接失败重试间隔时间，当Redis从节点连接失败时，重试连接的时间间隔。默认值是3000毫秒。
           - `failedSlaveCheckInterval`：从节点连接检查间隔时间，Redisson会定期检查从节点的连接是否正常。默认值是60000毫秒。
 
           这四个参数都是关于Redis连接的重试和从节点故障恢复的设置，但是它们之间有一些差异：
-
+      
           - `retryAttempts`和`retryInterval`主要关注Redis命令执行的重试设置，即当Redis命令执行失败时，会自动重试该命令的次数和时间间隔。
           - `failedSlaveReconnectionInterval`和`failedSlaveCheckInterval`主要关注Redis从节点的故障恢复设置，即当Redis从节点连接失败时，重试连接的时间间隔和Redisson检查从节点连接是否正常的时间间隔。
 
@@ -168,12 +170,12 @@ spring:
       - redisson配置中clientName、loadBalancer分别表示什么？
 
         - 在Redisson的配置中，`clientName`和`loadBalancer`两个参数分别表示：
-
+      
           - `clientName`：Redis客户端名称，用于标识Redisson客户端。默认值是"redisson"。
           - `loadBalancer`：Redis集群负载均衡算法，用于在Redis集群中选择一个节点进行操作。默认值是"org.redisson.connection.balancer.RoundRobinLoadBalancer"，即轮询算法。
 
           这两个参数都是关于Redis连接的设置，但是它们之间有一些差异：
-
+      
           - `clientName`主要用于标识Redisson客户端，可以根据实际情况进行设置，以便在Redis中进行监控和管理。
           - `loadBalancer`主要用于在Redis集群中选择一个节点进行操作，可以根据实际情况进行选择不同的负载均衡算法。
 
@@ -182,13 +184,13 @@ spring:
       - redisson配置中subscriptionsPerConnection、subscriptionConnectionMinimumIdleSize、subscriptionConnectionPoolSize分别表示什么？
 
         - 在Redisson的配置中，`subscriptionsPerConnection`、`subscriptionConnectionMinimumIdleSize`、`subscriptionConnectionPoolSize`三个参数分别表示：
-
+      
           - `subscriptionsPerConnection`：每个连接的最大订阅数量，即每个Redis连接最多可以订阅的频道和模式的数量。默认值是5。
           - `subscriptionConnectionMinimumIdleSize`：订阅连接池最小空闲连接数，即订阅连接池中最少保持的空闲连接数量。默认值是1。
           - `subscriptionConnectionPoolSize`：订阅连接池最大连接数，即订阅连接池中最多可以创建的Redis连接数量。默认值是50。
 
           这三个参数都是关于Redis订阅连接池的设置，但是它们之间有一些差异：
-
+      
           - `subscriptionsPerConnection`是关于Redis连接订阅数量的设置，即每个Redis连接最多可以订阅的频道和模式的数量。
           - `subscriptionConnectionMinimumIdleSize`是关于订阅连接池空闲连接数量的设置，即订阅连接池中最少保持的空闲连接数量。
           - `subscriptionConnectionPoolSize`是关于订阅连接池最大连接数量的设置，即订阅连接池中最多可以创建的Redis连接数量。
@@ -204,7 +206,7 @@ spring:
       - redisson配置中slaveConnectionMinimumIdleSize、slaveConnectionPoolSize、masterConnectionMinimumIdleSize、masterConnectionPoolSize分别表示什么？
 
         - 在Redisson的配置中，`slaveConnectionMinimumIdleSize`、`slaveConnectionPoolSize`、`masterConnectionMinimumIdleSize`、`masterConnectionPoolSize`四个参数分别表示：
-
+      
           - `slaveConnectionMinimumIdleSize`：从节点连接池最小空闲连接数，即从节点连接池中最少保持的空闲连接数量。默认值是1。
           - `slaveConnectionPoolSize`：从节点连接池最大连接数，即从节点连接池中最多可以创建的Redis连接数量。默认值是64。
           - `masterConnectionMinimumIdleSize`：主节点连接池最小空闲连接数，即主节点连接池中最少保持的空闲连接数量。默认值是10。
@@ -217,7 +219,7 @@ spring:
       - redisson配置中readMode、subscriptionMode、scanInterval、pingConnectionInterval分别表示什么？
 
         - 在Redisson的配置中，`readMode`、`subscriptionMode`、`scanInterval`、`pingConnectionInterval`四个参数分别表示：
-
+      
           - `readMode`：Redisson读取模式，即在读取数据时采用的策略。默认值是`SLAVE`，表示优先从从节点读取数据，如果从节点不可用，则从主节点读取数据。另外还可以设置为`MASTER`，表示只从主节点读取数据。
           - `subscriptionMode`：Redisson订阅模式，即在订阅频道和模式时采用的策略。默认值是`SLAVE`，表示优先从从节点订阅频道和模式，如果从节点不可用，则从主节点订阅频道和模式。另外还可以设置为`MASTER`，表示只从主节点订阅频道和模式。
           - `scanInterval`：Redisson扫描间隔时间，即Redisson定期检查连接池中连接是否可用的时间间隔。默认值是1000毫秒，即每隔1秒钟检查一次连接池中的连接是否可用。
@@ -228,7 +230,7 @@ spring:
       - redisson配置中keepAlive、tcpNoDelay分别表示什么？
 
         - 在Redisson的配置中，`keepAlive`和`tcpNoDelay`两个参数分别表示：
-
+      
           - `keepAlive`：是否开启TCP连接的SO_KEEPALIVE属性。如果设置为true，则表示开启TCP连接的SO_KEEPALIVE属性，即在TCP连接空闲一段时间后，会自动向对端发送心跳包以保持连接的可用性。默认值是false，表示不开启TCP连接的SO_KEEPALIVE属性。
           - `tcpNoDelay`：是否开启TCP连接的TCP_NODELAY属性。如果设置为true，则表示开启TCP连接的TCP_NODELAY属性，即禁用Nagle算法，可以提高小数据包传输的性能。默认值是true，表示开启TCP连接的TCP_NODELAY属性。
 
@@ -237,7 +239,7 @@ spring:
       - redisson配置中threads、nettyThreads、codec、transportMode分别表示什么？
 
         - 在Redisson的配置中，`threads`、`nettyThreads`、`codec`、`transportMode`四个参数分别表示：
-
+      
           - `threads`：Redisson客户端的工作线程数量。默认值是当前CPU核心数*2。
           - `nettyThreads`：Redisson客户端Netty的工作线程数量。默认值是当前CPU核心数*2。
           - `codec`：Redisson客户端的编解码器类型。默认值是`org.redisson.codec.JsonJacksonCodec`，表示使用JSON格式进行编解码。另外还可以设置为`org.redisson.codec.SerializationCodec`，表示使用Java序列化进行编解码。
@@ -248,7 +250,7 @@ spring:
       - org.redisson.codec.Kryo5Codec是什么？
 
         - `org.redisson.codec.Kryo5Codec`是Redisson提供的一种编解码器类型，用于在Redisson客户端和Redis服务器之间进行数据的序列化和反序列化。它使用Kryo 5.x版本进行对象的序列化和反序列化，相比于Java默认的序列化方式，Kryo序列化更加高效，序列化后的数据更加紧凑，可以减少网络传输的数据量和传输时间，从而提高Redisson客户端的性能。
-
+      
       - *End.*
 
 
