@@ -12,14 +12,14 @@ spring:
     timeout: 5000
 
 dubbo:
+  registry:
+    address: zookeeper://127.0.0.1:2181
   application:
     name: ${spring.application.name}
     ## Dubbo框架的QoS（Quality of Service）服务
     qos-enable: false
     ## 默认qos-port: 22222
     qos-port: 33333
-  registry:
-    address: zookeeper://127.0.0.1:2181
   consumer:
     check: false
     timeout: 5000
