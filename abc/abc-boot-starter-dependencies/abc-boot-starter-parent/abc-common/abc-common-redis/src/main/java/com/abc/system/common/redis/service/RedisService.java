@@ -50,20 +50,6 @@ public class RedisService {
     }
 
     /**
-     * 缓存基本的对象，Integer、String、实体类等
-     * 注意：JDK8及之后，请使用Duration替换旧版本中的long+TimeUnit
-     *
-     * @param key      缓存的键值
-     * @param value    缓存的值
-     * @param timeout  时间
-     * @param timeUnit 时间颗粒度
-     */
-    @Deprecated
-    public <T> void set(final String key, final T value, final Long timeout, final TimeUnit timeUnit) {
-        redisTemplate.opsForValue().set(key, value, timeout, timeUnit);
-    }
-
-    /**
      * 设置有效时间(单位秒)
      *
      * @param key            Redis键
@@ -83,20 +69,6 @@ public class RedisService {
      */
     public boolean expire(final String key, final Duration duration) {
         return Boolean.TRUE.equals(redisTemplate.expire(key, duration));
-    }
-
-    /**
-     * 设置有效时间(自定义单位)
-     * 注意：JDK8及之后，请使用Duration替换旧版本中的long+TimeUnit
-     *
-     * @param key     Redis键
-     * @param timeout 超时时间
-     * @param unit    时间单位
-     * @return true=设置成功；false=设置失败
-     */
-    @Deprecated
-    public boolean expire(final String key, final long timeout, final TimeUnit unit) {
-        return Boolean.TRUE.equals(redisTemplate.expire(key, timeout, unit));
     }
 
     /**
@@ -143,7 +115,7 @@ public class RedisService {
     }
 
     //###############################################################
-    //######List、Set
+    //######List、Set、Map
     //###############################################################
 
     /**
@@ -203,6 +175,20 @@ public class RedisService {
     public <T> void setMap(final String key, final Map<String, T> dataMap) {
         if (dataMap != null) {
             redisTemplate.opsForHash().putAll(key, dataMap);
+        }
+    }
+
+    /**
+     * 缓存Map
+     *
+     * @param key     缓存键值
+     * @param dataMap Map
+     * @param <T>     T
+     */
+    public <T> void setMap(final String key, final Map<String, T> dataMap, final Duration duration) {
+        if (dataMap != null) {
+            redisTemplate.opsForHash().putAll(key, dataMap);
+            expire(key, duration);
         }
     }
 
