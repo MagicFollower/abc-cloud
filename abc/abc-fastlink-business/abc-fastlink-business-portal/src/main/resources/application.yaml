@@ -20,3 +20,7 @@ dubbo:
     qos-port: 33333
   registry:
     address: zookeeper://127.0.0.1:2181
+  consumer:
+    check: false
+    timeout: 5000
+    retries: 0
