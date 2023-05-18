@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class RedisService {
      * @param key   缓存的键值
      * @param value 缓存的值
      */
-    public <T> void setCacheObject(final String key, final T value) {
+    public <T> void set(final String key, final T value) {
         redisTemplate.opsForValue().set(key, value);
     }
 
@@ -42,32 +43,58 @@ public class RedisService {
      *
      * @param key      缓存的键值
      * @param value    缓存的值
+     * @param duration 时间范围
+     */
+    public <T> void set(final String key, final T value, final Duration duration) {
+        redisTemplate.opsForValue().set(key, value, duration);
+    }
+
+    /**
+     * 缓存基本的对象，Integer、String、实体类等
+     * 注意：JDK8及之后，请使用Duration替换旧版本中的long+TimeUnit
+     *
+     * @param key      缓存的键值
+     * @param value    缓存的值
      * @param timeout  时间
      * @param timeUnit 时间颗粒度
      */
-    public <T> void setCacheObject(final String key, final T value, final Long timeout, final TimeUnit timeUnit) {
+    @Deprecated
+    public <T> void set(final String key, final T value, final Long timeout, final TimeUnit timeUnit) {
         redisTemplate.opsForValue().set(key, value, timeout, timeUnit);
     }
 
     /**
      * 设置有效时间(单位秒)
      *
-     * @param key     Redis键
+     * @param key            Redis键
      * @param timeoutSeconds 超时时间
      * @return true=设置成功；false=设置失败
      */
     public boolean expire(final String key, final long timeoutSeconds) {
-        return expire(key, timeoutSeconds, TimeUnit.SECONDS);
+        return expire(key, Duration.ofSeconds(timeoutSeconds));
+    }
+
+    /**
+     * 设置有效时间(Duration)
+     *
+     * @param key      Redis键
+     * @param duration 时间范围
+     * @return true=设置成功；false=设置失败
+     */
+    public boolean expire(final String key, final Duration duration) {
+        return Boolean.TRUE.equals(redisTemplate.expire(key, duration));
     }
 
     /**
      * 设置有效时间(自定义单位)
+     * 注意：JDK8及之后，请使用Duration替换旧版本中的long+TimeUnit
      *
      * @param key     Redis键
      * @param timeout 超时时间
      * @param unit    时间单位
      * @return true=设置成功；false=设置失败
      */
+    @Deprecated
     public boolean expire(final String key, final long timeout, final TimeUnit unit) {
         return Boolean.TRUE.equals(redisTemplate.expire(key, timeout, unit));
     }
@@ -76,21 +103,11 @@ public class RedisService {
      * 获取有效时间
      *
      * @param key Redis键
-     * @return 有效时间
+     * @return 有效时间(秒)
      */
     public long getExpire(final String key) {
         Long expire = redisTemplate.getExpire(key);
         return expire != null ? expire : 0;
-    }
-
-    /**
-     * 判断 key是否存在
-     *
-     * @param key 键
-     * @return true 存在 false不存在
-     */
-    public boolean hasKey(String key) {
-        return Boolean.TRUE.equals(redisTemplate.hasKey(key));
     }
 
     /**
@@ -99,7 +116,7 @@ public class RedisService {
      * @param key 缓存键值
      * @return 缓存键值对应的数据
      */
-    public <T> T getCacheObject(final String key) {
+    public <T> T get(final String key) {
         ValueOperations<String, T> operation = redisTemplate.opsForValue();
         return operation.get(key);
     }
@@ -110,7 +127,7 @@ public class RedisService {
      * @param key 缓存键值
      * @return true/false
      */
-    public boolean deleteObject(final String key) {
+    public boolean delete(final String key) {
         return Boolean.TRUE.equals(redisTemplate.delete(key));
     }
 
@@ -120,10 +137,14 @@ public class RedisService {
      * @param collection 多个对象
      * @return true/false
      */
-    public boolean deleteObject(final Collection collection) {
+    public boolean delete(final Collection<String> collection) {
         Long delete = redisTemplate.delete(collection);
         return delete != null && delete > 0;
     }
+
+    //###############################################################
+    //######List、Set
+    //###############################################################
 
     /**
      * 缓存List数据
@@ -132,7 +153,7 @@ public class RedisService {
      * @param dataList 待缓存的List数据
      * @return 操作后列表的长度
      */
-    public <T> long setCacheList(final String key, final List<T> dataList) {
+    public <T> long setList(final String key, final List<T> dataList) {
         Long count = redisTemplate.opsForList().rightPushAll(key, dataList);
         return count != null ? count : 0;
     }
@@ -143,7 +164,7 @@ public class RedisService {
      * @param key 缓存的键值
      * @return 缓存键值对应的数据
      */
-    public <T> List<T> getCacheList(final String key) {
+    public <T> List<T> getList(final String key) {
         return redisTemplate.opsForList().range(key, 0, -1);
     }
 
@@ -154,7 +175,7 @@ public class RedisService {
      * @param dataSet 缓存的数据
      * @return BoundSetOperations
      */
-    public <T> BoundSetOperations<String, T> setCacheSet(final String key, final Set<T> dataSet) {
+    public <T> BoundSetOperations<String, T> setSet(final String key, final Set<T> dataSet) {
         BoundSetOperations<String, T> setOperation = redisTemplate.boundSetOps(key);
         for (T t : dataSet) {
             setOperation.add(t);
@@ -168,7 +189,7 @@ public class RedisService {
      * @param key 缓存键值
      * @return Set集合
      */
-    public <T> Set<T> getCacheSet(final String key) {
+    public <T> Set<T> getSet(final String key) {
         return redisTemplate.opsForSet().members(key);
     }
 
@@ -179,7 +200,7 @@ public class RedisService {
      * @param dataMap Map
      * @param <T>     T
      */
-    public <T> void setCacheMap(final String key, final Map<String, T> dataMap) {
+    public <T> void setMap(final String key, final Map<String, T> dataMap) {
         if (dataMap != null) {
             redisTemplate.opsForHash().putAll(key, dataMap);
         }
@@ -191,7 +212,7 @@ public class RedisService {
      * @param key 缓存键值
      * @return T
      */
-    public <T> Map<String, T> getCacheMap(final String key) {
+    public <T> Map<String, T> getMap(final String key) {
         return redisTemplate.opsForHash().entries(key);
     }
 
@@ -202,7 +223,7 @@ public class RedisService {
      * @param hKey  Hash键
      * @param value 值
      */
-    public <T> void setCacheMapValue(final String key, final String hKey, final T value) {
+    public <T> void setMapValue(final String key, final String hKey, final T value) {
         redisTemplate.opsForHash().put(key, hKey, value);
     }
 
@@ -213,7 +234,7 @@ public class RedisService {
      * @param hKey Hash键
      * @return Hash中的对象
      */
-    public <T> T getCacheMapValue(final String key, final String hKey) {
+    public <T> T getMapValue(final String key, final String hKey) {
         HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
         return opsForHash.get(key, hKey);
     }
@@ -225,7 +246,7 @@ public class RedisService {
      * @param hKeys Hash键集合
      * @return Hash对象集合
      */
-    public <T> List<T> getMultiCacheMapValue(final String key, final Collection<Object> hKeys) {
+    public <T> List<T> getMultiMapValue(final String key, final Collection<Object> hKeys) {
         return redisTemplate.opsForHash().multiGet(key, hKeys);
     }
 
@@ -236,8 +257,18 @@ public class RedisService {
      * @param hKey Hash键
      * @return 是否成功
      */
-    public boolean deleteCacheMapValue(final String key, final String hKey) {
+    public boolean deleteMapValue(final String key, final String hKey) {
         return redisTemplate.opsForHash().delete(key, hKey) > 0;
+    }
+
+    /**
+     * 判断 key是否存在
+     *
+     * @param key 键
+     * @return true 存在 false不存在
+     */
+    public boolean hasKey(String key) {
+        return Boolean.TRUE.equals(redisTemplate.hasKey(key));
     }
 
     /**
