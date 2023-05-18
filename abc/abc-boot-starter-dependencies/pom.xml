@@ -53,6 +53,7 @@
         <!-- 分布式锁 -->
         <!-- 注意：3.18.1开始对JDK最低版本出现限制，最低要求JDK17 -->
         <redisson-spring-boot-starter.version>3.18.0</redisson-spring-boot-starter.version>
+        <com.esotericsoftware.kryo.version>5.5.0</com.esotericsoftware.kryo.version>
 
         <!-- 条形码、二维码 -->
         <google-zxing.version>3.5.1</google-zxing.version>

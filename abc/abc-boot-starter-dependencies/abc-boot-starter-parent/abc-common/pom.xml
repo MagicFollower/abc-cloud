@@ -57,17 +57,25 @@
             <!-- spring-boot end -->
 
             <!-- data-redis -->
+            <!-- redis模块不再单独引入spring-boot-starter-data-redis, redisson-spring-boot-starter中默认已经引入 -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-data-redis</artifactId>
                 <version>${spring-boot.version}</version>
             </dependency>
-            <!-- distributed-lock -->
+            <!-- distributed-lock start -->
             <dependency>
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson-spring-boot-starter</artifactId>
                 <version>${redisson-spring-boot-starter.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.esotericsoftware</groupId>
+                <artifactId>kryo</artifactId>
+                <version>${com.esotericsoftware.kryo.version}</version>
+            </dependency>
+            <!-- distributed-lock end -->
+
 
             <!-- 二维码、条形码 -->
             <dependency>
