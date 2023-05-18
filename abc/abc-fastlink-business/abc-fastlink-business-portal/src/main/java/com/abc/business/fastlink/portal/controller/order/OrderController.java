@@ -6,6 +6,7 @@ import com.abc.business.fastlink.portal.controller.order.constant.Url;
 import com.abc.business.fastlink.portal.controller.order.dto.OrderRequest;
 import com.abc.system.common.page.PageInfo;
 import com.abc.system.common.page.PageResponse;
+import com.abc.system.common.redis.service.RedisService;
 import com.abc.system.common.redis.util.RedissonUtils;
 import com.abc.system.common.response.ResponseData;
 import com.abc.system.common.response.ResponseProcessor;
@@ -48,6 +49,8 @@ public class OrderController {
     @DubboReference
     private FastlinkOrderService fastlinkOrderService;
 
+    private final RedisService redisService;
+
     @PostMapping(Url.ORDER_BASE_QUERY)
     public ResponseData<PageResponse<?>> queryOrder(@RequestBody OrderRequest orderRequest) {
         orderRequest.requestCheck();
@@ -72,7 +75,8 @@ public class OrderController {
         total = 120L;
 
         // 将首页数据写入缓存
-        saveToCache(pageInfo, jsonArray, total);
+        saveToCacheRedisson(pageInfo, jsonArray, total);
+        saveToCacheDataDataRedis(pageInfo, jsonArray, total);
 
         PageResponse<JSONArray> stringPageResponse = new PageResponse<>();
         stringPageResponse.setData(jsonArray);
@@ -113,11 +117,11 @@ public class OrderController {
         return null;
     }
 
-    private void saveToCache(PageInfo pageInfo, JSONArray data, long total) {
+    private void saveToCacheRedisson(PageInfo pageInfo, JSONArray data, long total) {
         // 缓存首页数据、数据总数
         try {
             if (pageInfo.getPageNum() == 1) {
-                clearFirstPageCache();
+                clearFirstPageCacheRedisson();
                 Map<Object, Double> stringLongHashMap = new HashMap<>();
                 data.forEach(x -> {
                     JSONObject jsonObject = (JSONObject) x;
@@ -130,13 +134,38 @@ public class OrderController {
             log.warn("缓存写入异常，请检查缓存服务是否正常运行！");
         }
     }
+    private void saveToCacheDataDataRedis(PageInfo pageInfo, JSONArray data, long total) {
+        // 缓存首页数据、数据总数
+        try {
+            if (pageInfo.getPageNum() == 1) {
+                clearFirstPageCacheDataRedis();
+                Map<String, String> stringLongHashMap = new HashMap<>();
+                data.forEach(x -> {
+                    JSONObject jsonObject = (JSONObject) x;
+                    stringLongHashMap.put(jsonObject.getString("id"), jsonObject.toJSONString());
+                });
+                redisService.setMap("aaa", stringLongHashMap, Duration.ofDays(1));
+                redisService.set("aaa_total", String.valueOf(total));
+            }
+        } catch (Exception e) {
+            log.warn("缓存写入异常，请检查缓存服务是否正常运行！");
+        }
+    }
 
-    private void clearFirstPageCache() {
+    private void clearFirstPageCacheRedisson() {
         final String CACHE_DATA_DISTRIBUTED_LOCK_TAG = "LOCK_OrderController_Order";
         RLock lock = redissonClient.getLock(CACHE_DATA_DISTRIBUTED_LOCK_TAG);
         lock.lock();
         RedissonUtils.delete(CACHE_DATA_KEY);
         RedissonUtils.delete(CACHE_DATA_TOTAL_KEY);
+        lock.unlock();
+    }
+    private void clearFirstPageCacheDataRedis() {
+        final String CACHE_DATA_DISTRIBUTED_LOCK_TAG = "LOCK_OrderController_Order";
+        RLock lock = redissonClient.getLock(CACHE_DATA_DISTRIBUTED_LOCK_TAG);
+        lock.lock();
+        redisService.delete("aaa");
+        redisService.delete("aaa_total");
         lock.unlock();
     }
 }
