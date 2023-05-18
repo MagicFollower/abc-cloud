@@ -46,10 +46,9 @@ public class OrderController {
     private final String CACHE_DATA_KEY = "OrderController_Order";
     private final String CACHE_DATA_TOTAL_KEY = "OrderController_Order_Total";
     private final RedissonClient redissonClient;
+    private final RedisService redisService;
     @DubboReference
     private FastlinkOrderService fastlinkOrderService;
-
-    private final RedisService redisService;
 
     @PostMapping(Url.ORDER_BASE_QUERY)
     public ResponseData<PageResponse<?>> queryOrder(@RequestBody OrderRequest orderRequest) {
@@ -134,6 +133,7 @@ public class OrderController {
             log.warn("缓存写入异常，请检查缓存服务是否正常运行！");
         }
     }
+
     private void saveToCacheDataDataRedis(PageInfo pageInfo, JSONArray data, long total) {
         // 缓存首页数据、数据总数
         try {
@@ -160,6 +160,7 @@ public class OrderController {
         RedissonUtils.delete(CACHE_DATA_TOTAL_KEY);
         lock.unlock();
     }
+
     private void clearFirstPageCacheDataRedis() {
         final String CACHE_DATA_DISTRIBUTED_LOCK_TAG = "LOCK_OrderController_Order";
         RLock lock = redissonClient.getLock(CACHE_DATA_DISTRIBUTED_LOCK_TAG);
