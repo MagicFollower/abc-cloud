@@ -6,10 +6,8 @@ spring:
   main:
     banner-mode: off
   redis:
-    database: 1
-    host: 192.168.204.101
-    port: 16379
-    timeout: 5000
+    redisson:
+      file: classpath:redisson.yaml
 
 dubbo:
   registry:
