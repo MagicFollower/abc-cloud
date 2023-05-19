@@ -15,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -211,11 +212,11 @@ public class RedissonUtils {
      *
      * @param key      存储的键
      * @param value    存储的值
-     * @param timeOut  过期时间，-1：表示未过期
+     * @param timeout  过期时间，-1：表示未过期
      * @param timeUnit 过期时间单位
      * @return true:成功 false:失败
      */
-    public static boolean setValue(String key, String value, long timeOut, TimeUnit timeUnit) {
+    public static boolean setValue(String key, String value, long timeout, TimeUnit timeUnit) {
         RedissonClient redissonClient = SpringHelper.getBean(RedissonClient.class);
 
         try {
@@ -223,12 +224,12 @@ public class RedissonUtils {
             RBucket<String> rBucket = redissonClient.getBucket(key);
 
             // -1表示未过期
-            if (-1 == timeOut) {
+            if (-1 == timeout) {
                 // 60分钟过期
                 rBucket.set(value);
             } else {
                 // 60分钟过期
-                rBucket.set(value, timeOut, timeUnit);
+                rBucket.set(value, timeout, timeUnit);
             }
         } catch (Exception e) {
             log.error(">>>>>>>>>>> set key={},value={} exception: <<<<<<<<<<<", key, value, e);
@@ -279,11 +280,11 @@ public class RedissonUtils {
      *
      * @param mainKey  redis中的KEY
      * @param values   map集合
-     * @param timeOut  过期时间
+     * @param timeout  过期时间
      * @param timeUnit 过期时间单位
      * @return true:成功 false:失败
      */
-    public static boolean setValueForMap(String mainKey, Map<String, List<String>> values, long timeOut,
+    public static boolean setValueForMap(String mainKey, Map<String, List<String>> values, long timeout,
                                          TimeUnit timeUnit) {
         RedissonClient redissonClient = SpringHelper.getBean(RedissonClient.class);
         RMap<String, String> maps = redissonClient.getMap(mainKey);
@@ -293,7 +294,7 @@ public class RedissonUtils {
                 maps.put(k, JSONObject.toJSONString(v));
             });
             // 设置过期时间
-            maps.expire(timeOut, timeUnit);
+            maps.expire(Duration.of(timeout, ChronoUnit.valueOf(timeUnit.name())));
             log.info(">>>>>>>>>>> set value for Map|mainKey:{}|query times={} ms |success <<<<<<<<<<<", mainKey
                     , (System.currentTimeMillis() - startTime));
             return true;
@@ -317,18 +318,18 @@ public class RedissonUtils {
      * @param mainKey  redis中的KEY
      * @param key      集合中的KEY
      * @param values   对应的值
-     * @param timeOut  过期时间
+     * @param timeout  过期时间
      * @param timeUnit 过期时间单位
      * @return true:成功 false:失败
      */
-    public static boolean setValueForMap(String mainKey, String key, List<String> values, long timeOut,
+    public static boolean setValueForMap(String mainKey, String key, List<String> values, long timeout,
                                          TimeUnit timeUnit) {
         RedissonClient redissonClient = SpringHelper.getBean(RedissonClient.class);
         RMap<String, String> maps = redissonClient.getMap(mainKey);
         try {
             maps.put(key, JSONObject.toJSONString(values));
             // 设置过期时间
-            maps.expire(timeOut, timeUnit);
+            maps.expire(Duration.of(timeout, ChronoUnit.valueOf(timeUnit.name())));
             return true;
         } catch (Exception e) {
             log.error(">>>>>>>>>>> get value for {} exception: <<<<<<<<<<<", key, e);
@@ -360,13 +361,13 @@ public class RedissonUtils {
         try {
             set.add(values);
             // 设置过期时间
-            set.expire(timeout, timeUnit);
+            set.expire(Duration.of(timeout, ChronoUnit.valueOf(timeUnit.name())));
             log.info(">>>>>>>>>>> save value to redis|set|success <<<<<<<<<<<");
             return true;
         } catch (Exception e) {
             log.error(">>>>>>>>>>> save value to redis|set|key:{}|exception: <<<<<<<<<<<", key, e);
-            throw new RedisException(SystemRetCodeConstants.REQUISITE_PARAMETER_NOT_EXIST.getCode(),
-                    SystemRetCodeConstants.REQUEST_DATA_ERROR.getMessage().concat(":用户ID为空"));
+            throw new RedisException(SystemRetCodeConstants.SYSTEM_ERROR.getCode(),
+                    SystemRetCodeConstants.SYSTEM_ERROR.getMessage());
         }
     }
 
@@ -395,8 +396,8 @@ public class RedissonUtils {
             return true;
         } catch (Exception e) {
             log.error(">>>>>>>>>>> save value to redis|set|key:{}|exception: <<<<<<<<<<<", key, e);
-            throw new RedisException(SystemRetCodeConstants.REQUISITE_PARAMETER_NOT_EXIST.getCode(),
-                    SystemRetCodeConstants.REQUEST_DATA_ERROR.getMessage().concat(":用户ID为空"));
+            throw new RedisException(SystemRetCodeConstants.SYSTEM_ERROR.getCode(),
+                    SystemRetCodeConstants.SYSTEM_ERROR.getMessage());
         }
     }
 
