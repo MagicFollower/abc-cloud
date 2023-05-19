@@ -32,8 +32,8 @@ public class FastlinkOrderServiceImpl implements FastlinkOrderService {
         try {
             BaseResponse<String> goodsResponse = fastlinkGoodsService.query();
             String goodsResult = goodsResponse.getResult();
-            orderResponse.setCode(SystemRetCodeConstants.SUCCESS.getCode());
-            orderResponse.setMsg(SystemRetCodeConstants.SUCCESS.getMessage());
+            orderResponse.setCode(SystemRetCodeConstants.OP_SUCCESS.getCode());
+            orderResponse.setMsg(SystemRetCodeConstants.OP_SUCCESS.getMessage());
             orderResponse.setResult(goodsResult + "→" + "order_data");
             orderResponse.setTotal(1L);
         } catch (BaseException be) {

@@ -23,8 +23,8 @@ public class FastlinkGoodsServiceImpl implements FastLinkGoodsService {
         BaseResponse<String> response = new BaseResponse<>();
         // todo 模拟响应
 
-        response.setCode(SystemRetCodeConstants.SUCCESS.getCode());
-        response.setMsg(SystemRetCodeConstants.SUCCESS.getMessage());
+        response.setCode(SystemRetCodeConstants.OP_SUCCESS.getCode());
+        response.setMsg(SystemRetCodeConstants.OP_SUCCESS.getMessage());
         response.setResult("goods_data");
         response.setTotal(1L);
         return response;
