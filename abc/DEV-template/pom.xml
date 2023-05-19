@@ -6,7 +6,7 @@
     <artifactId>DEV-TEMPLATE</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>abc-boot-starter-dependencies</name>
+    <name>DEV-template</name>
     <description>
         Web后端标准开发流程
     </description>
