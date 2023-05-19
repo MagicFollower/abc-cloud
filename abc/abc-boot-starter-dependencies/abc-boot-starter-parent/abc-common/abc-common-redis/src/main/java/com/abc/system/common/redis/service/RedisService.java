@@ -1,8 +1,5 @@
 package com.abc.system.common.redis.service;
 
-import com.abc.system.common.constant.SystemRetCodeConstants;
-import com.abc.system.common.exception.redis.RedisException;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -267,13 +264,6 @@ public class RedisService {
      */
     public Collection<String> keys(final String pattern) {
         return redisTemplate.keys(pattern);
-    }
-
-
-    private void keyExistsCheck(String key){
-        if(StringUtils.isEmpty(key)) {
-            // throw new RedisException(SystemRetCodeConstants.REDIS_KEY_NOT_EXISTS);
-        }
     }
 }
 
