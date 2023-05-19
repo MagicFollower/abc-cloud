@@ -25,6 +25,7 @@
         <module>abc-common-qrcode</module>
         <module>abc-common-apollo-client</module>
         <module>abc-common-dubbo</module>
+        <module>abc-common-distributed-lock</module>
     </modules>
 
     <properties>
@@ -37,6 +38,11 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
                 <version>${spring-boot.version}</version>
             </dependency>
             <dependency>

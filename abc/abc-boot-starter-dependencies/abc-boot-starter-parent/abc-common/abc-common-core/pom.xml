@@ -29,6 +29,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- spring-aop -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
 
         <!-- 核心工具包 -->
         <dependency>
@@ -65,7 +71,6 @@
         <dependency>
             <groupId>com.abc</groupId>
             <artifactId>abc-common-exception</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
