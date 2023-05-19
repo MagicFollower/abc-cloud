@@ -111,8 +111,6 @@ spring:
       ```yaml
       spring:
         redis:
-         # single、sentinel模式下生效
-         database: 1
          redisson: 
            config: |
               clusterServersConfig:
@@ -150,9 +148,9 @@ spring:
               codec: !<org.redisson.codec.Kryo5Codec> {}
               transportMode: "NIO"
       ```
-
+      
       - 哨兵配置
-    
+
         - ```yaml
           spring:
             application:
@@ -196,7 +194,7 @@ spring:
           codec: !<org.redisson.codec.Kryo5Codec> {}
           transportMode: "NIO"
           ```
-    
+      
         - ```yaml
           spring:
             application:
