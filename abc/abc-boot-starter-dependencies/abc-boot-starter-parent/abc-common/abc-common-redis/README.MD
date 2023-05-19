@@ -84,12 +84,14 @@ spring:
             max-active: 30
     ```
 
-  - redisson-spring-boot-starter:3.18.0使用的是自定义的连接池（***↪️默认会引入spring-boot-starter-data-redis***）
+  - redisson-spring-boot-starter:3.18.0使用的是自定义的连接池（***↪️默认会引入spring-boot-starter-data-redis，但是⤵️***）
+
+    - ☀️`redisson-spring-boot-starter`会引入`spring-boot-starter-data-redis`，***但是移除了其中lettuce。***
 
     - [redisson/redisson-spring-boot-starter at master · redisson/redisson (github.com)](https://github.com/redisson/redisson/tree/master/redisson-spring-boot-starter#spring-boot-starter)
 
     - 注意：两种接口，两种配置，但是只有一种配置会生效（配置之间存在优先级）
-
+    
       - ![redisson-spring-boot-starter配置优先级.png](https://github.com/MagicFollower/abc-cloud/blob/main/abc/abc-boot-starter-dependencies/abc-boot-starter-parent/abc-common/img/common-redis/redisson-spring-boot-starter%E9%85%8D%E7%BD%AE%E4%BC%98%E5%85%88%E7%BA%A7.png?raw=true)
       
       - ```xml
@@ -150,7 +152,7 @@ spring:
       ```
 
       - 哨兵配置
-
+    
         - ```yaml
           spring:
             application:
@@ -194,7 +196,7 @@ spring:
           codec: !<org.redisson.codec.Kryo5Codec> {}
           transportMode: "NIO"
           ```
-
+    
         - ```yaml
           spring:
             application:
