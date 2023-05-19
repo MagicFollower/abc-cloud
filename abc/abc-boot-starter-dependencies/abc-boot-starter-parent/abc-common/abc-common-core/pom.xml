@@ -61,17 +61,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok-mapstruct-binding</artifactId>
         </dependency>
-
-        <!-- 引入abc-common-exception -->
-        <!--
-            关于为什么要在common-core中引入common-exception的解释：
-            1.引入自定义异常模块后，意味着你需要在代码中添加日志锚点，此时集成lombok+spring-jcl，这些工具被定义在common-core中；
-            2.common-exception并不直接暴露给任何其他模块（系统+业务），当有模块需要使用自定义异常时需要引入common-core核心包。
-        -->
-        <dependency>
-            <groupId>com.abc</groupId>
-            <artifactId>abc-common-exception</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

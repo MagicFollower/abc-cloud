@@ -1,5 +1,6 @@
 package com.abc.system.common.exception.redis;
 
+import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.base.BaseException;
 
 /**
@@ -14,6 +15,12 @@ public class RedisException extends BaseException {
 
     public RedisException() {
         super();
+    }
+
+    public RedisException(SystemRetCodeConstants systemRetCodeConstants) {
+        super();
+        this.errorCode = systemRetCodeConstants.getCode();
+        this.message = systemRetCodeConstants.getMessage();
     }
 
     public RedisException(String errorCode) {

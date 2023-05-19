@@ -32,11 +32,6 @@
             </dependency>
             <dependency>
                 <groupId>com.abc</groupId>
-                <artifactId>abc-common-exception</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.abc</groupId>
                 <artifactId>abc-common-web</artifactId>
                 <version>${project.version}</version>
             </dependency>

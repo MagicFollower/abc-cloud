@@ -1,5 +1,6 @@
 package com.abc.system.common.exception.business;
 
+import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.base.BaseException;
 
 /**
@@ -7,6 +8,12 @@ import com.abc.system.common.exception.base.BaseException;
  */
 public class BizException extends BaseException {
     public BizException() {
+    }
+
+    public BizException(SystemRetCodeConstants systemRetCodeConstants) {
+        super();
+        this.errorCode = systemRetCodeConstants.getCode();
+        this.message = systemRetCodeConstants.getMessage();
     }
 
     public BizException(String errorCode) {

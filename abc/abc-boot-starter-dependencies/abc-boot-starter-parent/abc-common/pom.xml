@@ -16,7 +16,6 @@
 
     <modules>
         <module>abc-common-core</module>
-        <module>abc-common-exception</module>
         <module>abc-common-web</module>
         <module>abc-common-redis</module>
         <module>abc-common-dao</module>
