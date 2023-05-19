@@ -2,7 +2,7 @@ package com.abc.business.fastlink.goods.service.impl;
 
 import com.abc.business.fastlink.goods.api.FastLinkGoodsService;
 import com.abc.system.common.constant.SystemRetCodeConstants;
-import com.abc.system.common.exception.BizException;
+import com.abc.system.common.exception.business.BizException;
 import com.abc.system.common.response.BaseResponse;
 import org.apache.dubbo.config.annotation.DubboService;
 

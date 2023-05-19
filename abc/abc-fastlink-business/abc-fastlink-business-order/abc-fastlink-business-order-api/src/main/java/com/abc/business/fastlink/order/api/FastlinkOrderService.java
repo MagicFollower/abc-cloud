@@ -1,6 +1,6 @@
 package com.abc.business.fastlink.order.api;
 
-import com.abc.system.common.exception.BizException;
+import com.abc.system.common.exception.business.BizException;
 import com.abc.system.common.response.BaseResponse;
 
 /**

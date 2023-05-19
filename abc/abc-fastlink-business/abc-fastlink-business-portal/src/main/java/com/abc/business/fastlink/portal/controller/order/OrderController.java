@@ -6,8 +6,9 @@ import com.abc.business.fastlink.portal.controller.order.constant.Url;
 import com.abc.business.fastlink.portal.controller.order.dto.OrderRequest;
 import com.abc.system.common.page.PageInfo;
 import com.abc.system.common.page.PageResponse;
+import com.abc.system.common.redis.helper.RedissonHelper;
 import com.abc.system.common.redis.service.RedisService;
-import com.abc.system.common.redis.util.RedissonUtils;
+import com.abc.system.common.redis.helper.RedissonHelper;
 import com.abc.system.common.response.BaseResponse;
 import com.abc.system.common.response.ResponseData;
 import com.abc.system.common.response.ResponseProcessor;
@@ -58,6 +59,9 @@ public class OrderController {
     public ResponseData<String> testDistributedLock() {
         System.out.println("OrderController.testDistributedLock");
 
+        RedissonHelper.addAndGet("aaaaaaaaaaaaaa", 10);
+        RedissonHelper.addAndGet("aaaaaaaaaaaaaa", -6);
+
         // 模拟获取响应数据
         BaseResponse<String> stringBaseResponse = new BaseResponse<>();
         stringBaseResponse.setTotal(1L);
@@ -106,15 +110,15 @@ public class OrderController {
     private PageResponse<?> queryFromCache(PageInfo pageInfo) {
         if (pageInfo.getPageNum() == 1) {
             try {
-                String cachedTotalStr = RedissonUtils.getValue(CACHE_DATA_TOTAL_KEY);
+                String cachedTotalStr = RedissonHelper.get(CACHE_DATA_TOTAL_KEY);
                 // cachedTotalStr == null时，表示缓存已被移除
                 if (cachedTotalStr == null) return null;
                 int cachedTotal = Integer.parseInt(cachedTotalStr);
-                int cachedDataCount = RedissonUtils.getZSetCount(CACHE_DATA_KEY);
+                int cachedDataCount = RedissonHelper.getZSetCount(CACHE_DATA_KEY);
                 // 缓存中包含所有数据，但是pageSize>=真实数据总记录数
                 if (((pageInfo.getPageSize() >= cachedTotal) && (cachedTotal == cachedDataCount)) ||
                         (pageInfo.getPageSize() == cachedDataCount)) {
-                    PageResponse<List<String>> pageInfoFromRedis = RedissonUtils
+                    PageResponse<List<String>> pageInfoFromRedis = RedissonHelper
                             .getPageInfoFromRedis(pageInfo, CACHE_DATA_KEY);
                     JSONArray jsonArray = new JSONArray();
                     pageInfoFromRedis.getData().stream().map(JSONObject::parseObject).forEach(jsonArray::add);
@@ -143,8 +147,8 @@ public class OrderController {
                     JSONObject jsonObject = (JSONObject) x;
                     stringLongHashMap.put(jsonObject.toJSONString(), jsonObject.getDouble("age"));
                 });
-                RedissonUtils.saveRecordToRedis(CACHE_DATA_KEY, stringLongHashMap, Duration.ofDays(1));
-                RedissonUtils.setValue(CACHE_DATA_TOTAL_KEY, String.valueOf(total));
+                RedissonHelper.saveRecordToRedis(CACHE_DATA_KEY, stringLongHashMap, Duration.ofDays(1));
+                RedissonHelper.set(CACHE_DATA_TOTAL_KEY, String.valueOf(total));
             }
         } catch (Exception e) {
             log.warn("缓存写入异常，请检查缓存服务是否正常运行！");
@@ -173,8 +177,8 @@ public class OrderController {
         final String CACHE_DATA_DISTRIBUTED_LOCK_TAG = "LOCK_OrderController_Order";
         RLock lock = redissonClient.getLock(CACHE_DATA_DISTRIBUTED_LOCK_TAG);
         lock.lock();
-        RedissonUtils.delete(CACHE_DATA_KEY);
-        RedissonUtils.delete(CACHE_DATA_TOTAL_KEY);
+        RedissonHelper.delete(CACHE_DATA_KEY);
+        RedissonHelper.delete(CACHE_DATA_TOTAL_KEY);
         lock.unlock();
     }
 

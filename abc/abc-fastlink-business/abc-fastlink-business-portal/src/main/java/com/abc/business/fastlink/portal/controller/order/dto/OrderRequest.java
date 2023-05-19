@@ -1,6 +1,6 @@
 package com.abc.business.fastlink.portal.controller.order.dto;
 
-import com.abc.system.common.exception.BizException;
+import com.abc.system.common.exception.business.BizException;
 import com.abc.system.common.page.PageInfo;
 import com.abc.system.common.request.AbstractRequest;
 

@@ -1,4 +1,4 @@
-package com.abc.system.common.exception;
+package com.abc.system.common.exception.redis;
 
 import com.abc.system.common.exception.base.BaseException;
 

@@ -1,6 +1,6 @@
 package com.abc.system.common.filegenerator.util;
 
-import com.abc.system.common.exception.BizException;
+import com.abc.system.common.exception.business.BizException;
 import com.abc.system.common.filegenerator.config.FreemarkerProperties;
 import com.abc.system.common.filegenerator.constant.GenerateFileRetCodeConstants;
 import com.abc.system.common.filegenerator.vo.ExportFileRequest;

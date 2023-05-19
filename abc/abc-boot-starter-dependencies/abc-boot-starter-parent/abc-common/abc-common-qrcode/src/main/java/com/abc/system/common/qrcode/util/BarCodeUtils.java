@@ -1,7 +1,7 @@
 package com.abc.system.common.qrcode.util;
 
 import com.abc.system.common.constant.SystemRetCodeConstants;
-import com.abc.system.common.exception.BizException;
+import com.abc.system.common.exception.business.BizException;
 import com.abc.system.common.qrcode.constant.ImageTypeEnum;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;

@@ -3,7 +3,7 @@ package com.abc.business.fastlink.order.service.impl;
 import com.abc.business.fastlink.goods.api.FastLinkGoodsService;
 import com.abc.business.fastlink.order.api.FastlinkOrderService;
 import com.abc.system.common.constant.SystemRetCodeConstants;
-import com.abc.system.common.exception.BizException;
+import com.abc.system.common.exception.business.BizException;
 import com.abc.system.common.exception.base.BaseException;
 import com.abc.system.common.response.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
