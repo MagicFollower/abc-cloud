@@ -124,8 +124,8 @@ spring:
                 retryInterval: 1000
                 failedSlaveReconnectionInterval: 3000
                 failedSlaveCheckInterval: 60000
-                clientName: "redisson"
-                loadBalancer: org.redisson.connection.balancer.RoundRobinLoadBalancer
+                clientName: null
+                loadBalancer: !<org.redisson.connection.balancer.RoundRobinLoadBalancer> {}
                 subscriptionsPerConnection: 5
                 subscriptionConnectionMinimumIdleSize: 1
                 subscriptionConnectionPoolSize: 50
@@ -147,7 +147,7 @@ spring:
                 tcpNoDelay: false
               threads: 4
               nettyThreads: 4
-              codec: org.redisson.codec.Kryo5Codec
+              codec: !<org.redisson.codec.Kryo5Codec> {}
               transportMode: "NIO"
       ```
 
