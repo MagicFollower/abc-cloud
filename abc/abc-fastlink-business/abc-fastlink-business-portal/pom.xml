@@ -38,7 +38,8 @@
         <!-- 下方依赖仅供测试使用，随时可以删除 -->
         <dependency>
             <groupId>com.abc</groupId>
-            <artifactId>abc-common-redis</artifactId>
+            <artifactId>abc-common-distributed-lock</artifactId>
+            <version>${abc-common.version}</version>
         </dependency>
 
     </dependencies>

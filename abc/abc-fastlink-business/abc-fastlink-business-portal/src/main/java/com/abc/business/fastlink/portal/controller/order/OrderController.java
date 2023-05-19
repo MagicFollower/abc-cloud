@@ -8,8 +8,10 @@ import com.abc.system.common.page.PageInfo;
 import com.abc.system.common.page.PageResponse;
 import com.abc.system.common.redis.service.RedisService;
 import com.abc.system.common.redis.util.RedissonUtils;
+import com.abc.system.common.response.BaseResponse;
 import com.abc.system.common.response.ResponseData;
 import com.abc.system.common.response.ResponseProcessor;
+import com.abc.system.lock.annotation.DistributedLock;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +51,21 @@ public class OrderController {
     private final RedisService redisService;
     @DubboReference
     private FastlinkOrderService fastlinkOrderService;
+
+
+    @DistributedLock
+    @PostMapping(Url.ORDER_BASE_TEST_DISTRIBUTED_LOCK)
+    public ResponseData<String> testDistributedLock() {
+        System.out.println("OrderController.testDistributedLock");
+
+        // 模拟获取响应数据
+        BaseResponse<String> stringBaseResponse = new BaseResponse<>();
+        stringBaseResponse.setTotal(1L);
+        stringBaseResponse.setResult("OrderController.testDistributedLock");
+
+        return new ResponseProcessor<String>().setData(stringBaseResponse.getResult(), "操作成功");
+    }
+
 
     @PostMapping(Url.ORDER_BASE_QUERY)
     public ResponseData<PageResponse<?>> queryOrder(@RequestBody OrderRequest orderRequest) {

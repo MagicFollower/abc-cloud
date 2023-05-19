@@ -13,6 +13,7 @@ import com.abc.business.fastlink.portal.base.BaseUrl;
 public class Url {
     private final static String ORDER_BASE = BaseUrl.BASE_URL_BASE + "/order";
     public final static String ORDER_BASE_QUERY = ORDER_BASE + "/query";
+    public final static String ORDER_BASE_TEST_DISTRIBUTED_LOCK = ORDER_BASE + "/test_distributed_lock";
 
     private Url() {
     }
