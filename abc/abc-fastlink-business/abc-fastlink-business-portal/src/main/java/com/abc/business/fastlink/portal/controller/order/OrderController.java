@@ -4,6 +4,8 @@ import com.abc.business.fastlink.order.api.FastlinkOrderService;
 import com.abc.business.fastlink.portal.base.BaseUrl;
 import com.abc.business.fastlink.portal.controller.order.constant.Url;
 import com.abc.business.fastlink.portal.controller.order.dto.OrderRequest;
+import com.abc.system.common.constant.SystemRetCodeConstants;
+import com.abc.system.common.exception.business.BizException;
 import com.abc.system.common.log.annotation.LogAnchor;
 import com.abc.system.common.page.PageInfo;
 import com.abc.system.common.page.PageResponse;
@@ -58,6 +60,9 @@ public class OrderController {
     @PostMapping("/test")
     public void test(@RequestBody User user) {
         System.out.println("OrderController.test");
+        if(ThreadLocalRandom.current().nextBoolean()) {
+            throw new BizException(SystemRetCodeConstants.SYSTEM_ERROR);
+        }
     }
 
 
