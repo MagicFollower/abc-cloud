@@ -7,9 +7,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * <pre>
  * 系统级缓存，独立于Spring自动配置，从Apollo配置加载全局配置
- * → 使用位置（common-apollo-client）：com.abc.system.apollo.autoconfig.SystemValuesAutoConfiguration
- *
+ *   → 使用位置（common-apollo-client）：com.abc.system.apollo.autoconfig.SystemValuesAutoConfiguration
+ * </pre>
  * @Description 系统级缓存，独立于Spring自动配置，从Apollo配置加载全局配置（apollo.system.namespace）
  * @Author Trivis
  * @Date 2023/5/12 20:41
