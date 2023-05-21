@@ -28,6 +28,32 @@ public final class SystemConfigValues {
     }
 
     /**
+     * 获取指定KEY的值
+     *
+     * @param key KEY
+     * @return 返回对应KEY的值
+     */
+    public static String get(String key) {
+        return SYSTEM_CONFIG_VALUES.get(key);
+    }
+
+    /**
+     * 获取指定KEY的值，如果对应KEY不存在，返回给定的默认值
+     *
+     * @param key          KEY
+     * @param defaultValue 默认值
+     * @return VALUE: String
+     */
+    public static String get(String key, String defaultValue) {
+        // KEY存在，直接返回对应值
+        if (StringUtils.isNoneEmpty(SYSTEM_CONFIG_VALUES.get(key))) {
+            return SYSTEM_CONFIG_VALUES.get(key);
+        }
+
+        return defaultValue;
+    }
+
+    /**
      * 将配置信息放入缓存
      *
      * @param key   KEY
@@ -53,31 +79,5 @@ public final class SystemConfigValues {
      */
     public static void delete(String key) {
         SYSTEM_CONFIG_VALUES.remove(key);
-    }
-
-    /**
-     * 获取指定KEY的值
-     *
-     * @param key KEY
-     * @return 返回对应KEY的值
-     */
-    public static String get(String key) {
-        return SYSTEM_CONFIG_VALUES.get(key);
-    }
-
-    /**
-     * 获取指定KEY的值，如果对应KEY不存在，返回给定的默认值
-     *
-     * @param key          KEY
-     * @param defaultValue 默认值
-     * @return VALUE: String
-     */
-    public static String get(String key, String defaultValue) {
-        // KEY存在，直接返回对应值
-        if (StringUtils.isNoneEmpty(SYSTEM_CONFIG_VALUES.get(key))) {
-            return SYSTEM_CONFIG_VALUES.get(key);
-        }
-
-        return defaultValue;
     }
 }
