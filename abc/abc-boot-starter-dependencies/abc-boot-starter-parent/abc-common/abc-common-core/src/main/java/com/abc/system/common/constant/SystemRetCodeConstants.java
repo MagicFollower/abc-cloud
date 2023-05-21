@@ -47,10 +47,11 @@ public enum SystemRetCodeConstants {
     //#####Excel模块响应编码 005
     //##############################################
     EXCEL_TEMPLATE_CODE_LOST("005001", "缺少templateCode"),
-    EXCEL_NUM_ERROR("005002", "上传文件数量非法"),
-    EXCEL_IS_NULL("005003","上传Excel无法解析"),
-    EXCEL_RULE_ERROR("005004","Excel规则解析出错"),
-    EXCEL_TYPE_ERROR("005005", "Excel数据类型解析异常"),
+    EXCEL_NOT_SUPPORT_ERROR("005002", "文件格式不支持"),
+    EXCEL_NUM_ERROR("005003", "上传文件数量非法"),
+    EXCEL_IS_NULL("005004","上传Excel无法解析"),
+    EXCEL_RULE_ERROR("005005","Excel规则解析出错"),
+    EXCEL_TYPE_ERROR("005006", "Excel数据类型解析异常"),
 
 
 

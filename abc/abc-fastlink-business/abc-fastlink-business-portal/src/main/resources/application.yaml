@@ -53,3 +53,11 @@ dubbo:
     check: false
     timeout: 5000
     retries: 0
+
+abc:
+  excel:
+    rules:
+      - templateCode: abc001
+        columns: id|long|20|0|id,备注|string|200|0|memo
+      - templateCode: abc002
+        columns: id|string|20|0|id,备注|string|200|0|memo

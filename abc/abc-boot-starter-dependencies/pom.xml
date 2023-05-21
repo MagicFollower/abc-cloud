@@ -65,6 +65,7 @@
 
         <!-- Excel-POI -->
         <excel-resolver.version>5.2.3</excel-resolver.version>
+        <commons-fileupload.version>1.5</commons-fileupload.version>
 
         <!-- LOG-Agent(Java-Agent) -->
         <byte-buddy.version>1.14.4</byte-buddy.version>

@@ -11,13 +11,15 @@ import com.abc.system.common.page.PageInfo;
 import com.abc.system.common.page.PageResponse;
 import com.abc.system.common.redis.helper.RedissonHelper;
 import com.abc.system.common.redis.service.RedisService;
-import com.abc.system.common.redis.helper.RedissonHelper;
 import com.abc.system.common.response.BaseResponse;
 import com.abc.system.common.response.ResponseData;
 import com.abc.system.common.response.ResponseProcessor;
+import com.abc.system.excel.service.ExcelFileService;
+import com.abc.system.excel.vo.ExcelResponse;
 import com.abc.system.lock.annotation.DistributedLock;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,12 +29,11 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -53,18 +54,28 @@ public class OrderController {
     private final String CACHE_DATA_TOTAL_KEY = "OrderController_Order_Total";
     private final RedissonClient redissonClient;
     private final RedisService redisService;
+    private final ExcelFileService excelFileService;
     @DubboReference
     private FastlinkOrderService fastlinkOrderService;
+
+
+    @PostMapping("/testExcelImport")
+    public String testExcelImport(HttpServletRequest request) {
+        ResponseData<ExcelResponse> responseData = excelFileService.dealWith(request);
+        ExcelResponse result = responseData.getResult();
+        System.out.println(JSONObject.toJSONString(result, JSONWriter.Feature.PrettyFormat));
+        return "200";
+    }
+
 
     @LogAnchor
     @PostMapping("/testLogAnchor")
     public void testLogAnchor(@RequestBody User user) {
         System.out.println("OrderController.test");
-        if(ThreadLocalRandom.current().nextBoolean()) {
+        if (ThreadLocalRandom.current().nextBoolean()) {
             throw new BizException(SystemRetCodeConstants.SYSTEM_ERROR);
         }
     }
-
 
     @DistributedLock
     @PostMapping(Url.ORDER_BASE_TEST_DISTRIBUTED_LOCK)
@@ -208,7 +219,7 @@ public class OrderController {
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-class User{
+class User {
     private String id;
     private String username;
     private int age;

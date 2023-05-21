@@ -41,6 +41,11 @@
             <artifactId>abc-common-distributed-lock</artifactId>
             <version>${abc-common.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.abc</groupId>
+            <artifactId>abc-common-excel</artifactId>
+            <version>${abc-common.version}</version>
+        </dependency>
 
     </dependencies>
 
