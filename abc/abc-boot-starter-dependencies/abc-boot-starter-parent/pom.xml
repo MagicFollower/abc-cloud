@@ -66,6 +66,11 @@
                 <artifactId>abc-common-qrcode</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.abc</groupId>
+                <artifactId>abc-common-excel</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

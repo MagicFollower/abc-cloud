@@ -143,6 +143,18 @@
                 <version>${minio.version}</version>
             </dependency>
 
+            <!-- Excel-POI -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${excel-resolver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${excel-resolver.version}</version>
+            </dependency>
+
             <!-- freemarker、flying-saucer-pdf -->
             <dependency>
                 <groupId>org.freemarker</groupId>
