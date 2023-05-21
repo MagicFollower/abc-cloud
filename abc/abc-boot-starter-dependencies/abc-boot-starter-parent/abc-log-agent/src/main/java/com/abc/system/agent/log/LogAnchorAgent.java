@@ -39,7 +39,7 @@ public class LogAnchorAgent {
             String methodName = method.getName();
             final Logger LOGGER = LoggerFactory.getLogger(method.getDeclaringClass());
             LOGGER.info(">>>>>>>>>>>|enter|method:{}|<<<<<<<<<<<", methodName);
-            LOGGER.info(">>>>>>>>>>>|param:{}|<<<<<<<<<<<", JSONObject.toJSONString(arg1, JSONWriter.Feature.PrettyFormat));
+            LOGGER.info(">>>>>>>>>>>|param:\n{}", JSONObject.toJSONString(arg1, JSONWriter.Feature.PrettyFormat));
         }
 
         @Advice.OnMethodExit(onThrowable = Exception.class)
