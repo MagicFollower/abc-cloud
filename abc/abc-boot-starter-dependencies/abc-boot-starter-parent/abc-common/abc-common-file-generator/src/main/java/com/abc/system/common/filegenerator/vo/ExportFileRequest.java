@@ -15,6 +15,10 @@ import java.util.Map;
 @Data
 public class ExportFileRequest {
     /**
+     * 模板文件名
+     */
+    private String templateFile;
+    /**
      * 生成文件的数据集合
      */
     private Map<String, Object> data;
@@ -23,9 +27,4 @@ public class ExportFileRequest {
      * 导出的文件名
      */
     private String exportFileName;
-
-    /**
-     * 模板文件名
-     */
-    private String templateFile;
 }
