@@ -34,6 +34,15 @@ public class ResponseProcessor<T> {
      * 🔓统一成功响应消息
      *
      * @param t   t
+     * @return ResponseData
+     */
+    public ResponseData<T> setData(T t) {
+        return setData(t, null);
+    }
+    /**
+     * 🔓统一成功响应消息
+     *
+     * @param t   t
      * @param msg msg
      * @return ResponseData
      */
