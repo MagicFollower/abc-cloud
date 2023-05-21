@@ -4,6 +4,7 @@ import com.abc.business.fastlink.order.api.FastlinkOrderService;
 import com.abc.business.fastlink.portal.base.BaseUrl;
 import com.abc.business.fastlink.portal.controller.order.constant.Url;
 import com.abc.business.fastlink.portal.controller.order.dto.OrderRequest;
+import com.abc.system.common.log.annotation.LogAnchor;
 import com.abc.system.common.page.PageInfo;
 import com.abc.system.common.page.PageResponse;
 import com.abc.system.common.redis.helper.RedissonHelper;
@@ -15,15 +16,15 @@ import com.abc.system.common.response.ResponseProcessor;
 import com.abc.system.lock.annotation.DistributedLock;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -52,6 +53,12 @@ public class OrderController {
     private final RedisService redisService;
     @DubboReference
     private FastlinkOrderService fastlinkOrderService;
+
+    @LogAnchor
+    @PostMapping("/test")
+    public void test(@RequestBody User user) {
+        System.out.println("OrderController.test");
+    }
 
 
     @DistributedLock
@@ -190,4 +197,14 @@ public class OrderController {
         redisService.delete("aaa_total");
         lock.unlock();
     }
+}
+
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+class User{
+    private String id;
+    private String username;
+    private int age;
 }
