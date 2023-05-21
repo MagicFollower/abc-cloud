@@ -1,5 +1,6 @@
 package com.abc.system.common.response;
 
+import com.abc.system.common.constant.SystemRetCodeConstants;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,7 +40,7 @@ public class ResponseProcessor<T> {
     public ResponseData<T> setData(T t, String msg) {
         this.responseData.setSuccess(true);
         this.responseData.setCode(200);
-        this.responseData.setMessage(msg == null ? "success" : msg);
+        this.responseData.setMessage(msg == null ? SystemRetCodeConstants.OP_SUCCESS.getMessage() : msg);
         this.responseData.setResult(t);
         return this.responseData;
     }
