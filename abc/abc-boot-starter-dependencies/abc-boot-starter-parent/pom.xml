@@ -16,6 +16,7 @@
 
     <modules>
         <module>abc-common</module>
+        <module>abc-log-agent</module>
     </modules>
 
     <properties>
