@@ -34,6 +34,10 @@ public class JacksonConfig {
      * 1.spring.jackson.date-format参数目前只对Date生效（springboot:2.7.11），这是此处配置的目的；
      * 2.⚠️注意：如果你没有配置spring.jackson.date-format，LocalDateTime会按照上方默认格式`DEFAULT_FORMAT`序列化，
      *          但Date仍然是原生序列化格式，这是约定。
+     * spring:
+     *   jackson:
+     *     time-zone: GMT+8
+     *     date-format: yyyy-MM-dd HH:mm:ss.SSS
      * </pre>
      */
     final static String CONFIG_PROPERTY_NANE = "spring.jackson.date-format";
