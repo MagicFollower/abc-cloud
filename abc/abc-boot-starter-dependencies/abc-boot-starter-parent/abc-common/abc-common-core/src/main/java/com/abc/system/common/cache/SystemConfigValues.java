@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * </pre>
  * @Description 系统级缓存，独立于Spring自动配置，从Apollo配置加载全局配置（apollo.system.namespace）
  * @Author Trivis
- * @Date 2023/5/12 20:41
+ * @Date 2023/05/21 14:18
  * @Version 1.0
  */
 @Slf4j
