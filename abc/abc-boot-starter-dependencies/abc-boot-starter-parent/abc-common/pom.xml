@@ -25,6 +25,7 @@
         <module>abc-common-apollo-client</module>
         <module>abc-common-dubbo</module>
         <module>abc-common-distributed-lock</module>
+        <module>abc-common-excel</module>
     </modules>
 
     <properties>
