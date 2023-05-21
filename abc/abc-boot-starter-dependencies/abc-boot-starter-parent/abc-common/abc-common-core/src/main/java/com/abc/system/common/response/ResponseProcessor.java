@@ -11,15 +11,17 @@ import java.io.Serializable;
  * 响应处理器工具，Controller层使用，提供2个统一的API，用于快速生成ResponseData。
  *
  * @param <T> 响应体中result数据类型（基本实体、实体集合）
- * @Description 响应处理器工具，Controller层使用，提供统一的API，用于快速生成ResponseData。<br>
- * → 成功：<br>
- *     → new ResponseProcessor泛型().setData(response.getResult(), response.getMsg());<br>
- * → 异常：<br>
- *     → new ResponseProcessor空泛型().setErrorMessage(be.getErrorCode, be.getMessage);<br>
+ * @Description <pre>
+ * 响应处理器工具，Controller层使用，提供统一的API，用于快速生成ResponseData。
+ * → 成功：
+ *     → new ResponseProcessor泛型().setData(response.getResult(), response.getMsg());
+ * → 异常：
+ *     → new ResponseProcessor空泛型().setErrorMessage(be.getErrorCode, be.getMessage);
  *     → new ResponseProcessor空泛型().setErrorMessage(SystemReturnCodeConstants.SYSTEM_ERROR.getCode(),
- *                                               SystemReturnCodeConstants.SYSTEM_ERROR.getMessage());<br>
- * ⚠️提示：ResponseData在此处忽略泛型<br>
- * 1.setErrorMsg在提供内部错误编号和信息时，将会封装为ResponseErrorData至result中，使controller层代码泛型统一为T<br>
+ *                                               SystemReturnCodeConstants.SYSTEM_ERROR.getMessage());
+ * ⚠️提示：ResponseData在此处忽略泛型
+ * 1.setErrorMsg在提供内部错误编号和信息时，将会封装为ResponseErrorData至result中，使controller层代码泛型统一为T
+ * </pre>
  */
 public class ResponseProcessor<T> {
     private final ResponseData responseData = new ResponseData();
@@ -30,7 +32,7 @@ public class ResponseProcessor<T> {
     /**
      * 🔓统一成功响应消息
      *
-     * @param t t
+     * @param t   t
      * @param msg msg
      * @return ResponseData
      */
