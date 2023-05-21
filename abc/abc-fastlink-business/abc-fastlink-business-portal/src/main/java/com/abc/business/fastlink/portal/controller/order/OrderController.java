@@ -57,8 +57,8 @@ public class OrderController {
     private FastlinkOrderService fastlinkOrderService;
 
     @LogAnchor
-    @PostMapping("/test")
-    public void test(@RequestBody User user) {
+    @PostMapping("/testLogAnchor")
+    public void testLogAnchor(@RequestBody User user) {
         System.out.println("OrderController.test");
         if(ThreadLocalRandom.current().nextBoolean()) {
             throw new BizException(SystemRetCodeConstants.SYSTEM_ERROR);
