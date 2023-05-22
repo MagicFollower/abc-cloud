@@ -61,3 +61,4 @@ abc:
         columns: id|long|20|0|id,备注|string|200|0|memo
       - templateCode: abc002
         columns: id|string|20|0|id,备注|string|200|0|memo
+    title-num: 2

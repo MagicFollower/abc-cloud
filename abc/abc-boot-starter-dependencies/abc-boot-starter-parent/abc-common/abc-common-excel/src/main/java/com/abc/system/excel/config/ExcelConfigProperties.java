@@ -19,6 +19,13 @@ import java.util.List;
 public class ExcelConfigProperties {
 
     /**
+     * 标题行号
+     * 1.默认=1, 如果设置为3，会解析第三行为标题行，前两行将被忽略；
+     * 2.如果设置为3，但是第3行为空行，将会自动向下寻找第一个非空行作为标题行。
+     */
+    private int titleNum = 1;
+
+    /**
      * 字段规则（列表）
      */
     private List<ExcelRule> rules;

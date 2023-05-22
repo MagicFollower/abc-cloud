@@ -12,10 +12,10 @@ import com.abc.system.excel.vo.ExcelColumnRule;
 import com.abc.system.excel.vo.ExcelResponse;
 import com.abc.system.excel.vo.ExcelRule;
 import com.alibaba.fastjson2.JSONObject;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -38,25 +38,23 @@ import java.util.stream.Collectors;
  * @Version 1.0
  */
 @Slf4j
+@RequiredArgsConstructor
 public class ExcelFileServiceImpl implements ExcelFileService {
     private static final String TEMPLATE_CODE_KEY = "templateCode";
 
-    /**
-     * <pre>
-     * 移除指定警告：“必须在有效 Spring Bean 中定义自动装配成员(@Component|@Service|…)”
-     *   1.原因：该类已在com.abc.system.lock.config.DistributedLockAutoConfiguration中通过@Bean方式完成注入。
-     * </pre>
-     */
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    @Autowired
-    private ExcelConfigProperties excelConfigProperties;
+    private final ExcelConfigProperties excelConfigProperties;
 
     @Override
     public ResponseData<ExcelResponse> dealWith(HttpServletRequest request) {
+        // 从请求头中解析templateCode
         String templateCode = request.getHeader(TEMPLATE_CODE_KEY);
         if (StringUtils.isEmpty(templateCode)) {
             throw new ValidateException(SystemRetCodeConstants.EXCEL_TEMPLATE_CODE_LOST);
         }
+        // 获取标题所在的行数
+        int titleNum = excelConfigProperties.getTitleNum();
+        if (titleNum <= 0) titleNum = 1;
+
         // 创建一个通用的多部分解析器
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
         // 保存excel处理结果
@@ -65,7 +63,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
         // List#字段名:值
         List<JSONObject> realExcelResultList = new ArrayList<>();
 
-        List<Row> titleRows = new ArrayList<>();
+        // 真实Title字段Map、Title显示数据Map
         Map<Integer, String> realTitleMap = new HashMap<>();
         Map<Integer, String> displayTitleMap = new HashMap<>();
         // 判断 request 是否有文件上传,即多部分请求,实际将检测（enctype="multipart/form-data" method="POST"）
@@ -92,7 +90,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             // 仅支持.xlsx、.xls
             String originalFilename = file.getOriginalFilename();
             if (!StringUtils.endsWithIgnoreCase(originalFilename, ".xlsx")
-                    || !StringUtils.endsWithIgnoreCase(originalFilename, ".xls")) {
+                    && !StringUtils.endsWithIgnoreCase(originalFilename, ".xls")) {
                 throw new ValidateException(SystemRetCodeConstants.EXCEL_NOT_SUPPORT_ERROR);
             }
 
@@ -113,16 +111,23 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                     if (currentSheet.getLastRowNum() == 0 && currentSheet.getPhysicalNumberOfRows() == 0) {
                         continue;
                     }
+                    RowTypeEnum rowTypeEnum = RowTypeEnum.TITLE;
                     for (Row row : currentSheet) {
-                        JSONObject realResultObj = new JSONObject();
-                        // 检测空行
-                        if (ResolveExcelHelper.isRowEmpty(row)) continue;
-                        // 检测标题行
-                        if (row.getRowNum() == 0) {
+                        if (rowTypeEnum.equals(RowTypeEnum.TITLE)) {
+                            // 定位至标题行
+                            if (row.getRowNum() + 1 < titleNum) continue;
+                            // 跳过空行
+                            if (ResolveExcelHelper.isRowEmpty(row)) continue;
+                            // 解析标题行
                             ResolveExcelHelper.resolveExcelTitle(row, templateCode, excelRuleMap,
                                     realTitleMap, displayTitleMap);
+                            // 标记之后的所有数据为记录行
+                            rowTypeEnum = RowTypeEnum.DATA;
                             continue;
                         }
+                        // 跳过空行
+                        if (ResolveExcelHelper.isRowEmpty(row)) continue;
+                        JSONObject realResultObj = new JSONObject();
                         StringBuilder stringBuilder = new StringBuilder();
                         // Cell校验
                         for (Cell cell : row) {
@@ -153,6 +158,10 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             }
         }
         return new ResponseProcessor<ExcelResponse>().setData(new ExcelResponse(displayTitleMap.values(),
-                displayData, realExcelResultList, titleRows));
+                displayData, realExcelResultList));
+    }
+
+    enum RowTypeEnum {
+        TITLE, DATA
     }
 }

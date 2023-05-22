@@ -3,6 +3,7 @@ package com.abc.system.excel.autoconfig;
 import com.abc.system.excel.config.ExcelConfigProperties;
 import com.abc.system.excel.service.ExcelFileService;
 import com.abc.system.excel.service.impl.ExcelFileServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -18,9 +19,12 @@ import org.springframework.web.multipart.MultipartFile;
  * @Version 1.0
  */
 @Configuration
+@RequiredArgsConstructor
 @EnableConfigurationProperties(ExcelConfigProperties.class)
 @ConditionalOnClass(MultipartFile.class)
 public class ExcelConfigAutoConfiguration {
+
+    private final ExcelConfigProperties excelConfigProperties;
 
     /**
      * 实例化Excel上传解析服务
@@ -29,6 +33,6 @@ public class ExcelConfigAutoConfiguration {
      */
     @Bean("excelFileService")
     public ExcelFileService uploadFile() {
-        return new ExcelFileServiceImpl();
+        return new ExcelFileServiceImpl(excelConfigProperties);
     }
 }
