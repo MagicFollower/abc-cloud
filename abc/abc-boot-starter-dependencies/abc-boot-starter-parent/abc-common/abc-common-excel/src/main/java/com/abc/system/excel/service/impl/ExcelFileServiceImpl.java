@@ -88,10 +88,11 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                 throw new ValidateException(SystemRetCodeConstants.EXCEL_IS_NULL);
             }
 
-            // todo 文件后缀校验
-            // 仅支持.xlsx
+            // 文件后缀校验
+            // 仅支持.xlsx、.xls
             String originalFilename = file.getOriginalFilename();
-            if (!StringUtils.endsWithIgnoreCase(originalFilename, ".xlsx")) {
+            if (!StringUtils.endsWithIgnoreCase(originalFilename, ".xlsx")
+                    || !StringUtils.endsWithIgnoreCase(originalFilename, ".xls")) {
                 throw new ValidateException(SystemRetCodeConstants.EXCEL_NOT_SUPPORT_ERROR);
             }
 
