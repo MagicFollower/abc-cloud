@@ -28,6 +28,10 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
 
         <!-- apache-poi, 该框架依赖log4j日志接口与实现 -->
         <dependency>
