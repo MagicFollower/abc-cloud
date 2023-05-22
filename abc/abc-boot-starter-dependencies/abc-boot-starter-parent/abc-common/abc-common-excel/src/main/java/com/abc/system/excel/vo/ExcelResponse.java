@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Excel响应体
@@ -26,14 +25,15 @@ public class ExcelResponse {
     /**
      * 逗号分隔的单元格数据
      */
-    private List<String> displayData;
+    private Collection<String> displayData;
 
     /**
      * 单元格真实数据（单元格真实字段名:单元格数据）
      */
-    private List<JSONObject> realData;
+    private Collection<JSONObject> realData;
 
-    public ExcelResponse(Collection<String> displayTitle, List<String> displayData, List<JSONObject> realData) {
+    public ExcelResponse(Collection<String> displayTitle,
+                         Collection<String> displayData, Collection<JSONObject> realData) {
         this.displayTitle = displayTitle;
         this.displayData = displayData;
         this.realData = realData;

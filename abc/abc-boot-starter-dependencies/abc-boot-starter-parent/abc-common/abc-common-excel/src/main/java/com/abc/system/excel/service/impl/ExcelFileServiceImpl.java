@@ -23,10 +23,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -59,9 +56,9 @@ public class ExcelFileServiceImpl implements ExcelFileService {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
         // 保存excel处理结果
         // 逗号分隔的数据
-        List<String> displayData = new ArrayList<>();
+        Set<String> displayData = new HashSet<>();
         // List#字段名:值
-        List<JSONObject> realExcelResultList = new ArrayList<>();
+        Set<JSONObject> realExcelResultList = new HashSet<>();
 
         // 真实Title字段Map、Title显示数据Map
         Map<Integer, String> realTitleMap = new HashMap<>();
@@ -147,7 +144,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                                 throw new ValidateException(SystemRetCodeConstants.EXCEL_TYPE_ERROR);
                             }
                             realResultObj.put(realTitleMap.get(cell.getColumnIndex()), cellValue.getValue());
-                            stringBuilder.append(",").append(cellValue.getValue());
+                            stringBuilder.append(",").append(cellValue.getValue().toString().trim());
                         }
                         displayData.add(stringBuilder.substring(1));
                         realExcelResultList.add(realResultObj);
