@@ -1,5 +1,7 @@
 package com.abc.system.common.constant.session;
 
+import java.time.Duration;
+
 /**
  * 用户会话常量定义
  *
@@ -13,12 +15,17 @@ public interface SessionConstants {
     /**
      * 会话默认超时时间30分钟
      */
-    Long DEFAULT_TIME_OUT = 30L;
+    Duration DEFAULT_TIME_OUT = Duration.ofMinutes(30L);
 
     /**
      * 客户端唯一标识
      */
     String EUID = "euid";
+    /**
+     * 用户显示名称
+     */
+    String USER_DISPLAY_NAME = "displayName";
+
     /**
      * 用户登录会话缓存前缀
      * 格式：USER_${euid}:会员信息字符串
