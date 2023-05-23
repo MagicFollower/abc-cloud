@@ -31,6 +31,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <!-- apache-poi, 该框架依赖log4j日志接口与实现 -->
