@@ -113,6 +113,11 @@
                 <artifactId>dubbo-metadata-report-zookeeper</artifactId>
                 <version>${dubbo.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-registry-zookeeper</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
 
             <!-- DAO-start -->
             <!-- 1.TK-Mybatis -->

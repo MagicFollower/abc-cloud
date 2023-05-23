@@ -27,6 +27,7 @@
             <groupId>org.apache.dubbo</groupId>
             <artifactId>dubbo-spring-boot-starter</artifactId>
         </dependency>
+        <!-- dubbo-metadata-report-zookeeper模块则会将Dubbo服务的元数据信息（包括服务接口名称、方法列表、参数列表等）注册到ZooKeeper中，以便Dubbo服务的消费者可以根据这些信息构建调用请求 -->
         <dependency>
             <groupId>org.apache.dubbo</groupId>
             <artifactId>dubbo-metadata-report-zookeeper</artifactId>
@@ -36,6 +37,11 @@
                     <artifactId>slf4j-log4j12</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <!-- dubbo-registry-zookeeper模块会将Dubbo服务的提供者信息（包括IP地址、端口号、权重等）注册到ZooKeeper中，以便Dubbo服务的消费者可以从ZooKeeper中发现和调用这些服务 -->
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-registry-zookeeper</artifactId>
         </dependency>
 
         <dependency>
