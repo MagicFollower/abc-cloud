@@ -4,6 +4,7 @@ import com.abc.business.fastlink.order.api.FastlinkOrderService;
 import com.abc.business.fastlink.portal.base.BaseUrl;
 import com.abc.business.fastlink.portal.controller.order.constant.Url;
 import com.abc.business.fastlink.portal.controller.order.dto.OrderRequest;
+import com.abc.system.common.cache.SystemConfigValues;
 import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.business.BizException;
 import com.abc.system.common.log.annotation.LogAnchor;
@@ -17,7 +18,6 @@ import com.abc.system.common.response.ResponseProcessor;
 import com.abc.system.lock.annotation.DistributedLock;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.JSONWriter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,14 +26,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 /**
  * OrderController
@@ -53,7 +56,7 @@ public class OrderController {
     private final String CACHE_DATA_TOTAL_KEY = "OrderController_Order_Total";
     private final RedissonClient redissonClient;
     private final RedisService redisService;
-//    private final ExcelFileService excelFileService;
+    //    private final ExcelFileService excelFileService;
     @DubboReference
     private FastlinkOrderService fastlinkOrderService;
 
@@ -68,6 +71,14 @@ public class OrderController {
 
 
     @LogAnchor
+    @PostMapping("/testSystemValues")
+    public void testSystemValues() {
+        String s = SystemConfigValues.get("not_need_login.urls");
+        List<String> notNeedLoginUrls = Arrays.stream(s.split(",")).collect(Collectors.toList());
+        System.out.println("notNeedLoginUrls = " + notNeedLoginUrls);
+    }
+
+    @LogAnchor
     @PostMapping("/testLogAnchor0")
     public void testLogAnchor0() {
         System.out.println("OrderController.testLogAnchor0");
@@ -75,6 +86,7 @@ public class OrderController {
             throw new BizException(SystemRetCodeConstants.SYSTEM_ERROR);
         }
     }
+
     @LogAnchor
     @PostMapping("/testLogAnchor1")
     public void testLogAnchor1(@RequestBody User user) {
@@ -83,6 +95,7 @@ public class OrderController {
             throw new BizException(SystemRetCodeConstants.SYSTEM_ERROR);
         }
     }
+
     @LogAnchor
     @PostMapping("/testLogAnchor2")
     public void testLogAnchor2(HttpServletRequest request, HttpServletResponse response, @RequestBody User user) {
