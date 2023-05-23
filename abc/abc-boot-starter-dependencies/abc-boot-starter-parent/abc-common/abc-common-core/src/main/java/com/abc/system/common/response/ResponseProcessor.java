@@ -24,6 +24,7 @@ import java.io.Serializable;
  * 1.setErrorMsg在提供内部错误编号和信息时，将会封装为ResponseErrorData至result中，使controller层代码泛型统一为T
  * </pre>
  */
+@SuppressWarnings({"rawtypes","unchecked"})
 public class ResponseProcessor<T> {
     private final ResponseData responseData = new ResponseData();
 
