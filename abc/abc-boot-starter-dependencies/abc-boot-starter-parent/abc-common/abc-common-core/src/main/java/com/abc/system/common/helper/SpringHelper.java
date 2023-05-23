@@ -4,7 +4,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
@@ -16,6 +15,7 @@ import java.util.Map;
  * @Date 2023/5/10 20:10
  * @Version 1.0
  */
+@SuppressWarnings({"unchecked"})
 public class SpringHelper implements ApplicationContextAware {
     private static ApplicationContext APPLICATION_CONTEXT;
 
