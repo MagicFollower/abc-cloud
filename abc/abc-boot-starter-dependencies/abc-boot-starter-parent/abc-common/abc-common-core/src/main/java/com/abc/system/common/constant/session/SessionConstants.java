@@ -15,7 +15,7 @@ public interface SessionConstants {
     /**
      * 会话默认超时时间30分钟
      */
-    Duration DEFAULT_TIME_OUT = Duration.ofMinutes(30L);
+    Duration DEFAULT_TIME_OUT_DURATION = Duration.ofMinutes(30L);
 
     /**
      * 客户端唯一标识
