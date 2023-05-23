@@ -14,8 +14,6 @@ import com.abc.system.common.redis.service.RedisService;
 import com.abc.system.common.response.BaseResponse;
 import com.abc.system.common.response.ResponseData;
 import com.abc.system.common.response.ResponseProcessor;
-import com.abc.system.excel.service.ExcelFileService;
-import com.abc.system.excel.vo.ExcelResponse;
 import com.abc.system.lock.annotation.DistributedLock;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
@@ -32,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -54,24 +53,40 @@ public class OrderController {
     private final String CACHE_DATA_TOTAL_KEY = "OrderController_Order_Total";
     private final RedissonClient redissonClient;
     private final RedisService redisService;
-    private final ExcelFileService excelFileService;
+//    private final ExcelFileService excelFileService;
     @DubboReference
     private FastlinkOrderService fastlinkOrderService;
 
 
-    @PostMapping("/testExcelImport")
-    public String testExcelImport(HttpServletRequest request) {
-        ResponseData<ExcelResponse> responseData = excelFileService.dealWith(request);
-        ExcelResponse result = responseData.getResult();
-        System.out.println(JSONObject.toJSONString(result, JSONWriter.Feature.PrettyFormat));
-        return "200";
-    }
+//    @PostMapping("/testExcelImport")
+//    public String testExcelImport(HttpServletRequest request) {
+//        ResponseData<ExcelResponse> responseData = excelFileService.dealWith(request);
+//        ExcelResponse result = responseData.getResult();
+//        System.out.println(JSONObject.toJSONString(result, JSONWriter.Feature.PrettyFormat));
+//        return "200";
+//    }
 
 
     @LogAnchor
-    @PostMapping("/testLogAnchor")
-    public void testLogAnchor(@RequestBody User user) {
-        System.out.println("OrderController.test");
+    @PostMapping("/testLogAnchor0")
+    public void testLogAnchor0() {
+        System.out.println("OrderController.testLogAnchor0");
+        if (ThreadLocalRandom.current().nextBoolean()) {
+            throw new BizException(SystemRetCodeConstants.SYSTEM_ERROR);
+        }
+    }
+    @LogAnchor
+    @PostMapping("/testLogAnchor1")
+    public void testLogAnchor1(@RequestBody User user) {
+        System.out.println("OrderController.testLogAnchor1");
+        if (ThreadLocalRandom.current().nextBoolean()) {
+            throw new BizException(SystemRetCodeConstants.SYSTEM_ERROR);
+        }
+    }
+    @LogAnchor
+    @PostMapping("/testLogAnchor2")
+    public void testLogAnchor2(HttpServletRequest request, HttpServletResponse response, @RequestBody User user) {
+        System.out.println("OrderController.testLogAnchor2");
         if (ThreadLocalRandom.current().nextBoolean()) {
             throw new BizException(SystemRetCodeConstants.SYSTEM_ERROR);
         }
