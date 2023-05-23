@@ -9,8 +9,11 @@ import net.bytebuddy.matcher.ElementMatchers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 
 /**
  * 日志锚点JavaAgent
@@ -35,11 +38,20 @@ public class LogAnchorAgent {
 
     public static class LogTagInterceptor {
         @Advice.OnMethodEnter
-        public static void enter(@Advice.Origin Method method, @Advice.Argument(0) Object arg1) throws Exception {
-            String methodName = method.getName();
+        public static void enter(@Advice.Origin Method method, @Advice.AllArguments Object[] args) {
             final Logger LOGGER = LoggerFactory.getLogger(method.getDeclaringClass());
-            LOGGER.info(">>>>>>>>>>>|enter|method:{}|<<<<<<<<<<<", methodName);
-            LOGGER.info(">>>>>>>>>>>|param:\n{}", JSONObject.toJSONString(arg1, JSONWriter.Feature.PrettyFormat));
+            LOGGER.info(">>>>>>>>>>>|enter|method:{}|<<<<<<<<<<<", method.getName());
+            Parameter[] parameters = method.getParameters();
+            for (int i = 0; i < parameters.length; i++) {
+                String parameterName = parameters[i].getName();
+                Object parameterValue = args[i];
+                if (parameterValue instanceof HttpServletRequest || parameterValue instanceof HttpServletResponse) {
+                    // LOGGER.info(">>>>>>>>>>>|HttpServletRequest/HttpServletResponse|<<<<<<<<<<<");
+                    continue;
+                }
+                LOGGER.info(">>>>>>>>>>>|param-{}|{}:⤵\n{}", i + 1, parameterName,
+                        JSONObject.toJSONString(parameterValue, JSONWriter.Feature.PrettyFormat));
+            }
         }
 
         @Advice.OnMethodExit(onThrowable = Exception.class)
