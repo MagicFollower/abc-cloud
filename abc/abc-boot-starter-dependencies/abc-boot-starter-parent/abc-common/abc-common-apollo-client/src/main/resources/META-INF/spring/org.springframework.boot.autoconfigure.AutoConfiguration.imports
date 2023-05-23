@@ -1,1 +1,2 @@
 com.abc.system.apollo.autoconfig.ApolloConfigRefreshAutoConfiguration
+com.abc.system.apollo.autoconfig.SystemValuesAutoConfiguration
