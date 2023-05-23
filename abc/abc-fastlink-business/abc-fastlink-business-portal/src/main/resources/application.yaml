@@ -5,54 +5,54 @@ spring:
     name: abc-fastlink-business-portal
   main:
     banner-mode: off
-  redis:
-    redisson:
-      #file: classpath:redisson.yaml
-      config: |
-        sentinelServersConfig:
-          idleConnectionTimeout: 10000
-          connectTimeout: 3000
-          timeout: 3000
-          retryAttempts: 2
-          retryInterval: 1000
-          failedSlaveReconnectionInterval: 3000
-          failedSlaveCheckInterval: 60000
-          password: null
-          clientName: null
-          loadBalancer: !<org.redisson.connection.balancer.RoundRobinLoadBalancer> {}
-          subscriptionsPerConnection: 5
-          subscriptionConnectionMinimumIdleSize: 1
-          subscriptionConnectionPoolSize: 50
-          slaveConnectionMinimumIdleSize: 24
-          slaveConnectionPoolSize: 64
-          masterConnectionMinimumIdleSize: 24
-          masterConnectionPoolSize: 64
-          readMode: "SLAVE"
-          subscriptionMode: "SLAVE"
-          sentinelAddresses:
-            - "redis://192.168.204.101:26379"
-            - "redis://192.168.204.101:26380"
-            - "redis://192.168.204.101:26381"
-          masterName: "master"
-          database: 15
-        threads: 4
-        nettyThreads: 4
-        codec: !<org.redisson.codec.Kryo5Codec> {}
-        transportMode: "NIO"
-
-dubbo:
-  registry:
-    address: zookeeper://127.0.0.1:2181
-  application:
-    name: ${spring.application.name}
-    ## Dubbo框架的QoS（Quality of Service）服务
-    qos-enable: false
-    ## 默认qos-port: 22222
-    qos-port: 33333
-  consumer:
-    check: false
-    timeout: 5000
-    retries: 0
+#  redis:
+#    redisson:
+#      #file: classpath:redisson.yaml
+#      config: |
+#        sentinelServersConfig:
+#          idleConnectionTimeout: 10000
+#          connectTimeout: 3000
+#          timeout: 3000
+#          retryAttempts: 2
+#          retryInterval: 1000
+#          failedSlaveReconnectionInterval: 3000
+#          failedSlaveCheckInterval: 60000
+#          password: null
+#          clientName: null
+#          loadBalancer: !<org.redisson.connection.balancer.RoundRobinLoadBalancer> {}
+#          subscriptionsPerConnection: 5
+#          subscriptionConnectionMinimumIdleSize: 1
+#          subscriptionConnectionPoolSize: 50
+#          slaveConnectionMinimumIdleSize: 24
+#          slaveConnectionPoolSize: 64
+#          masterConnectionMinimumIdleSize: 24
+#          masterConnectionPoolSize: 64
+#          readMode: "SLAVE"
+#          subscriptionMode: "SLAVE"
+#          sentinelAddresses:
+#            - "redis://192.168.204.101:26379"
+#            - "redis://192.168.204.101:26380"
+#            - "redis://192.168.204.101:26381"
+#          masterName: "master"
+#          database: 15
+#        threads: 4
+#        nettyThreads: 4
+#        codec: !<org.redisson.codec.Kryo5Codec> {}
+#        transportMode: "NIO"
+#
+#dubbo:
+#  registry:
+#    address: zookeeper://127.0.0.1:2181
+#  application:
+#    name: ${spring.application.name}
+#    ## Dubbo框架的QoS（Quality of Service）服务
+#    qos-enable: false
+#    ## 默认qos-port: 22222
+#    qos-port: 33333
+#  consumer:
+#    check: false
+#    timeout: 5000
+#    retries: 0
 
 abc:
   excel:

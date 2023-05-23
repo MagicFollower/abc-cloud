@@ -35,6 +35,13 @@
             <version>${abc-common.version}</version>
         </dependency>
 
+        <!-- Apollo -->
+        <dependency>
+            <groupId>com.abc</groupId>
+            <artifactId>abc-common-apollo-client</artifactId>
+            <version>${abc-common.version}</version>
+        </dependency>
+
         <!-- 下方依赖仅供测试使用，随时可以删除 -->
         <dependency>
             <groupId>com.abc</groupId>
