@@ -19,7 +19,7 @@ public class MySqlBatchInsertGenIdProvider extends MapperTemplate {
         super(mapperClass, mapperHelper);
     }
 
-    public String batchInsertList(MappedStatement ms) {
+    public String batchInsertGenId(MappedStatement ms) {
         LOGGER.info(">>>>>>>> batch insert build sql|start <<<<<<<<");
         Class<?> entityClass = this.getEntityClass(ms);
         StringBuilder sql = new StringBuilder();

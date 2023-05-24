@@ -19,7 +19,7 @@ public class MySqlBatchExampleProvider extends ExampleProvider implements MySqlI
         super(mapperClass, mapperHelper);
     }
 
-    public String updateBatchByPrimaryKeySelective(MappedStatement mappedStatement) {
+    public String batchUpdateByPrimaryKeySelective(MappedStatement mappedStatement) {
         LOGGER.info(">>>>>>>> batch selective update build sql|start <<<<<<<<");
         Class<?> entityClass = this.getEntityClass(mappedStatement);
         StringBuilder sqlBuilder = new StringBuilder();
@@ -53,7 +53,7 @@ public class MySqlBatchExampleProvider extends ExampleProvider implements MySqlI
         }
     }
 
-    public String updateBatchByPrimaryKey(MappedStatement mappedStatement) {
+    public String batchUpdateByPrimaryKey(MappedStatement mappedStatement) {
         LOGGER.info(">>>>>>>> batch update build sql|start <<<<<<<<");
         Class<?> entityClass = this.getEntityClass(mappedStatement);
         StringBuilder sqlBuilder = new StringBuilder();
