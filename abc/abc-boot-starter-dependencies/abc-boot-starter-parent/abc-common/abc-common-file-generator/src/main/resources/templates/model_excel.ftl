@@ -75,13 +75,14 @@
                     Map<String,Object> data = new HashMap<>();
                     data.put("aaaDtlList", aaaDtlList);
             -->
+            <#-- 注意：当前模板约定只渲染字符串，请手动确保待渲染数据集全属性为字符串 -->
             <#list aaaDtlList as aaaDtl>
                 <Row>
                     <Cell ss:StyleID="s17"><Data ss:Type="Number">${aaaDtl_index+1}</Data></Cell>
-                    <Cell ss:StyleID="s17"><Data ss:Type="String">${aaaDtl.aaaCode}</Data></Cell>
-                    <Cell ss:StyleID="s17"><Data ss:Type="String">${aaaDtl.aaaName}</Data></Cell>
-                    <Cell ss:StyleID="s17"><Data ss:Type="String">${aaaDtl.aaaTypeCode}</Data></Cell>
-                    <Cell ss:StyleID="s17"><Data ss:Type="String">${aaaDtl.aaaTypeName}</Data></Cell>
+                    <Cell ss:StyleID="s17"><Data ss:Type="String">${aaaDtl.aaaCode?default("")}</Data></Cell>
+                    <Cell ss:StyleID="s17"><Data ss:Type="String">${aaaDtl.aaaName?default("")}</Data></Cell>
+                    <Cell ss:StyleID="s17"><Data ss:Type="String">${aaaDtl.aaaTypeCode?default("")}</Data></Cell>
+                    <Cell ss:StyleID="s17"><Data ss:Type="String">${aaaDtl.aaaTypeName?default("")}</Data></Cell>
                     <Cell ss:StyleID="s17"><Data ss:Type="String">${aaaDtl.memo?default("")}</Data></Cell>
                 </Row>
             </#list>
