@@ -1,8 +1,6 @@
 package com.abc.system.web.domain;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
