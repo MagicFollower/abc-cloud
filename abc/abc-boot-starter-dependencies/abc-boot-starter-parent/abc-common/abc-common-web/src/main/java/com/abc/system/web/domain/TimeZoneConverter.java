@@ -12,10 +12,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 基础领域模型实体
+ * 多时区转换器
  *
  * @Description <pre>
- * 基础领域模型实体
+ * 多时区转换器
  * 1.提供世界级时区统一转换
  *   -> 请将三者统一为UTC时区：{@code @JsonFormat}、jdbcUrl#serverTimezone/connectionTimeZone、MySQL#time_zone
  *
