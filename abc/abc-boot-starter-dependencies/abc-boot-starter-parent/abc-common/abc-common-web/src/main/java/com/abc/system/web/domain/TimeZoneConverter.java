@@ -1,14 +1,15 @@
 package com.abc.system.web.domain;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.List;
-
-import static com.abc.system.web.domain.ITimeZoneDomainModelConstants.*;
 
 /**
  * 基础领域模型实体
@@ -22,14 +23,14 @@ import static com.abc.system.web.domain.ITimeZoneDomainModelConstants.*;
  * {@code
  *     @PostMapping("/demo02")
  *     public String demo02(HttpServletRequest request, @RequestBody User user) {
- *         user.tzConverterDown(request, user, User.class);
+ *         TimeZoneConverter.tzConverterDown(request, user, User.class);
  *
  *         Example example = new Example(User.class);
  *         Example.Criteria criteria = example.createCriteria();
  *         criteria.andLessThanOrEqualTo(User.Fields.id, 400);
  *         List<User> users = userMapper.selectByExample(example);
  *
- *         user.tzConverterUp(request, users, User.class);
+ *         TimeZoneConverter.tzConverterUp(request, users, User.class);
  *
  *         return JSONObject.toJSONString(users, JSONWriter.Feature.PrettyFormat);
  *     }
@@ -39,7 +40,16 @@ import static com.abc.system.web.domain.ITimeZoneDomainModelConstants.*;
  * @Date 2023/5/26 8:37
  * @Version 1.0
  */
-public interface ITimeZoneDomainModel {
+public class TimeZoneConverter {
+
+    static String TZ_HEADER = "tz";
+    static String TZ_DEFAULT = "GMT+8";
+
+    static String TZ_PREFIX_LIMIT = "GMT";
+    static List<String> TZ_POSTFIX_LIMIT = Arrays.asList("-12", "-11", "-10",
+            "-9", "-8", "-7", "-6", "-5", "-4", "-3", "-2", "-1",
+            "-0", "+0",
+            "+1", "+2", "+3", "+4", "+5", "+6", "+7", "+8", "+9", "+10", "+11", "+12", "+13", "+14");
 
     /**
      * <pre>
@@ -51,7 +61,7 @@ public interface ITimeZoneDomainModel {
      *
      * @return 时区字符串（GMT-12~GMT+14）
      */
-    default String fetchTZ(HttpServletRequest request) {
+    private static String fetchTZ(HttpServletRequest request) {
         String userLocalTimeZone = request.getHeader(TZ_HEADER);
         if (StringUtils.isEmpty(userLocalTimeZone)) return TZ_DEFAULT;
         if ((userLocalTimeZone.length() == 6 || userLocalTimeZone.length() == 5)
@@ -63,7 +73,7 @@ public interface ITimeZoneDomainModel {
         return TZ_DEFAULT;
     }
 
-    default <T extends ITimeZoneDomainModel> void tzConverterDown(HttpServletRequest request, T instance, Class<T> clazz) {
+    public static <T> void tzConverterDown(HttpServletRequest request, T instance, Class<T> clazz) {
         String userLocalTimeZone = fetchTZ(request);
         for (Field field : clazz.getDeclaredFields()) {
             if (field.getType() == ZonedDateTime.class) {
@@ -80,7 +90,7 @@ public interface ITimeZoneDomainModel {
         }
     }
 
-    default <T extends ITimeZoneDomainModel> void tzConverterUp(HttpServletRequest request, T instance, Class<T> clazz) {
+    public static <T> void tzConverterUp(HttpServletRequest request, T instance, Class<T> clazz) {
         String userLocalTimeZone = fetchTZ(request);
         for (Field field : clazz.getDeclaredFields()) {
             if (field.getType() == ZonedDateTime.class) {
@@ -96,11 +106,11 @@ public interface ITimeZoneDomainModel {
         }
     }
 
-    default <T extends ITimeZoneDomainModel> void tzConverterDown(HttpServletRequest request, List<T> instanceList, Class<T> clazz) {
+    public static <T> void tzConverterDown(HttpServletRequest request, List<T> instanceList, Class<T> clazz) {
         instanceList.forEach(instance -> tzConverterDown(request, instance, clazz));
     }
 
-    default <T extends ITimeZoneDomainModel> void tzConverterUp(HttpServletRequest request, List<T> instanceList, Class<T> clazz) {
+    public static <T> void tzConverterUp(HttpServletRequest request, List<T> instanceList, Class<T> clazz) {
         instanceList.forEach(instance -> tzConverterUp(request, instance, clazz));
     }
 
