@@ -13,7 +13,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
-import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Map;
@@ -64,9 +63,11 @@ public class JWTHelper1 {
      * @return 校验是否通过（true是，false否）
      */
     public static boolean validateJWT(String jwt, String currentSystemName) {
-        boolean valid;
+        boolean valid = true;
         try {
-            valid = isJWTExpired(parseJWT(jwt, currentSystemName));
+            if (parseJWT(jwt, currentSystemName) == null) {
+                valid = false;
+            }
         } catch (Exception e) {
             valid = false;
             log.error(">>>>>>>>|JWT校验失败|e:{}|<<<<<<<<", e.getMessage(), e);
@@ -87,12 +88,7 @@ public class JWTHelper1 {
      */
     public static String parseUserInfo(String jwt, String currentSystemName) {
         try {
-            Map<String, Claim> stringClaimMap = parseJWT(jwt, currentSystemName);
-            if (!isJWTExpired(stringClaimMap)) {
-                return parseJWT(jwt, currentSystemName).get("user").asString();
-            } else {
-                throw new RuntimeException("JWT已过期");
-            }
+            return parseJWT(jwt, currentSystemName).get("user").asString();
         } catch (Exception e) {
             log.error(">>>>>>>>|JWT解析用户信息失败|e:{}|<<<<<<<<", e.getMessage(), e);
             throw new JWTException(SystemRetCodeConstants.JWT_PARSE_ERROR);
@@ -128,16 +124,17 @@ public class JWTHelper1 {
         }
     }
 
-    /**
-     * 判断JWT是否过期，在校验JWT通过获取Claims后，需要根据Claims检测JWT是否过期
-     *
-     * @param claims {@code io.jsonwebtoken.Claims}
-     * @return 是否过期（true是，false否）
-     */
-    private static boolean isJWTExpired(Map<String, Claim> claims) {
-        Instant exp = Instant.ofEpochSecond(claims.get("exp").asLong());
-        return exp.isBefore(Instant.now());
-    }
+// 移除原因：解析JWT时框架会自动检测是否过期：TokenExpiredException
+//    /**
+//     * 判断JWT是否过期，在校验JWT通过获取Claims后，需要根据Claims检测JWT是否过期
+//     *
+//     * @param claims {@code io.jsonwebtoken.Claims}
+//     * @return 是否过期（true是，false否）
+//     */
+//    private static boolean isJWTExpired(Map<String, Claim> claims) {
+//        Instant exp = Instant.ofEpochSecond(claims.get("exp").asLong());
+//        return exp.isBefore(Instant.now());
+//    }
 
     /**
      * 生成JWT字符串

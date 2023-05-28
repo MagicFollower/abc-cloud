@@ -67,9 +67,11 @@ public class JWTHelper {
      * @return 校验是否通过（true是，false否）
      */
     public static boolean validateJWT(String jwt, String currentSystemName) {
-        boolean valid;
+        boolean valid = true;
         try {
-            valid = isJWTExpired(parseJWT(jwt, currentSystemName));
+            if (parseJWT(jwt, currentSystemName) == null) {
+                valid = false;
+            }
         } catch (Exception e) {
             valid = false;
             log.error(">>>>>>>>|JWT校验失败|e:{}|<<<<<<<<", e.getMessage(), e);
@@ -90,12 +92,7 @@ public class JWTHelper {
      */
     public static String parseUserInfo(String jwt, String currentSystemName) {
         try {
-            Claims claims = parseJWT(jwt, currentSystemName);
-            if (!isJWTExpired(claims)) {
-                return parseJWT(jwt, currentSystemName).get("user").toString();
-            } else {
-                throw new RuntimeException("JWT已过期");
-            }
+            return parseJWT(jwt, currentSystemName).get("user").toString();
         } catch (Exception e) {
             log.error(">>>>>>>>|JWT解析用户信息失败|e:{}|<<<<<<<<", e.getMessage(), e);
             throw new JWTException(SystemRetCodeConstants.JWT_PARSE_ERROR);
@@ -131,15 +128,16 @@ public class JWTHelper {
         }
     }
 
-    /**
-     * 判断JWT是否过期，在校验JWT通过获取Claims后，需要根据Claims检测JWT是否过期
-     *
-     * @param claims {@code io.jsonwebtoken.Claims}
-     * @return 是否过期（true是，false否）
-     */
-    private static boolean isJWTExpired(Claims claims) {
-        return claims.getExpiration().before(new Date());
-    }
+// 移除原因：解析JWT时框架会自动检测是否过期：ExpiredJwtException
+//    /**
+//     * 判断JWT是否过期，在校验JWT通过获取Claims后，需要根据Claims检测JWT是否过期
+//     *
+//     * @param claims {@code io.jsonwebtoken.Claims}
+//     * @return 是否过期（true是，false否）
+//     */
+//    private static boolean isJWTExpired(Claims claims) {
+//        return claims.getExpiration().before(new Date());
+//    }
 
     /**
      * 生成JWT字符串
