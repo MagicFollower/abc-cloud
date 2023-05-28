@@ -56,7 +56,7 @@ public class JWTHelper {
     }
 
     public static String generateJWT(String content) {
-        return generateJWT(content, "");
+        return generateJWT(content, null);
     }
 
     /**
@@ -78,7 +78,7 @@ public class JWTHelper {
     }
 
     public static boolean validateJWT(String jwt) {
-        return validateJWT(jwt, "");
+        return validateJWT(jwt, null);
     }
 
     /**
@@ -103,7 +103,7 @@ public class JWTHelper {
     }
 
     public static String parseUserInfo(String jwt) {
-        return parseUserInfo(jwt, "");
+        return parseUserInfo(jwt, null);
     }
 
     /*🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎*/
