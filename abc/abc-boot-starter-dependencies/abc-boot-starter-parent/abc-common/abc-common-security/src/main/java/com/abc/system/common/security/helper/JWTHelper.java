@@ -56,11 +56,7 @@ public class JWTHelper {
     }
 
     public static String generateJWT(String content) {
-        JWTProperties jwtProperties = SpringHelper.getBean(JWTProperties.class);
-        String encryptionSecret = jwtProperties.getEncryptionSecret();
-        String encryptedContent = new AESUtils(content).encrypt(encryptionSecret);
-        String issuer = jwtProperties.getIssuer();
-        return generateJWT(encryptedContent, issuer, "");
+        return generateJWT(content, "");
     }
 
     /**
@@ -82,14 +78,7 @@ public class JWTHelper {
     }
 
     public static boolean validateJWT(String jwt) {
-        boolean valid;
-        try {
-            valid = isJWTExpired(parseJWT(jwt, ""));
-        } catch (Exception e) {
-            valid = false;
-            log.error(">>>>>>>>|JWT校验失败|e:{}|<<<<<<<<", e.getMessage(), e);
-        }
-        return valid;
+        return validateJWT(jwt, "");
     }
 
     /**
@@ -101,7 +90,12 @@ public class JWTHelper {
      */
     public static String parseUserInfo(String jwt, String currentSystemName) {
         try {
-            return parseJWT(jwt, currentSystemName).get("user").toString();
+            Claims claims = parseJWT(jwt, currentSystemName);
+            if (!isJWTExpired(claims)) {
+                return parseJWT(jwt, currentSystemName).get("user").toString();
+            } else {
+                throw new RuntimeException("JWT已过期");
+            }
         } catch (Exception e) {
             log.error(">>>>>>>>|JWT解析用户信息失败|e:{}|<<<<<<<<", e.getMessage(), e);
             throw new JWTException(SystemRetCodeConstants.JWT_PARSE_ERROR);
@@ -109,13 +103,10 @@ public class JWTHelper {
     }
 
     public static String parseUserInfo(String jwt) {
-        try {
-            return parseJWT(jwt, "").get("user").toString();
-        } catch (Exception e) {
-            log.error(">>>>>>>>|JWT解析用户信息失败|e:{}|<<<<<<<<", e.getMessage(), e);
-            throw new JWTException(SystemRetCodeConstants.JWT_PARSE_ERROR);
-        }
+        return parseUserInfo(jwt, "");
     }
+
+    /*🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎*/
 
     /**
      * 解析JWT
@@ -149,8 +140,6 @@ public class JWTHelper {
     private static boolean isJWTExpired(Claims claims) {
         return claims.getExpiration().before(new Date());
     }
-
-    /*🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎*/
 
     /**
      * 生成JWT字符串
