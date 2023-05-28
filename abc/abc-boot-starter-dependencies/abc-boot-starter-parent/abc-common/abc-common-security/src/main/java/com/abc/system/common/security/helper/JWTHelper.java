@@ -22,9 +22,15 @@ import java.util.HashMap;
 import java.util.Objects;
 
 /**
- * JWTUtils
+ * JWT生成与解析工具
  *
- * @Description JWTUtils 详细介绍
+ * @Description
+ * <pre>
+ * JWT生成与解析工具
+ * 1.{@code String generateJWT(String content, String currentSystemName)}
+ * 2.{@code boolean validateJWT(String jwt, String currentSystemName)}
+ * 3.{@code String parseUserInfo(String jwt, String currentSystemName))}
+ * </pre>
  * @Author Trivis
  * @Date 2023/5/28 8:30
  * @Version 1.0
