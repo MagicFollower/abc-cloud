@@ -24,12 +24,14 @@ import java.util.Objects;
 /**
  * JWT生成与解析工具
  *
- * @Description
- * <pre>
+ * @Description <pre>
  * JWT生成与解析工具
- * 1.{@code String generateJWT(String content, String currentSystemName)}
- * 2.{@code boolean validateJWT(String jwt, String currentSystemName)}
- * 3.{@code String parseUserInfo(String jwt, String currentSystemName))}
+ * 1.{@code String generateJWT(String content)}
+ *   {@code String generateJWT(String content, String currentSystemName)}
+ * 2.{@code boolean validateJWT(String jwt)}
+ *   {@code boolean validateJWT(String jwt, String currentSystemName)}
+ * 3.{@code String parseUserInfo(String jwt))}
+ *   {@code String parseUserInfo(String jwt, String currentSystemName))}
  * </pre>
  * @Author Trivis
  * @Date 2023/5/28 8:30
@@ -53,6 +55,14 @@ public class JWTHelper {
         return generateJWT(encryptedContent, issuer, currentSystemName);
     }
 
+    public static String generateJWT(String content) {
+        JWTProperties jwtProperties = SpringHelper.getBean(JWTProperties.class);
+        String encryptionSecret = jwtProperties.getEncryptionSecret();
+        String encryptedContent = new AESUtils(content).encrypt(encryptionSecret);
+        String issuer = jwtProperties.getIssuer();
+        return generateJWT(encryptedContent, issuer, "");
+    }
+
     /**
      * 校验JWT字符串
      *
@@ -71,6 +81,17 @@ public class JWTHelper {
         return valid;
     }
 
+    public static boolean validateJWT(String jwt) {
+        boolean valid;
+        try {
+            valid = isJWTExpired(parseJWT(jwt, ""));
+        } catch (Exception e) {
+            valid = false;
+            log.error(">>>>>>>>|JWT校验失败|e:{}|<<<<<<<<", e.getMessage(), e);
+        }
+        return valid;
+    }
+
     /**
      * 解析JWT字符串中自定义payload（key="user"）
      *
@@ -81,6 +102,15 @@ public class JWTHelper {
     public static String parseUserInfo(String jwt, String currentSystemName) {
         try {
             return parseJWT(jwt, currentSystemName).get("user").toString();
+        } catch (Exception e) {
+            log.error(">>>>>>>>|JWT解析用户信息失败|e:{}|<<<<<<<<", e.getMessage(), e);
+            throw new JWTException(SystemRetCodeConstants.JWT_PARSE_ERROR);
+        }
+    }
+
+    public static String parseUserInfo(String jwt) {
+        try {
+            return parseJWT(jwt, "").get("user").toString();
         } catch (Exception e) {
             log.error(">>>>>>>>|JWT解析用户信息失败|e:{}|<<<<<<<<", e.getMessage(), e);
             throw new JWTException(SystemRetCodeConstants.JWT_PARSE_ERROR);
