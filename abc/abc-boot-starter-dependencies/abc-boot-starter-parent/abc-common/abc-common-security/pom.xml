@@ -31,12 +31,12 @@
             <artifactId>jjwt-gson</artifactId>
         </dependency>
 
+        <!-- ⚠️⚠️⚠️ -->
         <!-- auth0:java-jwt -->
         <!-- 测试引入，针对两个库，我暴露了同样的API，你只需要在两个工具中选择一个即可 -->
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
-            <version>4.4.0</version>
         </dependency>
 
         <dependency>

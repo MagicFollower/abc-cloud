@@ -72,6 +72,7 @@
 
         <!-- JJWT -->
         <jjwt.version>0.11.5</jjwt.version>
+        <java-jwt.version>4.4.0</java-jwt.version>
 
         <!-- TOOLS-start -->
         <commoms-lang3.version>3.12.0</commoms-lang3.version>
