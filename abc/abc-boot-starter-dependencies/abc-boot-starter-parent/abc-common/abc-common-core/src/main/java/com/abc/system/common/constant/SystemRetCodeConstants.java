@@ -49,12 +49,22 @@ public enum SystemRetCodeConstants {
     EXCEL_TEMPLATE_CODE_LOST("005001", "缺少templateCode"),
     EXCEL_NOT_SUPPORT_ERROR("005002", "文件格式不支持"),
     EXCEL_NUM_ERROR("005003", "上传文件数量非法"),
-    EXCEL_IS_NULL("005004","上传Excel无法解析"),
-    EXCEL_RULE_ERROR("005005","Excel规则解析出错"),
+    EXCEL_IS_NULL("005004", "上传Excel无法解析"),
+    EXCEL_RULE_ERROR("005005", "Excel规则解析出错"),
     EXCEL_TYPE_ERROR("005006", "Excel数据类型解析异常"),
 
 
+    //##############################################
+    //#####JWT（security）响应编码 006
+    //##############################################
+    JWT_GENERATE_ERROR("006001", "TOKEN生成异常"),
+    JWT_PARSE_ERROR("006002", "TOKEN解析异常"),
 
+
+
+
+
+    
     ANONYMOUS("999999", "ANONYMOUS-MESSAGE");
 
     private String code;
