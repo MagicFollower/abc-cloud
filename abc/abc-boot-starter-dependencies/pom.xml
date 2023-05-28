@@ -70,6 +70,9 @@
         <!-- LOG-Agent(Java-Agent) -->
         <byte-buddy.version>1.14.4</byte-buddy.version>
 
+        <!-- JJWT -->
+        <jjwt.version>0.11.5</jjwt.version>
+
         <!-- TOOLS-start -->
         <commoms-lang3.version>3.12.0</commoms-lang3.version>
         <fastjson2.version>2.0.29</fastjson2.version>

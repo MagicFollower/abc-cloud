@@ -26,6 +26,7 @@
         <module>abc-common-dubbo</module>
         <module>abc-common-distributed-lock</module>
         <module>abc-common-excel</module>
+        <module>abc-common-security</module>
     </modules>
 
     <properties>
@@ -180,6 +181,18 @@
                 <groupId>org.xhtmlrenderer</groupId>
                 <artifactId>flying-saucer-pdf</artifactId>
                 <version>${flying-saucer-pdf.version}</version>
+            </dependency>
+
+            <!-- jjwt -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-gson</artifactId>
+                <version>${jjwt.version}</version>
             </dependency>
 
             <dependency>
