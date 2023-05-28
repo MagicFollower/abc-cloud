@@ -59,6 +59,7 @@ public enum SystemRetCodeConstants {
     //##############################################
     JWT_GENERATE_ERROR("006001", "TOKEN生成异常"),
     JWT_PARSE_ERROR("006002", "TOKEN解析异常"),
+    JWT_EXPIRED("006003", "TOKEN过期"),
 
 
 

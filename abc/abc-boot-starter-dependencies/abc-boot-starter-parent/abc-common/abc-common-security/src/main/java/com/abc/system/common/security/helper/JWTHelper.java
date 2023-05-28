@@ -7,6 +7,7 @@ import com.abc.system.common.security.config.JWTProperties;
 import com.abc.system.common.security.util.AESUtils;
 import com.google.gson.Gson;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.gson.io.GsonSerializer;
@@ -91,12 +92,7 @@ public class JWTHelper {
      * @return 用户信息
      */
     public static String parseUserInfo(String jwt, String currentSystemName) {
-        try {
-            return parseJWT(jwt, currentSystemName).get("user").toString();
-        } catch (Exception e) {
-            log.error(">>>>>>>>|JWT解析用户信息失败|e:{}|<<<<<<<<", e.getMessage(), e);
-            throw new JWTException(SystemRetCodeConstants.JWT_PARSE_ERROR);
-        }
+        return parseJWT(jwt, currentSystemName).get("user").toString();
     }
 
     public static String parseUserInfo(String jwt) {
@@ -122,6 +118,9 @@ public class JWTHelper {
                     .build()
                     .parseClaimsJws(jwt)
                     .getBody();
+        }catch (ExpiredJwtException eje) {
+            log.error(">>>>>>>>|JWT过期|e:{}|<<<<<<<<", eje.getMessage(), eje);
+            throw new JWTException(SystemRetCodeConstants.JWT_EXPIRED);
         } catch (Exception e) {
             log.error(">>>>>>>>|JWT解析异常|e:{}|<<<<<<<<", e.getMessage(), e);
             throw new JWTException(SystemRetCodeConstants.JWT_PARSE_ERROR);

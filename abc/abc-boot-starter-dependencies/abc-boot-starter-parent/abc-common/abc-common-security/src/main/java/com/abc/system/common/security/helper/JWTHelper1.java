@@ -8,6 +8,7 @@ import com.abc.system.common.security.util.AESUtils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.extern.slf4j.Slf4j;
@@ -87,12 +88,7 @@ public class JWTHelper1 {
      * @return 用户信息
      */
     public static String parseUserInfo(String jwt, String currentSystemName) {
-        try {
-            return parseJWT(jwt, currentSystemName).get("user").asString();
-        } catch (Exception e) {
-            log.error(">>>>>>>>|JWT解析用户信息失败|e:{}|<<<<<<<<", e.getMessage(), e);
-            throw new JWTException(SystemRetCodeConstants.JWT_PARSE_ERROR);
-        }
+        return parseJWT(jwt, currentSystemName).get("user").asString();
     }
 
     public static String parseUserInfo(String jwt) {
@@ -118,6 +114,9 @@ public class JWTHelper1 {
                     .build();
             DecodedJWT decodedJWT = verifier.verify(jwt);
             return decodedJWT.getClaims();
+        } catch (TokenExpiredException tee) {
+            log.error(">>>>>>>>|JWT过期|e:{}|<<<<<<<<", tee.getMessage(), tee);
+            throw new JWTException(SystemRetCodeConstants.JWT_EXPIRED);
         } catch (Exception e) {
             log.error(">>>>>>>>|JWT解析异常|e:{}|<<<<<<<<", e.getMessage(), e);
             throw new JWTException(SystemRetCodeConstants.JWT_PARSE_ERROR);
