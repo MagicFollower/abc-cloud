@@ -25,7 +25,7 @@ import java.util.Objects;
  * JWT生成与解析工具
  *
  * @Description <pre>
- * JWT生成与解析工具
+ * JWT生成与解析工具(jsonwebtoken:jjwt-impl)
  * 1.{@code String generateJWT(String content)}
  *   {@code String generateJWT(String content, String currentSystemName)}
  * 2.{@code boolean validateJWT(String jwt)}
