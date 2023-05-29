@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletRequest;
  * @Version 1.0
  */
 @Slf4j
-public class SessionUtils {
+public class SecuritySessionUtils {
 
-    private SessionUtils() {
+    private SecuritySessionUtils() {
 
     }
 
@@ -31,16 +31,12 @@ public class SessionUtils {
      * @return euid
      */
     public static String getEuid(HttpServletRequest request) {
-        // 从header中获取euid
         String euid = request.getHeader(SessionConstants.EUID);
-        // 取得euid
         euid = StringUtils.isEmpty(euid) ? CookieUtils.getCookieValue(request, SessionConstants.EUID) : euid;
-        // 无euid表示用户未登录
         if (StringUtils.isEmpty(euid)) {
-            // 其次从request中获取euid
             euid = (String) request.getAttribute(SessionConstants.EUID);
             if (StringUtils.isEmpty(euid)) {
-                log.warn(">>>>>>>> euid is empty|please login <<<<<<<<");
+                log.warn(">>>>>>>>|euid is empty|please login|<<<<<<<<");
                 return null;
             }
         }
