@@ -26,23 +26,13 @@ public class SecuritySessionUtils {
      * 从三个地方获取euid（euid可以解释为equipment_id或effective_uid, 表示登录后服务器给登录设备的tag标记）
      * 1.header
      * 2.cookie
-     * 3.attribute
      *
      * @param request 请求体（HttpServletRequest）
      * @return euid
      */
     public static String getEuid(HttpServletRequest request) {
         String euid = request.getHeader(SessionConstants.EUID);
-        euid = StringUtils.isEmpty(euid) ? CookieUtils.getCookieValue(request, SessionConstants.EUID) : euid;
-        if (StringUtils.isEmpty(euid)) {
-            euid = (String) request.getAttribute(SessionConstants.EUID);
-            if (StringUtils.isEmpty(euid)) {
-                log.warn(">>>>>>>>|euid is empty|please login|<<<<<<<<");
-                return null;
-            }
-        }
-
-        return euid;
+        return StringUtils.isEmpty(euid) ? CookieUtils.getCookieValue(request, SessionConstants.EUID) : euid;
     }
 
     /**
