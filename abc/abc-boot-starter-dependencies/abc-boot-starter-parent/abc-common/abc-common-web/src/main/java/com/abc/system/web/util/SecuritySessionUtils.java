@@ -7,9 +7,9 @@ import org.apache.commons.lang3.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * SessionUtils 会话工具包（仅提供获取euid的方法）
+ * SecuritySessionUtils 会话工具包（仅提供获取euid的方法）
  *
- * @Description SessionUtils 会话工具包（仅提供获取euid的方法）
+ * @Description SecuritySessionUtils 会话工具包（仅提供获取euid的方法）
  * @Author Trivis
  * @Date 2023/5/15 21:30
  * @Version 1.0
