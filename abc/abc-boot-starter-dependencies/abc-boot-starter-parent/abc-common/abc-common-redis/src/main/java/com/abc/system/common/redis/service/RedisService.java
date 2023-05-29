@@ -85,7 +85,7 @@ public class RedisService {
      * 获得缓存的基本对象
      *
      * @param key 缓存键值
-     * @return 缓存键值对应的数据
+     * @return 缓存键值对应的数据（数据不存在返回null）
      */
     public <T> T get(final String key) {
         ValueOperations<String, T> operation = redisTemplate.opsForValue();
