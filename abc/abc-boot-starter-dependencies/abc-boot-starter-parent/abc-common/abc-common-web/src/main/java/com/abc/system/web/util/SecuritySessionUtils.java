@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 /**
  * SecuritySessionUtils 会话工具包（仅提供获取euid的方法）
@@ -42,5 +43,14 @@ public class SecuritySessionUtils {
         }
 
         return euid;
+    }
+
+    /**
+     * 生成新EUID
+     *
+     * @return 新EUID字符串
+     */
+    public static String newEuid() {
+        return UUID.randomUUID().toString().replace("-", "");
     }
 }
