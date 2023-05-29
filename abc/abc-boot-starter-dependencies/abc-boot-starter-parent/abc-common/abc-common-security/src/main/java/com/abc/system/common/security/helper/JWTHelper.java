@@ -86,7 +86,7 @@ public class JWTHelper {
 
     /**
      * 解析JWT字符串中自定义payload（key="user"）
-     * 1.jwt=null、""等不符合规范的取值时，都将抛出异常{@code JWTDecodeException}
+     * 1.jwt=null、""等不符合规范的取值时，将抛出异常{@code IllegalArgumentException}
      *
      * @param jwt               JWT字符串
      * @param currentSystemName 当前系统名称（作为Audience）
