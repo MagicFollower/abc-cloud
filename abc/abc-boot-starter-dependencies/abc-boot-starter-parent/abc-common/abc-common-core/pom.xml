@@ -19,6 +19,7 @@
 
     <dependencies>
         <!-- 2019年，该包名前缀由javax已被更新为jakarta, 这里引入旨在保证向下兼容性，版本固定不对外暴露控制 -->
+        <!--   → 如果，升级到JDK17(SpringBoot3.x)，请移除这个包，同时将servlet协议前缀更新为jakarta -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
