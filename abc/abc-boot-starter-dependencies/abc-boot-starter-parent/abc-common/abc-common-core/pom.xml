@@ -18,6 +18,14 @@
     </properties>
 
     <dependencies>
+        <!-- 2019年，该包名前缀由javax已被更新为jakarta, 这里引入旨在保证向下兼容性，版本固定不对外暴露控制 -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- springboot启动器 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
