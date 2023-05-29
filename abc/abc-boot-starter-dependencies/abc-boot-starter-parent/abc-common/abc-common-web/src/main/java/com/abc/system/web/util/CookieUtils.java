@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.Duration;
 
 /**
  * CookieUtils Cookie工具类
@@ -65,67 +66,6 @@ public class CookieUtils {
             }
         }
         return null;
-    }
-
-    /**
-     * 生成Cookie，根据key、value、maxAge、domain
-     *
-     * @param key    cookie名称
-     * @param value  cookie值
-     * @param maxAge 有效时间
-     * @param domain cookie根路径
-     * @return Cookie
-     */
-    public static Cookie genCookieWithDomain(String key, String value, int maxAge, String domain) {
-        return genCookie(key, value, maxAge, domain, null);
-    }
-
-    /**
-     * 生成Cookie，根据key、value、maxAge、uri
-     *
-     * @param key    cookie名称
-     * @param value  cookie值
-     * @param maxAge 有效时间
-     * @param uri    cookie根路径
-     * @return Cookie
-     */
-    public static Cookie genCookieWithUri(String key, String value, int maxAge, String uri) {
-        return genCookie(key, value, maxAge, null, uri);
-    }
-
-    /**
-     * 生成Cookie，根据key、value、maxAge、domain、uri
-     *
-     * @param key    cookie名称
-     * @param value  cookie值
-     * @param uri    cookie根路径
-     * @param maxAge 有效时间
-     * @return Cookie
-     */
-    public static Cookie genCookie(@NonNull String key, @NonNull String value, int maxAge, String domain,
-                                   String uri) {
-        Cookie cookie = new Cookie(key, value);
-        if (StringUtils.isNotEmpty(uri)) {
-            enrichCookie(cookie, uri, maxAge);
-        } else {
-            enrichCookie(cookie, "/", maxAge);
-        }
-        if (StringUtils.isNotEmpty(domain)) {
-            cookie.setDomain(domain);
-        }
-        return cookie;
-    }
-
-    /**
-     * 设置Cookie路径与有效期
-     *
-     * @param cookie 待处理的Cookie对象
-     * @param uri    cookie保存的根路径
-     * @param maxAge 存储时间
-     */
-    public static void enrichCookie(Cookie cookie, String uri, int maxAge) {
-        cookie.setPath(uri);
-        cookie.setMaxAge(maxAge);
     }
 
     // #########################################################
@@ -218,5 +158,76 @@ public class CookieUtils {
             cookie.setDomain(domain);
         }
         response.addCookie(cookie);
+    }
+
+    // #########################################################
+    // 生成Cookie
+    // #########################################################
+
+    /**
+     * 生成Cookie，根据key、value、maxAge、domain
+     *
+     * @param key    cookie名称
+     * @param value  cookie值
+     * @param maxAge 有效时间
+     * @param domain cookie根路径
+     * @return Cookie
+     */
+    public static Cookie genCookieWithDomain(String key, String value, int maxAge, String domain) {
+        return genCookie(key, value, maxAge, domain, null);
+    }
+
+    /**
+     * 生成Cookie，根据key、value、maxAge、uri
+     *
+     * @param key    cookie名称
+     * @param value  cookie值
+     * @param maxAge 有效时间
+     * @param uri    cookie根路径
+     * @return Cookie
+     */
+    public static Cookie genCookieWithUri(String key, String value, int maxAge, String uri) {
+        return genCookie(key, value, maxAge, null, uri);
+    }
+
+    /**
+     * 生成Cookie，根据key、value、maxAge、domain、uri
+     *
+     * @param key    cookie名称
+     * @param value  cookie值
+     * @param uri    cookie根路径
+     * @param maxAge 有效时间
+     * @return Cookie
+     */
+    public static Cookie genCookie(@NonNull String key, @NonNull String value, int maxAge, String domain,
+                                   String uri) {
+        Cookie cookie = new Cookie(key, value);
+        if (StringUtils.isNotEmpty(uri)) {
+            enrichCookie(cookie, uri, maxAge);
+        } else {
+            enrichCookie(cookie, "/", maxAge);
+        }
+        if (StringUtils.isNotEmpty(domain)) {
+            cookie.setDomain(domain);
+        }
+        return cookie;
+    }
+
+    /**
+     * 设置Cookie路径与有效期
+     * 1.uri为null时，忽略uri配置
+     *
+     * @param cookie 待处理的Cookie对象
+     * @param uri    cookie保存的根路径
+     * @param maxAgeSeconds 存储时间(单位秒)
+     */
+    public static void enrichCookie(Cookie cookie, String uri, int maxAgeSeconds) {
+        if(StringUtils.isNotEmpty(uri)) {
+            cookie.setPath(uri);
+        }
+        cookie.setMaxAge(maxAgeSeconds);
+    }
+    public static void enrichCookie(Cookie cookie, String uri, Duration maxAgeDuration) {
+        enrichCookie(cookie, uri, (int) maxAgeDuration.getSeconds());
     }
 }
