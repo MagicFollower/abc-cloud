@@ -8,8 +8,9 @@
 
     <name>abc-boot-starter-dependencies</name>
     <description>
-        abc-boot-starter-dependencies;
-        请使用: mvn versions:set -DgenerateBackupPoms=false -DautoVersionSubmodules=true更新版本号。
+        1.abc-boot-starter-dependencies;
+          → 请使用: mvn versions:set -DgenerateBackupPoms=false -DautoVersionSubmodules=true更新版本号。
+        2.项目支持JDK8，由于Spring全线强制升级JDK17，后续将直接升级至JDK17（不再使用JDK11LTS作为过渡版本）
     </description>
     <packaging>pom</packaging>
 
