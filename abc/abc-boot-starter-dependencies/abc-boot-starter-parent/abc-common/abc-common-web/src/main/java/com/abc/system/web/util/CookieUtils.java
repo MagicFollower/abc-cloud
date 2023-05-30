@@ -96,13 +96,16 @@ public class CookieUtils {
      * 1.默认：会话cookie
      * 2.默认：isHttpOnly
      *
-     * @param response 响应对象（HttpServletResponse）
-     * @param key      Cookie的key(String)
-     * @param value    Cookie的value(String)
-     * @param domain   Cookie的domain域(String)
+     * @param response   响应对象（HttpServletResponse）
+     * @param key        Cookie的key(String)
+     * @param value      Cookie的value(String)
+     * @param isHttpOnly isHttpOnly
+     * @param domain     Cookie的domain域(String)
+     * @param uri        uri
      */
     public static void setSessionCookie(HttpServletResponse response,
-                                        String key, String value, boolean isHttpOnly, String domain, String uri) {
+                                        String key, String value,
+                                        boolean isHttpOnly, String domain, String uri) {
         Cookie cookie = new Cookie(key, value);
         cookie.setHttpOnly(isHttpOnly);
         if (StringUtils.isNotEmpty(domain)) {
@@ -119,9 +122,10 @@ public class CookieUtils {
      * 1.默认：isHttpOnly
      * 2.默认：uri=/
      *
-     * @param response 响应对象（HttpServletResponse）
-     * @param key      Cookie的key(String)
-     * @param value    Cookie的value(String)
+     * @param response       响应对象（HttpServletResponse）
+     * @param key            Cookie的key(String)
+     * @param value          Cookie的value(String)
+     * @param maxAgeDuration Duration
      */
     public static void setCookie(HttpServletResponse response, String key, String value, Duration maxAgeDuration) {
         Cookie cookie = new Cookie(key, value);
@@ -139,10 +143,13 @@ public class CookieUtils {
      * 向响应中写入cookie
      * 1.默认：isHttpOnly
      *
-     * @param response 响应对象（HttpServletResponse）
-     * @param key      Cookie的key(String)
-     * @param value    Cookie的value(String)
-     * @param domain   Cookie的domain域(String)
+     * @param response       响应对象（HttpServletResponse）
+     * @param key            Cookie的key(String)
+     * @param value          Cookie的value(String)
+     * @param maxAgeDuration Duration
+     * @param isHttpOnly     isHttpOnly
+     * @param domain         Cookie的domain域(String)
+     * @param uri            uri
      */
     public static void setCookie(HttpServletResponse response,
                                  String key,
@@ -185,10 +192,47 @@ public class CookieUtils {
      *
      * @param response 响应
      * @param key      Cookie对应的key
-     * @param uri      cookie保存的根路径
-     * @param domain   Cookie的domain域
      */
-    public static void cleanCookie(HttpServletResponse response, String key, String uri, String domain) {
+    public static void cleanCookie(HttpServletResponse response, String key) {
+        Cookie cookie = new Cookie(key, "");
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+    }
+
+    /**
+     * 清除Cookie
+     * <pre>
+     *     清除指定 KEY的Cookie
+     * </pre>
+     *
+     * @param response 响应
+     * @param key      Cookie对应的key
+     * @param uri      cookie保存的根路径
+     */
+    public static void cleanCookie(HttpServletResponse response, String key, String uri) {
+        Cookie cookie = new Cookie(key, "");
+        cookie.setMaxAge(0);
+        if (StringUtils.isNotEmpty(uri)) {
+            cookie.setPath(uri);
+        } else {
+            cookie.setPath("/");
+        }
+        response.addCookie(cookie);
+    }
+
+    /**
+     * 清除Cookie
+     * <pre>
+     *     清除指定 KEY的Cookie
+     * </pre>
+     *
+     * @param response 响应
+     * @param key      Cookie对应的key
+     * @param domain   Cookie的domain域
+     * @param uri      cookie保存的根路径
+     */
+    public static void cleanCookie(HttpServletResponse response, String key, String domain, String uri) {
         Cookie cookie = new Cookie(key, "");
         cookie.setMaxAge(0);
         if (StringUtils.isNotEmpty(uri)) {
@@ -207,47 +251,61 @@ public class CookieUtils {
     // #########################################################
 
     /**
-     * 生成Cookie，根据key、value、maxAge、domain
+     * 生成Cookie，根据key、value、maxAgeDuration
      *
-     * @param key    cookie名称
-     * @param value  cookie值
-     * @param maxAge 有效时间
-     * @param domain cookie根路径
+     * @param key            cookie名称
+     * @param value          cookie值
+     * @param maxAgeDuration Duration
      * @return Cookie
      */
-    public static Cookie genCookieWithDomain(String key, String value, int maxAge, String domain) {
-        return genCookie(key, value, maxAge, domain, null);
+    public static Cookie generateCookie(String key, String value, Duration maxAgeDuration) {
+        return generateCookie(key, value, maxAgeDuration, null, null);
     }
 
     /**
-     * 生成Cookie，根据key、value、maxAge、uri
+     * 生成Cookie，根据key、value、maxAgeDuration、domain
      *
-     * @param key    cookie名称
-     * @param value  cookie值
-     * @param maxAge 有效时间
-     * @param uri    cookie根路径
+     * @param key            cookie名称
+     * @param value          cookie值
+     * @param maxAgeDuration Duration
+     * @param domain         cookie根路径
      * @return Cookie
      */
-    public static Cookie genCookieWithUri(String key, String value, int maxAge, String uri) {
-        return genCookie(key, value, maxAge, null, uri);
+    public static Cookie generateCookieWithDomain(String key, String value, Duration maxAgeDuration, String domain) {
+        return generateCookie(key, value, maxAgeDuration, domain, null);
     }
 
     /**
-     * 生成Cookie，根据key、value、maxAge、domain、uri
+     * 生成Cookie，根据key、value、maxAgeDuration、uri
      *
-     * @param key    cookie名称
-     * @param value  cookie值
-     * @param uri    cookie根路径
-     * @param maxAge 有效时间
+     * @param key            cookie名称
+     * @param value          cookie值
+     * @param maxAgeDuration Duration
+     * @param uri            cookie根路径
      * @return Cookie
      */
-    public static Cookie genCookie(@NonNull String key, @NonNull String value, int maxAge, String domain,
-                                   String uri) {
+    public static Cookie generateCookieWithUri(String key, String value, Duration maxAgeDuration, String uri) {
+        return generateCookie(key, value, maxAgeDuration, null, uri);
+    }
+
+    /**
+     * 生成Cookie，根据key、value、maxAgeDuration、domain、uri
+     *
+     * @param key            cookie名称
+     * @param value          cookie值
+     * @param maxAgeDuration Duration
+     * @param domain         cookie根路径
+     * @param uri            cookie根路径
+     * @return Cookie
+     */
+    public static Cookie generateCookie(@NonNull String key,
+                                        @NonNull String value,
+                                        Duration maxAgeDuration, String domain, String uri) {
         Cookie cookie = new Cookie(key, value);
         if (StringUtils.isNotEmpty(uri)) {
-            enrichCookie(cookie, uri, maxAge);
+            enrichCookie(cookie, uri, maxAgeDuration);
         } else {
-            enrichCookie(cookie, "/", maxAge);
+            enrichCookie(cookie, "/", maxAgeDuration);
         }
         if (StringUtils.isNotEmpty(domain)) {
             cookie.setDomain(domain);
@@ -256,21 +314,20 @@ public class CookieUtils {
     }
 
     /**
-     * 设置Cookie路径与有效期
-     * 1.uri为null时，忽略uri配置
+     * 设置Cookie路径与有效期(uri为null时，忽略uri配置)
+     * <pre>
+     *   → Cookie有四个最常用的参数key、value、maxAge、uri/path
+     *   → 前两者可以在创建Cookie中指定{@code Cookie cookie = new Cookie(key, value);}，后两者将通过该enrichCookie方法进行填充
+     * </pre>
      *
-     * @param cookie        待处理的Cookie对象
-     * @param uri           cookie保存的根路径
-     * @param maxAgeSeconds 存储时间(单位秒)
+     * @param cookie         待处理的Cookie对象
+     * @param uri            cookie保存的根路径
+     * @param maxAgeDuration Duration
      */
-    public static void enrichCookie(Cookie cookie, String uri, int maxAgeSeconds) {
+    public static void enrichCookie(Cookie cookie, String uri, Duration maxAgeDuration) {
         if (StringUtils.isNotEmpty(uri)) {
             cookie.setPath(uri);
         }
-        cookie.setMaxAge(maxAgeSeconds);
-    }
-
-    public static void enrichCookie(Cookie cookie, String uri, Duration maxAgeDuration) {
-        enrichCookie(cookie, uri, (int) maxAgeDuration.getSeconds());
+        cookie.setMaxAge((int) maxAgeDuration.getSeconds());
     }
 }
