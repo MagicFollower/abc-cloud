@@ -15,6 +15,51 @@ import java.util.Set;
  * RedisService
  *
  * @Description RedisService, 自动注入到IOC容器
+ * <pre>
+ * 注意：
+ * 🤔️当前服务默认会为序列化后的键值添加Java序列化标记, 如果想移除这种序列化标记，请手动配置key、value为String类型序列化器/自定义序列化器。
+ * 127.0.0.1:6381[15]> KEYS *
+ *   → 1) "USER_002"
+ *   → 2) "\xac\xed\x00\x05t\x00\bUSER_001"
+ * 127.0.0.1:6381[15]> get \xac\xed\x00\x05t\x00\bUSER_001
+ *   → (nil)
+ * 127.0.0.1:6381[15]> get "\xac\xed\x00\x05t\x00\bUSER_001"
+ *   → "\xac\xed\x00\x05t\x00\x1e{\"username\":\"\xe6\xb5\x8b\xe8\xaf\x95\xe7\x94\xa8\xe6\x88\xb7001\"}"
+ * 127.0.0.1:6381[15]>
+ * 🤔️关于序列化前缀`\xac\xed\x00\x05t\x00\b`。
+ *   → `\xac\xed\x00\x05t\x00\b` 是一个字节序列，看起来像是Java序列化后的字节码。具体来说，这个字节序列可以分为以下几个部分：
+ *     → `\xac\xed`：这两个字节是Java序列化文件的魔数，表示这是一个Java序列化文件。
+ *     → `\x00\x05`：这两个字节是Java序列化文件的版本号，表示这个序列化文件是使用Java 5生成的。
+ *     → `t`：这个字节表示下一个对象是一个对象类型。
+ *     → `\x00\b`：这两个字节表示下一个对象的长度为8个字节（64位）。
+ *🤔️手动配置String类型序列化器/自定义序列化器（示例）。
+ * {@code
+ * @Configuration
+ * @EnableCaching
+ * @AutoConfigureBefore(RedisAutoConfiguration.class)
+ * public class RedisConfig implements CachingConfigurer {
+ *     @Bean
+ *     @SuppressWarnings(value = {"unchecked", "rawtypes"})
+ *     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+ *         RedisTemplate<Object, Object> template = new RedisTemplate<>();
+ *         template.setConnectionFactory(connectionFactory);
+ *
+ *         FastJson2JsonRedisSerializer serializer = new FastJson2JsonRedisSerializer(Object.class);
+ *
+ *         // 使用StringRedisSerializer来序列化和反序列化redis的key值
+ *         template.setKeySerializer(new StringRedisSerializer());
+ *         template.setValueSerializer(serializer);
+ *
+ *         // Hash的key也采用StringRedisSerializer的序列化方式
+ *         template.setHashKeySerializer(new StringRedisSerializer());
+ *         template.setHashValueSerializer(serializer);
+ *
+ *         template.afterPropertiesSet();
+ *         return template;
+ *     }
+ * }
+ * }
+ * </pre>
  * @Author Trivis
  * @Date 2023/5/1 15:43
  * @Version 1.0
