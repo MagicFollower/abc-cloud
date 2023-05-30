@@ -73,13 +73,16 @@ public class CookieUtils {
     // #########################################################
 
     /**
-     * 向响应回写cookie
+     * 向响应中写入会话cookie
+     * 1.默认：会话cookie
+     * 2.默认：isHttpOnly
+     * 3.默认：uri=/
      *
      * @param response 响应对象（HttpServletResponse）
      * @param key      Cookie的key(String)
      * @param value    Cookie的value(String)
      */
-    public static void setCookie(HttpServletResponse response, String key, String value) {
+    public static void setSessionCookie(HttpServletResponse response, String key, String value) {
         Cookie cookie = new Cookie(key, value);
         cookie.setPath("/");
         // 设置了secure后，cookie将只会在https请求中发送
@@ -89,34 +92,73 @@ public class CookieUtils {
     }
 
     /**
-     * 向响应回写cookie
-     *
-     * @param response   响应对象（HttpServletResponse）
-     * @param key        Cookie的key(String)
-     * @param value      Cookie的value(String)
-     * @param isHttpOnly 布尔值，设置后表示只能通过HTTP/HTTPS访问，无法通过Javascript等一些客户端脚本访问。
-     */
-    public static void setCookie(HttpServletResponse response, String key, String value, boolean isHttpOnly) {
-        Cookie cookie = new Cookie(key, value);
-        cookie.setPath("/");
-        cookie.setHttpOnly(isHttpOnly);
-        setCookie(response, cookie);
-    }
-
-    /**
-     * 向响应回写cookie
+     * 向响应中写入会话cookie
+     * 1.默认：会话cookie
+     * 2.默认：isHttpOnly
      *
      * @param response 响应对象（HttpServletResponse）
      * @param key      Cookie的key(String)
      * @param value    Cookie的value(String)
      * @param domain   Cookie的domain域(String)
      */
-    public static void setCookie(HttpServletResponse response, String key, String value, String domain) {
+    public static void setSessionCookie(HttpServletResponse response,
+                                        String key, String value, boolean isHttpOnly, String domain, String uri) {
         Cookie cookie = new Cookie(key, value);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
+        cookie.setHttpOnly(isHttpOnly);
         if (StringUtils.isNotEmpty(domain)) {
             cookie.setDomain(domain);
+        }
+        if (StringUtils.isNotEmpty(uri)) {
+            cookie.setPath(uri);
+        }
+        setCookie(response, cookie);
+    }
+
+    /**
+     * 向响应中写入cookie
+     * 1.默认：isHttpOnly
+     * 2.默认：uri=/
+     *
+     * @param response 响应对象（HttpServletResponse）
+     * @param key      Cookie的key(String)
+     * @param value    Cookie的value(String)
+     */
+    public static void setCookie(HttpServletResponse response, String key, String value, Duration maxAgeDuration) {
+        Cookie cookie = new Cookie(key, value);
+        cookie.setPath("/");
+        // 设置了secure后，cookie将只会在https请求中发送
+        // cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        if (maxAgeDuration != null) {
+            cookie.setMaxAge((int) maxAgeDuration.getSeconds());
+        }
+        setCookie(response, cookie);
+    }
+
+    /**
+     * 向响应中写入cookie
+     * 1.默认：isHttpOnly
+     *
+     * @param response 响应对象（HttpServletResponse）
+     * @param key      Cookie的key(String)
+     * @param value    Cookie的value(String)
+     * @param domain   Cookie的domain域(String)
+     */
+    public static void setCookie(HttpServletResponse response,
+                                 String key,
+                                 String value,
+                                 Duration maxAgeDuration,
+                                 boolean isHttpOnly, String domain, String uri) {
+        Cookie cookie = new Cookie(key, value);
+        cookie.setHttpOnly(isHttpOnly);
+        if (StringUtils.isNotEmpty(domain)) {
+            cookie.setDomain(domain);
+        }
+        if (StringUtils.isNotEmpty(uri)) {
+            cookie.setPath(uri);
+        }
+        if (maxAgeDuration != null) {
+            cookie.setMaxAge((int) maxAgeDuration.getSeconds());
         }
         setCookie(response, cookie);
     }
@@ -217,16 +259,17 @@ public class CookieUtils {
      * 设置Cookie路径与有效期
      * 1.uri为null时，忽略uri配置
      *
-     * @param cookie 待处理的Cookie对象
-     * @param uri    cookie保存的根路径
+     * @param cookie        待处理的Cookie对象
+     * @param uri           cookie保存的根路径
      * @param maxAgeSeconds 存储时间(单位秒)
      */
     public static void enrichCookie(Cookie cookie, String uri, int maxAgeSeconds) {
-        if(StringUtils.isNotEmpty(uri)) {
+        if (StringUtils.isNotEmpty(uri)) {
             cookie.setPath(uri);
         }
         cookie.setMaxAge(maxAgeSeconds);
     }
+
     public static void enrichCookie(Cookie cookie, String uri, Duration maxAgeDuration) {
         enrichCookie(cookie, uri, (int) maxAgeDuration.getSeconds());
     }
