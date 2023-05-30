@@ -71,7 +71,7 @@ public class JWTHelper1 {
             }
         } catch (Exception e) {
             valid = false;
-            log.error(">>>>>>>>|JWT校验失败|e:{}|<<<<<<<<", e.getMessage(), e);
+            log.error(">>>>>>>>|JWT校验失败|e:{}|<<<<<<<<", e.getMessage());
         }
         return valid;
     }
@@ -116,10 +116,10 @@ public class JWTHelper1 {
             DecodedJWT decodedJWT = verifier.verify(jwt);
             return decodedJWT.getClaims();
         } catch (TokenExpiredException tee) {
-            log.error(">>>>>>>>|JWT过期|e:{}|<<<<<<<<", tee.getMessage(), tee);
+            log.error(">>>>>>>>|JWT过期|e:{}|<<<<<<<<", tee.getMessage());
             throw new JWTException(SystemRetCodeConstants.JWT_EXPIRED);
         } catch (Exception e) {
-            log.error(">>>>>>>>|JWT解析异常|e:{}|<<<<<<<<", e.getMessage(), e);
+            log.error(">>>>>>>>|JWT解析异常|e:{}|<<<<<<<<", e.getMessage());
             throw new JWTException(SystemRetCodeConstants.JWT_PARSE_ERROR);
         }
     }
@@ -174,7 +174,7 @@ public class JWTHelper1 {
                     .withClaim("user", content)
                     .sign(algorithm);
         } catch (Exception e) {
-            log.error(">>>>>>>>|JWT生成异常|e:{}|<<<<<<<<", e.getMessage(), e);
+            log.error(">>>>>>>>|JWT生成异常|e:{}|<<<<<<<<", e.getMessage());
             throw new JWTException(SystemRetCodeConstants.JWT_GENERATE_ERROR);
         }
     }
