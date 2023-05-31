@@ -7,6 +7,9 @@ import org.springframework.http.MediaType;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.function.Supplier;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * ServletUtils
@@ -18,6 +21,23 @@ import java.nio.charset.StandardCharsets;
  */
 @Slf4j
 public class ServletUtils {
+
+    private HttpServletResponse response;
+
+
+    public static ServletUtils withInitial(HttpServletResponse response) {
+        ServletUtils servletUtils = new ServletUtils();
+        servletUtils.response = response;
+        return servletUtils;
+    }
+
+    public static ServletUtils withInitial(Supplier<HttpServletResponse> supplier) {
+        ServletUtils servletUtils = new ServletUtils();
+        servletUtils.response = requireNonNull(requireNonNull(supplier, "supplier").get(), "supplier.get()");
+        return servletUtils;
+    }
+
+
     /**
      * 将字符串渲染到客户端
      * <pre>
@@ -30,15 +50,27 @@ public class ServletUtils {
      *   因此，如果需要手动控制输出流的刷新时机，可以使用print()方法；如果不需要手动控制输出流的刷新时机，可以使用write()方法，它会自动刷新输出流。
      * </pre>
      *
-     * @param response 渲染响应体（HttpServletResponse）
-     * @param string   待渲染的字符串
+     * @param string 待渲染的字符串
      */
-    public static void renderString(HttpServletResponse response, String string) {
+    public void renderString(String string) {
         try {
             response.setStatus(HttpStatus.OK.value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.getWriter().write(string);
+        } catch (IOException e) {
+            log.error(">>>>>>>>|ServletUtils#renderString|exception:{}<<<<<<<<", e.getMessage());
+        }
+    }
+
+    /**
+     * 重定向
+     *
+     * @param urlOrUri 重定向URL/URI
+     */
+    public void redirectTo(String urlOrUri) {
+        try {
+            response.sendRedirect(urlOrUri);
         } catch (IOException e) {
             log.error(">>>>>>>>|ServletUtils#renderString|exception:{}<<<<<<<<", e.getMessage());
         }
