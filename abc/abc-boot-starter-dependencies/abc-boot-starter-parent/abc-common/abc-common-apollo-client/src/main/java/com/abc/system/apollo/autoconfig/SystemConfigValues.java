@@ -11,7 +11,20 @@ import java.util.concurrent.ConcurrentHashMap;
  * 系统级缓存，独立于Spring自动配置，从Apollo配置加载全局配置
  *   → 使用位置（common-apollo-client）：com.abc.system.apollo.autoconfig.SystemValuesAutoConfiguration
  * </pre>
- * @Description 系统级缓存，独立于Spring自动配置，从Apollo配置加载全局配置（apollo.system.namespace）
+ * @Description
+ * <pre>
+ * 系统级缓存，独立于Spring自动配置，从Apollo配置加载全局配置（apollo.system.namespace）
+ *   → 示例：{@code com.abc.business.fastlink.portal.controller.order.OrderController#testSystemValues}
+ * {@code
+ *     @LogAnchor
+ *     @PostMapping("/testSystemValues")
+ *     public void testSystemValues() {
+ *         String s = SystemConfigValues.get("not_need_login.urls");
+ *         List<String> notNeedLoginUrls = Arrays.stream(s.split(",")).collect(Collectors.toList());
+ *         System.out.println("notNeedLoginUrls = " + notNeedLoginUrls);
+ *     }
+ * }
+ * </pre>
  * @Author Trivis
  * @Date 2023/05/21 14:18
  * @Version 1.0
