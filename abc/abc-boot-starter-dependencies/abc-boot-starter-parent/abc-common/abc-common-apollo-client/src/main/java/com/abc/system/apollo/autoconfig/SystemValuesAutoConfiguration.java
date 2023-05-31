@@ -1,7 +1,6 @@
 package com.abc.system.apollo.autoconfig;
 
 import com.abc.system.apollo.config.SystemConfigValuesProperties;
-import com.abc.system.common.cache.SystemConfigValues;
 import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.ConfigService;
 import com.ctrip.framework.apollo.model.ConfigChange;

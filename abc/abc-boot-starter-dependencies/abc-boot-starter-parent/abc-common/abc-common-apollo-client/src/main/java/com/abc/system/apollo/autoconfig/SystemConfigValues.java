@@ -1,4 +1,4 @@
-package com.abc.system.common.cache;
+package com.abc.system.apollo.autoconfig;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -54,13 +54,23 @@ public final class SystemConfigValues {
         return defaultValue;
     }
 
+    // ############################################################################
+    // #####分布式微服务环境下，不推荐本地级别的缓存，写入操作会使得不同服务内出现数据不一致的情况
+    // #####  1.建议使用分布式缓存（redis）
+    // #####  2.如果使用本地缓存，请不要开放缓存数据的写能力
+    // #####    2.1 此处对外关闭了写、删除API
+    // #####    2.2 put仅在SystemValuesAutoConfiguration使用/生效
+    // #####    2.3 未来版本计划移除移除putAll+delete，或者废弃本地缓存使用分布式缓存
+    // #####  时间：2023年5月31日22:17:46
+    // ############################################################################
+
     /**
      * 将配置信息放入缓存
      *
      * @param key   KEY
      * @param value VALUE
      */
-    public static void put(String key, String value) {
+    static void put(String key, String value) {
         SYSTEM_CONFIG_VALUES.put(key, value);
     }
 
@@ -69,7 +79,7 @@ public final class SystemConfigValues {
      *
      * @param maps MAP
      */
-    public static void put(Map<String, String> maps) {
+    static void put(Map<String, String> maps) {
         SYSTEM_CONFIG_VALUES.putAll(maps);
     }
 
@@ -78,7 +88,7 @@ public final class SystemConfigValues {
      *
      * @param key KEY
      */
-    public static void delete(String key) {
+    static void delete(String key) {
         SYSTEM_CONFIG_VALUES.remove(key);
     }
 }

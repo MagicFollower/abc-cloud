@@ -10,7 +10,12 @@ import java.util.List;
 /**
  * 系统级缓存自定义配置
  *
- * @Description 系统级缓存自定义配置
+ * @Description
+ * <pre>
+ * 系统级缓存自定义配置
+ *   1.apollo.system.namespaces
+ *   2.多个namespace使用逗号分隔
+ * </pre>
  * @Author Trivis
  * @Date 2023/5/12 20:36
  * @Version 1.0

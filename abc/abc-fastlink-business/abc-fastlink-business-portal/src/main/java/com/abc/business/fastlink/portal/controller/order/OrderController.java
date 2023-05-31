@@ -4,7 +4,7 @@ import com.abc.business.fastlink.order.api.FastlinkOrderService;
 import com.abc.business.fastlink.portal.base.BaseUrl;
 import com.abc.business.fastlink.portal.controller.order.constant.Url;
 import com.abc.business.fastlink.portal.controller.order.dto.OrderRequest;
-import com.abc.system.common.cache.SystemConfigValues;
+import com.abc.system.apollo.autoconfig.SystemConfigValues;
 import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.business.BizException;
 import com.abc.system.common.log.annotation.LogAnchor;
