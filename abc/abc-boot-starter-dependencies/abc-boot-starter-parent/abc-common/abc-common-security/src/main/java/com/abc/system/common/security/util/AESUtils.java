@@ -8,7 +8,9 @@ import javax.crypto.KeyGenerator;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.SecureRandom;
+import java.util.function.Supplier;
 
+import static java.util.Objects.requireNonNull;
 import static javax.crypto.Cipher.DECRYPT_MODE;
 import static javax.crypto.Cipher.ENCRYPT_MODE;
 
@@ -22,47 +24,57 @@ import static javax.crypto.Cipher.ENCRYPT_MODE;
  */
 public class AESUtils {
     private static final Logger log = LoggerFactory.getLogger(AESUtils.class);
-    private final String content;
+    private final String encryptSecret;
 
-    public AESUtils(String content) {
-        this.content = content;
+    private AESUtils(String encryptSecret) {
+        this.encryptSecret = encryptSecret;
     }
 
-    public String encrypt(String encryptSecret) {
+    public static AESUtils withInitial(String encryptSecret) {
+        return new AESUtils(encryptSecret);
+    }
+
+    public static AESUtils withInitial(Supplier<String> supplier) {
+        return new AESUtils(requireNonNull(supplier, "supplier").get());
+    }
+
+    public String encrypt(String content) {
         Key key = this.getKey(encryptSecret);
         byte[] result = null;
 
         try {
             Cipher cipher = Cipher.getInstance("AES");
             cipher.init(ENCRYPT_MODE, key);
-            result = cipher.doFinal(this.content.getBytes(StandardCharsets.UTF_8));
+            result = cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             log.info(">>>>>>>>|aes encrypted error:{}|<<<<<<<<", e.getMessage(), e);
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < result.length; ++i) {
-            String hex = Integer.toHexString(result[i] & 255);
-            if (hex.length() == 1) {
-                hex = '0' + hex;
+        if (result != null) {
+            for (byte b : result) {
+                String hex = Integer.toHexString(b & 255);
+                if (hex.length() == 1) {
+                    hex = '0' + hex;
+                }
+
+                sb.append(hex.toUpperCase());
             }
-
-            sb.append(hex.toUpperCase());
         }
 
         return sb.toString();
     }
 
-    public String decrypt(String encryptSecret) {
-        if (this.content.length() < 1) {
+    public String decrypt(String content) {
+        if (content.length() < 1) {
             return null;
         } else {
-            byte[] result = new byte[this.content.length() / 2];
+            byte[] result = new byte[content.length() / 2];
 
-            for (int i = 0; i < this.content.length() / 2; ++i) {
-                int high = Integer.parseInt(this.content.substring(i * 2, i * 2 + 1), 16);
-                int low = Integer.parseInt(this.content.substring(i * 2 + 1, i * 2 + 2), 16);
+            for (int i = 0; i < content.length() / 2; ++i) {
+                int high = Integer.parseInt(content.substring(i * 2, i * 2 + 1), 16);
+                int low = Integer.parseInt(content.substring(i * 2 + 1, i * 2 + 2), 16);
                 result[i] = (byte) (high * 16 + low);
             }
 

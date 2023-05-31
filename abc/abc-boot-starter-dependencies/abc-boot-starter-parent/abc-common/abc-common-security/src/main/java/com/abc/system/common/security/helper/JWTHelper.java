@@ -51,7 +51,7 @@ public class JWTHelper {
     public static String generateJWT(String content, String currentSystemName) {
         JWTProperties jwtProperties = SpringHelper.getBean(JWTProperties.class);
         String encryptionSecret = jwtProperties.getEncryptionSecret();
-        String encryptedContent = new AESUtils(content).encrypt(encryptionSecret);
+        String encryptedContent = AESUtils.withInitial(encryptionSecret).encrypt(content);
         String issuer = jwtProperties.getIssuer();
         return generateJWT(encryptedContent, issuer, currentSystemName);
     }
