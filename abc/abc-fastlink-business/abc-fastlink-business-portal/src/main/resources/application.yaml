@@ -1,10 +1,4 @@
-server:
-  port: 19999
-spring:
-  application:
-    name: abc-fastlink-business-portal
-  main:
-    banner-mode: off
+
 #  redis:
 #    redisson:
 #      #file: classpath:redisson.yaml

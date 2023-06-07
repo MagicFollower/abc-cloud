@@ -1,3 +1,11 @@
+server:
+  port: 19999
+spring:
+  application:
+    name: abc-fastlink-business-portal
+  main:
+    banner-mode: off
+
 apollo:
   ### Apollo默认配置
   bootstrap:
