@@ -61,6 +61,17 @@ import static javax.crypto.Cipher.ENCRYPT_MODE;
  *
  * ⚠️注意2：在 MySQL 中，AES 加密和解密时使用 PKCS7Padding 是不支持的。
  *   → MySQL 使用的是一种名为“zero-padding”的填充模式，这是一种简单的填充模式，只是在明文的末尾添加零字节，以确保每个加密块都是相同的大小。
+ *
+ * ⚠️注意3：关于PKCS5Padding？
+ *   ❓PKCS5Padding是什么？PKCS是什么意思？是什么单词的缩写？
+ *     → PKCS5Padding 是一种填充方式，用于在加密时将数据填充到指定的块大小。PKCS 是 Public Key Cryptography Standards 的缩写，是一组密码学标准。PKCS#5 是其中的一个标准，定义了一种填充方式，可以在加密时将数据填充到指定的块大小。
+ *     → 具体来说，PKCS5Padding 使用的是一种称为 PKCS#5 的算法，它将数据分成固定大小的块，然后在块的末尾填充一些字节，使得块的大小达到指定的长度。填充字节的值等于需要填充的字节数，比如需要填充 3 个字节，则填充 0x03。
+ *     → 在这个例子中，使用了 AES/CBC/PKCS5Padding 加密方式，其中 PKCS5Padding 表示使用 PKCS#5 填充方式。块大小为 16 个字节（128 位），因此如果原始数据长度不是 16 的倍数，则会进行填充。填充后的数据长度总是 16 的倍数。
+ *   ❓PKCS#5和PKCS#7有什么差别？
+ *     → PKCS#5 和 PKCS#7 都是密码学标准，它们的主要区别在于填充方式的设计。
+ *     → PKCS#5 定义了一种填充方式，称为 PKCS#5 Padding，它适用于块大小为 8 个字节的加密算法，比如 DES。PKCS#5 Padding 的填充方式与 PKCS#7 Padding 基本相同，只是在填充的时候需要满足一些额外的限制。因此，PKCS#5 Padding 可以看作是 PKCS#7 Padding 的一个子集。
+ *     → PKCS#7 定义了一种通用的填充方式，可以适用于任意块大小的加密算法，比如 AES、TripleDES 等。PKCS#7 Padding 的填充方式与 PKCS#5 Padding 基本相同，只是在填充的时候没有额外的限制。因此，PKCS#7 Padding 更加通用，可以适用于更多的加密算法。
+ *     → 在实际应用中，PKCS#7 Padding 更加常用，因为它可以适用于任意块大小的加密算法。而 PKCS#5 Padding 则主要用于一些旧的加密算法，比如 DES。
  * </pre>
  *
  * @Description AES工具包
