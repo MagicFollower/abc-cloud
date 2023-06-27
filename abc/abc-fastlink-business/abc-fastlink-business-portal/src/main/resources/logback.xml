@@ -36,6 +36,7 @@
 <!--        </filter>-->
 <!--    </logger>-->
 
+    <!-- 也可在springboot中进行配置: logging↪️level↪️org.apache.catalina.core.ContainerBase: OFF -->
     <logger name="org.apache.catalina.core.ContainerBase" level="OFF" />
 
     <logger name="com.abc.business.service01" level="debug" additivity = "false">
