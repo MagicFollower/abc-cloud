@@ -7,6 +7,7 @@ import com.abc.business.fastlink.portal.controller.order.dto.OrderRequest;
 import com.abc.system.apollo.autoconfig.SystemConfigValues;
 import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.business.BizException;
+import com.abc.system.common.exception.business.XxxException;
 import com.abc.system.common.log.annotation.LogAnchor;
 import com.abc.system.common.page.PageInfo;
 import com.abc.system.common.page.PageResponse;
@@ -24,6 +25,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.dubbo.rpc.RpcException;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +35,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -59,6 +63,45 @@ public class OrderController {
     //    private final ExcelFileService excelFileService;
     @DubboReference
     private FastlinkOrderService fastlinkOrderService;
+
+
+    @LogAnchor
+    @PostMapping("/example03")
+    public void example03() {
+        BigDecimal dividend = new BigDecimal("10");
+        BigDecimal divisor = new BigDecimal("0");
+        BigDecimal result = dividend.divide(divisor, 6, RoundingMode.HALF_UP);
+        System.out.println("result = " + result);
+    }
+
+
+    /**
+     * Dubbo-RPC会将所有返回的【运行时异常】封装为RuntimeException，【编译期异常】除外
+     */
+    @PostMapping("/example02")
+    public void example02() {
+        try {
+            fastlinkOrderService.example02();
+        } catch (RpcException e) {
+            System.out.println("获取到了RpcException");
+        } catch (Exception e) {
+            System.out.println("被包装了为RuntimeException");
+        }
+    }
+
+    /**
+     * Dubbo-RPC会将所有返回的【运行时异常】封装为RuntimeException，【编译期异常】除外
+     */
+    @PostMapping("/example01")
+    public void example01() {
+        try {
+            fastlinkOrderService.example01();
+        } catch (XxxException e) {
+            System.out.println("获取到了XxxException");
+        } catch (Exception e) {
+            System.out.println("被包装了为RuntimeException");
+        }
+    }
 
 
 //    @PostMapping("/testExcelImport")
