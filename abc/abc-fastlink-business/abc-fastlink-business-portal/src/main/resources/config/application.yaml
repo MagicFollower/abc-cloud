@@ -4,7 +4,11 @@ spring:
   application:
     name: abc-fastlink-business-portal
   main:
-    banner-mode: off
+    banner-mode: OFF
+
+#logging:
+#  level:
+#    org.apache.catalina.core.ContainerBase: OFF
 
 apollo:
   ### Apollo默认配置

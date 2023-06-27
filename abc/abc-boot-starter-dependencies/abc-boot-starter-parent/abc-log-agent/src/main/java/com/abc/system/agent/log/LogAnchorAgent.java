@@ -54,13 +54,44 @@ public class LogAnchorAgent {
             }
         }
 
+        /**
+         * <pre>
+         * 1.不要使用spring-boot-starter-test；
+         * 2.排除dispatcherServlet的异常捕获输出，请在springboot配置文件中指定如下配置（建议保留）：
+         * {@code
+         *  logging:
+         *      level:
+         *        org.apache.catalina.core.ContainerBase: OFF
+         * }
+         * 或（在logback.xml中配置）
+         * {@code
+         *  <logger name="org.apache.catalina.core.ContainerBase" level="OFF" />
+         * }
+         * </pre>
+         *
+         * @param method Method
+         * @param e      Exception
+         */
         @Advice.OnMethodExit(onThrowable = Exception.class)
         public static void exit(@Advice.Origin Method method,
                                 @Advice.Thrown Exception e) {
+            String className = method.getDeclaringClass().getName();
             String methodName = method.getName();
             final Logger LOGGER = LoggerFactory.getLogger(method.getDeclaringClass());
             if (e != null) {
-                LOGGER.error(">>>>>>>>>>>|exception|method:{},errorMessage:{}|<<<<<<<<<<<", methodName, e.getMessage(), e);
+                //StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+                StackTraceElement[] stackTrace = e.getStackTrace();
+                for (StackTraceElement stackTraceElement : stackTrace) {
+                    if (className.equals(stackTraceElement.getClassName())) {
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("errorMsg", e.getMessage());
+                        jsonObject.put("errorClass", className);
+                        jsonObject.put("errorMethod", methodName);
+                        jsonObject.put("errorLine", stackTraceElement.getLineNumber());
+                        LOGGER.error(">>>>>>>>>>>|exception⤵|<<<<<<<<<<<\n{}", jsonObject.toJSONString(JSONWriter.Feature.PrettyFormat));
+                        break;
+                    }
+                }
             } else {
                 LOGGER.info(">>>>>>>>>>>|success|method:{}|<<<<<<<<<<<", methodName);
             }

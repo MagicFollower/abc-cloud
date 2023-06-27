@@ -1,0 +1,49 @@
+<configuration>
+    <!--    <timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss" />    -->
+    <timestamp key="bySecond" datePattern="yyyyMMdd" />
+
+    <property name="LOG_PATH" value="${user.home}/logs/test模块名"/>
+    <property name="MODULE_NAME" value="test模块名"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_PATH}/${MODULE_NAME}_error.log</File>
+        <immediateFlush>true</immediateFlush>
+        <encoder>
+            <pattern>%d [%thread] %-5level %logger - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--             按天轮转 -->
+            <fileNamePattern>logFile-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!--             保存 30 天的历史记录，最大大小为 3GB -->
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+<!--    <logger name="org.apache.catalina.core.ContainerBase" level="DEBUG">-->
+<!--        <appender-ref ref="STDOUT" />-->
+<!--        &lt;!&ndash; 移除INFO及以下的日志输出 &ndash;&gt;-->
+<!--        <filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+<!--            <level>INFO</level>-->
+<!--            <onMatch>DENY</onMatch>-->
+<!--            <onMismatch>ACCEPT</onMismatch>-->
+<!--        </filter>-->
+<!--    </logger>-->
+
+    <logger name="org.apache.catalina.core.ContainerBase" level="OFF" />
+
+    <logger name="com.abc.business.service01" level="debug" additivity = "false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>
