@@ -18,7 +18,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BaseResponse<T> extends AbstractResponse implements Serializable {
-    private long total;
+    private Long total;
     private T result;
 
     @Builder
