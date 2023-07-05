@@ -17,3 +17,5 @@ dubbo:
     port: 10012
   provider:
     timeout: 30000
+  consumer:
+    check: false
