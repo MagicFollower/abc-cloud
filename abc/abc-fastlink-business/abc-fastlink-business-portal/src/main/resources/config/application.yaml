@@ -6,9 +6,10 @@ spring:
   main:
     banner-mode: OFF
 
-#logging:
-#  level:
-#    org.apache.catalina.core.ContainerBase: OFF
+logging:
+  level:
+    org.apache.catalina.core.ContainerBase: ERROR
+    root: INFO
 
 apollo:
   ### Apollo默认配置

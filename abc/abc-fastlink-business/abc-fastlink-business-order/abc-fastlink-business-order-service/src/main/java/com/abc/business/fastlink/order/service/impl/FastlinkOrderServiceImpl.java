@@ -5,6 +5,7 @@ import com.abc.business.fastlink.order.api.FastlinkOrderService;
 import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.business.BizException;
 import com.abc.system.common.exception.base.BaseException;
+import com.abc.system.common.exception.business.XxxException;
 import com.abc.system.common.response.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
@@ -25,6 +26,16 @@ public class FastlinkOrderServiceImpl implements FastlinkOrderService {
     @DubboReference
     private FastLinkGoodsService fastlinkGoodsService;
 
+
+    @Override
+    public void example02() {
+        throw new BizException(SystemRetCodeConstants.ANONYMOUS);
+    }
+
+    @Override
+    public void example01() throws XxxException {
+        throw new XxxException();
+    }
 
     @Override
     public BaseResponse<String> query() throws BizException {

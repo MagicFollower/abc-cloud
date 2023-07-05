@@ -6,6 +6,7 @@ import com.abc.business.fastlink.portal.controller.order.constant.Url;
 import com.abc.business.fastlink.portal.controller.order.dto.OrderRequest;
 import com.abc.system.apollo.autoconfig.SystemConfigValues;
 import com.abc.system.common.constant.SystemRetCodeConstants;
+import com.abc.system.common.exception.ExceptionProcessor;
 import com.abc.system.common.exception.business.BizException;
 import com.abc.system.common.exception.business.XxxException;
 import com.abc.system.common.log.annotation.LogAnchor;
@@ -19,19 +20,18 @@ import com.abc.system.common.response.ResponseProcessor;
 import com.abc.system.lock.annotation.DistributedLock;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.rpc.RpcException;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -64,6 +64,39 @@ public class OrderController {
     @DubboReference
     private FastlinkOrderService fastlinkOrderService;
 
+
+    @GetMapping("/example05")
+    public String example05(HttpServletRequest request, @RequestParam("id") String id, String username, int age) {
+        Collections.list(request.getHeaderNames())
+                .forEach(headerName -> Collections.list(request.getHeaders(headerName))
+                        .forEach(headerValue -> {
+                            System.out.println(headerName + ": " + headerValue); //输出请求头的名称和值
+                        }));
+        BaseResponse<List<String>> baseResponse = new BaseResponse<>();
+        try{
+            throw new BizException(SystemRetCodeConstants.ANONYMOUS);
+        }catch (Exception e){
+            ExceptionProcessor.wrapAndHandleException(baseResponse, e);
+        }
+        System.out.println(JSONObject.toJSONString(baseResponse, JSONWriter.Feature.PrettyFormat));
+
+        System.out.println(request.getRequestURI());
+        System.out.println(request.getRequestURL());
+        return "你好! 这里是：example04->" + id + ":" + username + ":" + age;
+    }
+
+    @PostMapping("/example04")
+    public String example04(HttpServletRequest request, @RequestBody User user) {
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            System.out.println(headerName + ": " + request.getHeader(headerName));
+        }
+        System.out.println(StringUtils.repeat("#", 50));
+        List<String> headerNames1 = Collections.list(request.getHeaderNames());
+        headerNames1.forEach(headerName -> System.out.println(headerName + ": " + request.getHeader(headerName)));
+        return "你好! 这里是：example04->\n".concat(JSONObject.toJSONString(user, JSONWriter.Feature.PrettyFormat));
+    }
 
     @LogAnchor
     @PostMapping("/example03")
