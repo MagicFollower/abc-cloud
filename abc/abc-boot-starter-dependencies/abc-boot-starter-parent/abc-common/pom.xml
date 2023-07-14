@@ -27,6 +27,7 @@
         <module>abc-common-distributed-lock</module>
         <module>abc-common-excel</module>
         <module>abc-common-security</module>
+        <module>abc-common-test</module>
     </modules>
 
     <properties>

@@ -58,9 +58,12 @@
             <artifactId>abc-common-security</artifactId>
             <version>${abc-common.version}</version>
         </dependency>
-
-
-
+        <dependency>
+            <groupId>com.abc</groupId>
+            <artifactId>abc-common-test</artifactId>
+            <version>${abc-common.version}</version>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.cryptonode.jncryptor</groupId>
@@ -68,13 +71,6 @@
             <version>1.2.0</version>
         </dependency>
 
-
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-test</artifactId>-->
-<!--            <version>2.7.11</version>-->
-<!--            <optional>true</optional>-->
-<!--        </dependency>-->
     </dependencies>
 
     <build>
