@@ -1,8 +1,13 @@
 package com.abc.business.fastlink.portal.bootstrap;
 
+import com.abc.system.common.dubbo.util.RpcLogTraceHelper;
+import com.abc.system.common.helper.SpringHelper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * FastlinkPortalApplication
@@ -19,5 +24,7 @@ public class FastlinkPortalApplication {
         // 指定Dubbo日志适配器
         System.setProperty("dubbo.application.logger", "slf4j");
         SpringApplication.run(FastlinkPortalApplication.class, args);
+
+        System.out.println(SpringHelper.getBean(RpcLogTraceHelper.class).getTraceId());
     }
 }

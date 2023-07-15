@@ -1,7 +1,8 @@
 package com.abc.system.common.dubbo.filter;
 
 import com.abc.system.common.dubbo.constant.RpcConstants;
-import com.abc.system.common.dubbo.util.RpcLogTraceUtils;
+import com.abc.system.common.dubbo.util.RpcLogTraceHelper;
+import com.abc.system.common.helper.SpringHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.common.constants.CommonConstants;
@@ -30,7 +31,7 @@ public class ProviderDubboTraceIdFilter implements Filter {
         String traceId = RpcContext.getServiceContext().getAttachment(RpcConstants.RPC_TRACE_ID);
         // traceId为空则重新生成，并重新设置到RPC上下文中
         if (StringUtils.isEmpty(traceId)) {
-            traceId = RpcLogTraceUtils.getTraceId();
+            traceId = SpringHelper.getBean(RpcLogTraceHelper.class).getTraceId();
         }
 
         // slf4j 中设置了日志打印格式用作日志链路追踪
