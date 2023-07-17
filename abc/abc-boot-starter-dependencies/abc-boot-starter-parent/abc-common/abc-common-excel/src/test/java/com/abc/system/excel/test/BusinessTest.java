@@ -8,10 +8,7 @@ import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -23,6 +20,14 @@ import java.util.stream.Collectors;
  * @Version 1.0
  */
 class BusinessTest {
+
+
+    @Test
+    void test02() {
+        HashMap stringHashMap = new HashMap<String, String>();
+        System.out.println(stringHashMap.get("asdasda"));
+    }
+
 
     /**
      * 解析Excel后，我们会得到Excel表格中的数据，我们约定使用JSONObject存储解析后的数据，因为这样可以方便地在各个类型之间转换；

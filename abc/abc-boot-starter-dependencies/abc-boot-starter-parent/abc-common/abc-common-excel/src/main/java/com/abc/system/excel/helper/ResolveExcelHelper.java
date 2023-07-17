@@ -129,9 +129,9 @@ public class ResolveExcelHelper {
      * @param row             标题行
      * @param templateCode    模板编码
      * @param ruleMap         <pre>
-     *                                                                                                                    规则Map，用于解析字段真实名称，填充displayFieldMap;
-     *                                                                                                                      → Map中数据格式：templateCode_stringCellValue: ExcelColumnRule实体
-     *                                                                                                                    </pre>
+     *                                                                                                                                           规则Map，用于解析字段真实名称，填充displayFieldMap;
+     *                                                                                                                                             → Map中数据格式：templateCode_stringCellValue: ExcelColumnRule实体
+     *                                                                                                                                           </pre>
      * @param realFieldMap    realFieldMap 真实字段Map
      * @param displayFieldMap displayFieldMap 显示字段Map
      */
@@ -141,7 +141,12 @@ public class ResolveExcelHelper {
             int columnIndex = cell.getColumnIndex();
             String stringCellValue = dataFormatter.formatCellValue(cell);
             if (StringUtils.isNotEmpty(stringCellValue)) {
-                realFieldMap.put(columnIndex, ruleMap.get(templateCode + "_" + stringCellValue).getRealName());
+                ExcelColumnRule excelColumnRule = ruleMap.get(templateCode + "_" + stringCellValue);
+                if (excelColumnRule == null) {
+                    // Excel中字段与配置字段不匹配
+                    throw new ValidateException(SystemRetCodeConstants.EXCEL_COLUMN_MISMATCH);
+                }
+                realFieldMap.put(columnIndex, excelColumnRule.getRealName());
                 displayFieldMap.put(columnIndex, stringCellValue);
             }
         }

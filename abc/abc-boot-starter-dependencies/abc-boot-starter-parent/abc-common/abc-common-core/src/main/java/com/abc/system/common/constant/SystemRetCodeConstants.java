@@ -51,7 +51,8 @@ public enum SystemRetCodeConstants {
     EXCEL_NUM_ERROR("005003", "上传文件数量非法"),
     EXCEL_IS_NULL("005004", "上传Excel无法解析"),
     EXCEL_RULE_ERROR("005005", "Excel规则解析出错"),
-    EXCEL_TYPE_ERROR("005006", "Excel数据类型解析异常"),
+    EXCEL_TYPE_ERROR("005006", "Excel数据类型解析校验异常"),
+    EXCEL_COLUMN_MISMATCH("005007", "Excel字段与配置字段不匹配"),
 
 
     //##############################################

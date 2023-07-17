@@ -8,6 +8,17 @@ import java.util.List;
 
 /**
  * Excel上传自定义配置
+ * <pre>
+ * 配置示例：
+ *   abc:
+ *     excel:
+ *       rules:
+ *         - templateCode: abc001
+ *           columns: id|long|20|0|id,备注|string|200|0|memo
+ *         - templateCode: abc002
+ *           columns: id|string|20|0|id,备注|string|200|0|memo
+ *       title-num: 2
+ * </pre>
  *
  * @Description ExcelConfigProperties Excel上传自定义配置
  * @Author Trivis

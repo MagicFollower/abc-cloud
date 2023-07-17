@@ -8,6 +8,9 @@ import java.util.List;
 
 /**
  * Excel自定义配置列规则
+ * <pre>
+ *     id|long|20|0|id,备注|string|200|0|memo
+ * </pre>
  *
  * @Description ExcelColumnRule Excel自定义配置列规则
  * @Author Trivis
@@ -19,17 +22,12 @@ import java.util.List;
 public class ExcelColumnRule {
 
     /**
-     * CellType列表，apache.poi中类型（CellType.STRING, CellType.NUMERIC）
-     */
-    private List<CellType> cellTypeList;
-
-    /**
      * 字段配置类型（string/double/int/integer/long）
      */
     private String configType;
 
     /**
-     * 数据
+     * 数据长度
      */
     private Integer length;
 
@@ -42,6 +40,11 @@ public class ExcelColumnRule {
      * 真实字段名
      */
     private String realName;
+
+    /**
+     * CellType列表，apache.poi中类型（CellType.STRING, CellType.NUMERIC）
+     */
+    private List<CellType> cellTypeList;
 
     public ExcelColumnRule(List<CellType> cellTypeList, Integer length, Integer accuracy) {
         this.cellTypeList = cellTypeList;
