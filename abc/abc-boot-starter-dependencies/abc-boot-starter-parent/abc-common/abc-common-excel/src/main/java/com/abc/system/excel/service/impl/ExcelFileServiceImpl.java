@@ -48,9 +48,6 @@ public class ExcelFileServiceImpl implements ExcelFileService {
         if (StringUtils.isEmpty(templateCode)) {
             throw new ValidateException(SystemRetCodeConstants.EXCEL_TEMPLATE_CODE_LOST);
         }
-        // 获取标题所在的行数
-        int titleNum = excelConfigProperties.getTitleNum();
-        if (titleNum <= 0) titleNum = 1;
 
         // 创建一个通用的多部分解析器
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
@@ -103,6 +100,10 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                 if (CollectionUtils.isEmpty(excelRules) || excelRules.size() > 1) {
                     throw new ValidateException(SystemRetCodeConstants.EXCEL_RULE_ERROR);
                 }
+                // 获取标题所在的行数
+                int titleNum = excelRules.get(0).getTitleNum();
+                if (titleNum <= 0) titleNum = 1;
+                // 解析Excel数据
                 for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
                     Sheet currentSheet = workbook.getSheetAt(i);
                     if (currentSheet.getLastRowNum() == 0 && currentSheet.getPhysicalNumberOfRows() == 0) {

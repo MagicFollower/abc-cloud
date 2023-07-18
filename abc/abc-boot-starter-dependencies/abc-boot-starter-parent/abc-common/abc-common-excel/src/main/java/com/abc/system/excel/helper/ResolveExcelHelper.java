@@ -90,14 +90,14 @@ public class ResolveExcelHelper {
     public static ExcelColumnRule ExcelColumnRuleWrapper(String configType, String length, String accuracy, String realName, CellType... cellTypes) {
         if (StringUtils.isEmpty(length)) throw new ValidateException(SystemRetCodeConstants.EXCEL_RULE_ERROR);
         Integer len = Integer.parseInt(length);
-        int accur = 0;
+        int accuracyInt = 0;
         if (StringUtils.isNotEmpty(accuracy)) {
-            accur = Integer.parseInt(accuracy);
+            accuracyInt = Integer.parseInt(accuracy);
         }
         if (StringUtils.isEmpty(configType)) {
-            return new ExcelColumnRule(Arrays.asList(cellTypes), len, accur, realName);
+            return new ExcelColumnRule(Arrays.asList(cellTypes), len, accuracyInt, realName);
         } else {
-            return new ExcelColumnRule(Arrays.asList(cellTypes), configType, len, accur, realName);
+            return new ExcelColumnRule(Arrays.asList(cellTypes), configType, len, accuracyInt, realName);
         }
 
     }
@@ -240,7 +240,7 @@ public class ResolveExcelHelper {
      * @return {@code List<T>}
      */
     public static <T> List<T> copyIterator(Iterator<T> iterator) {
-        List<T> copyList = new ArrayList<T>(16);
+        List<T> copyList = new ArrayList<>(16);
         while (iterator.hasNext()) {
             copyList.add(iterator.next());
         }
