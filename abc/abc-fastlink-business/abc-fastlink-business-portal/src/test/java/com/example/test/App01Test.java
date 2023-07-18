@@ -1,7 +1,10 @@
 package com.example.test;
 
-import net.bytebuddy.agent.ByteBuddyAgent;
+import com.abc.business.fastlink.portal.bootstrap.FastlinkPortalApplication;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.env.Environment;
 
 /**
  * App01Test
@@ -11,15 +14,16 @@ import org.junit.jupiter.api.Test;
  * @Date 2023/7/14 20:17
  * @Version 1.0
  */
+@SpringBootTest(classes = {FastlinkPortalApplication.class})
 public class App01Test {
 
-    static {
-        ByteBuddyAgent.install();
-    }
+    @Autowired
+    private Environment environment;
 
     @Test
     public void test01() {
-        System.out.println("App01Test.test01");
+        String property = environment.getProperty("abc.excel");
+        System.out.println("property = " + property);
     }
 
     @Test

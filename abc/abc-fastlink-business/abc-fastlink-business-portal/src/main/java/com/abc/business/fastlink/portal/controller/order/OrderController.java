@@ -2,18 +2,22 @@ package com.abc.business.fastlink.portal.controller.order;
 
 import com.abc.business.fastlink.portal.base.BaseUrl;
 import com.abc.business.fastlink.portal.dal.entity.User;
+import com.abc.business.fastlink.portal.test.ExcelConfig;
 import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.business.BizException;
 import com.abc.system.common.log.annotation.LogAnchor;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -127,6 +131,15 @@ public class OrderController {
 //        List<String> notNeedLoginUrls = Arrays.stream(s.split(",")).collect(Collectors.toList());
 //        System.out.println("notNeedLoginUrls = " + notNeedLoginUrls);
 //    }
+
+
+    private final ExcelConfig excelConfig;
+
+    @GetMapping("/config")
+    public String getConfig() {
+        return JSONObject.toJSONString(excelConfig, JSONWriter.Feature.PrettyFormat);
+    }
+
 
     @LogAnchor
     @PostMapping("/testLogAnchor0")

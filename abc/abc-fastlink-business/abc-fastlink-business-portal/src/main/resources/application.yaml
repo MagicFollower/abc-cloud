@@ -1,3 +1,26 @@
+server:
+  port: 19999
+spring:
+  application:
+    name: abc-fastlink-business-portal
+  main:
+    banner-mode: OFF
+
+logging:
+  level:
+    org.apache.catalina.core.ContainerBase: ERROR
+    root: INFO
+
+apollo:
+  ### Apollo默认配置
+  bootstrap:
+    enabled: true
+    namespaces: datasource.yaml, dubbo.yaml, redis.yaml, uploadFile.yaml
+  ### 自定义的系统级别配置缓存
+  system:
+    namespaces: system.yaml
+
+
 #spring:
 #  redis:
 #    redisson:
@@ -48,6 +71,7 @@
 #    timeout: 5000
 #    retries: 0
 
+# common-excel模块旧版本配置
 abc:
   excel:
     rules:
@@ -55,4 +79,15 @@ abc:
         columns: id|long|20|0|id,备注|string|200|0|memo
       - templateCode: abc002
         columns: id|string|20|0|id,备注|string|200|0|memo
-    title-num: 2
+    titleNum: 2
+
+# common-excel模块新版本配置
+#abc:
+#  excel:
+#    rules:
+#      - templateCode: abc001
+#        titleNum: 1
+#        columns: id|long|20|0|id,备注|string|200|0|memo
+#      - templateCode: abc002
+#        titleNum: 2
+#        columns: id|string|20|0|id,备注|string|200|0|memo
