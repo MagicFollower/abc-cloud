@@ -3,8 +3,8 @@ package com.abc.business.fastlink.order.service.impl;
 import com.abc.business.fastlink.goods.api.FastLinkGoodsService;
 import com.abc.business.fastlink.order.api.FastlinkOrderService;
 import com.abc.system.common.constant.SystemRetCodeConstants;
+import com.abc.system.common.exception.ExceptionProcessor;
 import com.abc.system.common.exception.business.BizException;
-import com.abc.system.common.exception.base.BaseException;
 import com.abc.system.common.exception.business.XxxException;
 import com.abc.system.common.response.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class FastlinkOrderServiceImpl implements FastlinkOrderService {
     }
 
     @Override
-    public BaseResponse<String> query() throws BizException {
+    public BaseResponse<String> query() {
         BaseResponse<String> orderResponse = new BaseResponse<>();
         try {
             BaseResponse<String> goodsResponse = fastlinkGoodsService.query();
@@ -46,9 +46,10 @@ public class FastlinkOrderServiceImpl implements FastlinkOrderService {
             orderResponse.setCode(SystemRetCodeConstants.OP_SUCCESS.getCode());
             orderResponse.setMsg(SystemRetCodeConstants.OP_SUCCESS.getMessage());
             orderResponse.setResult(goodsResult + "→" + "order_data");
+            log.info(">>>>>>>> 数据当前在orderService处理中...[goodsService → orderService]");
             orderResponse.setTotal(1L);
-        } catch (BaseException be) {
-            throw new BizException(be.getErrorCode(), be.getMessage());
+        } catch (Exception e) {
+            ExceptionProcessor.wrapAndHandleException(orderResponse, e);
         }
         return orderResponse;
     }

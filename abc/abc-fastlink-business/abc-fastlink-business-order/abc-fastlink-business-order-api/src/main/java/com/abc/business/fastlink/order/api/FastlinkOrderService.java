@@ -17,5 +17,5 @@ public interface FastlinkOrderService {
     void example02();
     void example01() throws XxxException;
 
-    BaseResponse<String> query() throws BizException;
+    BaseResponse<String> query();
 }

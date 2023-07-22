@@ -1,23 +1,25 @@
 package com.abc.business.fastlink.portal.controller.order;
 
+import com.abc.business.fastlink.order.api.FastlinkOrderService;
 import com.abc.business.fastlink.portal.base.BaseUrl;
 import com.abc.business.fastlink.portal.dal.entity.User;
-import com.abc.business.fastlink.portal.test.ExcelConfig;
 import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.business.BizException;
+import com.abc.system.common.exception.business.XxxException;
 import com.abc.system.common.log.annotation.LogAnchor;
+import com.abc.system.common.response.BaseResponse;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.bind.annotation.*;
+import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -39,8 +41,8 @@ public class OrderController {
 //    private final RedissonClient redissonClient;
 //    private final RedisService redisService;
 //    //    private final ExcelFileService excelFileService;
-//    @DubboReference
-//    private FastlinkOrderService fastlinkOrderService;
+    @DubboReference
+    private FastlinkOrderService fastlinkOrderService;
 
 
 //    @GetMapping("/example05")
@@ -99,29 +101,6 @@ public class OrderController {
 //            System.out.println("被包装了为RuntimeException");
 //        }
 //    }
-//
-//    /**
-//     * Dubbo-RPC会将所有返回的【运行时异常】封装为RuntimeException，【编译期异常】除外
-//     */
-//    @PostMapping("/example01")
-//    public void example01() {
-//        try {
-//            fastlinkOrderService.example01();
-//        } catch (XxxException e) {
-//            System.out.println("获取到了XxxException");
-//        } catch (Exception e) {
-//            System.out.println("被包装了为RuntimeException");
-//        }
-//    }
-
-
-//    @PostMapping("/testExcelImport")
-//    public String testExcelImport(HttpServletRequest request) {
-//        ResponseData<ExcelResponse> responseData = excelFileService.dealWith(request);
-//        ExcelResponse result = responseData.getResult();
-//        System.out.println(JSONObject.toJSONString(result, JSONWriter.Feature.PrettyFormat));
-//        return "200";
-//    }
 
 
 //    @LogAnchor
@@ -133,40 +112,13 @@ public class OrderController {
 //    }
 
 
-    private final ExcelConfig excelConfig;
+//    private final ExcelConfig excelConfig;
 
-    @GetMapping("/config")
-    public String getConfig() {
-        return JSONObject.toJSONString(excelConfig, JSONWriter.Feature.PrettyFormat);
-    }
+//    @GetMapping("/config")
+//    public String getConfig() {
+//        return JSONObject.toJSONString(excelConfig, JSONWriter.Feature.PrettyFormat);
+//    }
 
-
-    @LogAnchor
-    @PostMapping("/testLogAnchor0")
-    public void testLogAnchor0() {
-        System.out.println("OrderController.testLogAnchor0");
-        if (ThreadLocalRandom.current().nextBoolean()) {
-            throw new BizException(SystemRetCodeConstants.SYSTEM_ERROR);
-        }
-    }
-
-    @LogAnchor
-    @PostMapping("/testLogAnchor1")
-    public void testLogAnchor1(@RequestBody User user) {
-        System.out.println("OrderController.testLogAnchor1");
-        if (ThreadLocalRandom.current().nextBoolean()) {
-            throw new BizException(SystemRetCodeConstants.SYSTEM_ERROR);
-        }
-    }
-
-    @LogAnchor
-    @PostMapping("/testLogAnchor2")
-    public void testLogAnchor2(HttpServletRequest request, HttpServletResponse response, @RequestBody User user) {
-        System.out.println("OrderController.testLogAnchor2");
-        if (ThreadLocalRandom.current().nextBoolean()) {
-            throw new BizException(SystemRetCodeConstants.SYSTEM_ERROR);
-        }
-    }
 
 //    @DistributedLock
 //    @PostMapping(Url.ORDER_BASE_TEST_DISTRIBUTED_LOCK)
@@ -304,4 +256,74 @@ public class OrderController {
 //        redisService.delete("aaa_total");
 //        lock.unlock();
 //    }
+
+
+    /* =========================== */
+    /* =======日志模块测试========== */
+    /* =========================== */
+    @LogAnchor
+    @PostMapping("/testLogAnchor0")
+    public void testLogAnchor0() {
+        System.out.println("OrderController.testLogAnchor0");
+        if (ThreadLocalRandom.current().nextBoolean()) {
+            throw new BizException(SystemRetCodeConstants.SYSTEM_ERROR);
+        }
+    }
+
+    @LogAnchor
+    @PostMapping("/testLogAnchor1")
+    public void testLogAnchor1(@RequestBody User user) {
+        System.out.println("OrderController.testLogAnchor1");
+        if (ThreadLocalRandom.current().nextBoolean()) {
+            throw new BizException(SystemRetCodeConstants.SYSTEM_ERROR);
+        }
+    }
+
+    @LogAnchor
+    @PostMapping("/testLogAnchor2")
+    public void testLogAnchor2(HttpServletRequest request, HttpServletResponse response, @RequestBody User user) {
+        System.out.println("OrderController.testLogAnchor2");
+        if (ThreadLocalRandom.current().nextBoolean()) {
+            throw new BizException(SystemRetCodeConstants.SYSTEM_ERROR);
+        }
+    }
+
+    /* =========================== */
+    /* =======DubboRPC测试========== */
+    /* =========================== */
+    @PostMapping("/example01")
+    public void example01() {
+        try {
+            fastlinkOrderService.example01();
+        } catch (XxxException e) {
+            System.out.println("获取到了XxxException: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("XxxException被包装了为RuntimeException");
+        }
+    }
+
+    @PostMapping("/example02")
+    public void example02() {
+        try {
+            fastlinkOrderService.example02();
+        } catch (BizException e) {
+            System.out.println("获取到了BizException: " + e.getErrorCode() + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("BizException被包装了为RuntimeException");
+        }
+    }
+
+    @PostMapping("/example03")
+    public void example03() {
+        try {
+            log.info(">>>>>>>> portal发送请求至orderService");
+            BaseResponse<String> query = fastlinkOrderService.query();
+            log.info(">>>>>>>> portal接收到orderService的请求");
+            System.out.println(JSONObject.toJSONString(query, JSONWriter.Feature.PrettyFormat));
+        } catch (BizException e) {
+            System.out.println("获取到了BizException: " + e.getErrorCode() + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
+        }
+    }
 }

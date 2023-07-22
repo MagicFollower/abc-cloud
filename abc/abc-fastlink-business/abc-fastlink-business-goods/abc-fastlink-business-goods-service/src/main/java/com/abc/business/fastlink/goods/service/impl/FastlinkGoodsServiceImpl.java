@@ -4,6 +4,7 @@ import com.abc.business.fastlink.goods.api.FastLinkGoodsService;
 import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.business.BizException;
 import com.abc.system.common.response.BaseResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 
 /**
@@ -15,6 +16,7 @@ import org.apache.dubbo.config.annotation.DubboService;
  * @Version 1.0
  */
 @DubboService
+@Slf4j
 public class FastlinkGoodsServiceImpl implements FastLinkGoodsService {
 
 
@@ -22,7 +24,7 @@ public class FastlinkGoodsServiceImpl implements FastLinkGoodsService {
     public BaseResponse<String> query() throws BizException {
         BaseResponse<String> response = new BaseResponse<>();
         // todo 模拟响应
-
+        log.info(">>>>>>>> 数据在goodsService处理中...");
         response.setCode(SystemRetCodeConstants.OP_SUCCESS.getCode());
         response.setMsg(SystemRetCodeConstants.OP_SUCCESS.getMessage());
         response.setResult("goods_data");
