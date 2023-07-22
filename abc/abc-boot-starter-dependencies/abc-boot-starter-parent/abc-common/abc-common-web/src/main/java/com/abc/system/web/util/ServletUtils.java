@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Supplier;
 
@@ -53,13 +54,20 @@ public class ServletUtils {
      * @param string 待渲染的字符串
      */
     public void renderString(String string) {
+        PrintWriter writer = null;
         try {
             response.setStatus(HttpStatus.OK.value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-            response.getWriter().write(string);
+            writer = response.getWriter();
+            writer.write(string);
+            writer.flush();
         } catch (IOException e) {
             log.error(">>>>>>>>|ServletUtils#renderString|exception:{}<<<<<<<<", e.getMessage());
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
         }
     }
 
