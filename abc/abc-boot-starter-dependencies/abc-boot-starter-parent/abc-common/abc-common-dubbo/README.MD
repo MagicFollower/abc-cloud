@@ -8,6 +8,8 @@
 
 #### 消费者、生产者过滤器
 
+- traceId生成 + ThreadLocal线程内缓存
+
 > /resources/META-INF/dubbo/com.alibaba.dubbo.rpc.Filter
 >
 > - `❓dubbo微服务框架中配置的consumerTraceFilter和providerTraceFilter有什么作用?在什么过程生效？`
