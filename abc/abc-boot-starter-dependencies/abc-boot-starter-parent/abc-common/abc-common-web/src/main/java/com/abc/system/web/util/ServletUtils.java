@@ -58,6 +58,10 @@ public class ServletUtils {
         try {
             response.setStatus(HttpStatus.OK.value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            // text/html; charset=UTF-8
+            //   -> 手动指定setCharacterEncoding是为了防止Content-Type设置为text/html但没有指定charset=UTF-8时渲染数据存在非ASCII字符出现的乱码场景😷
+            // application/json; charset=UTF-8
+            //   -> application/json;charset=UTF-8已经被Spring标记为了Deprecated，因为主流浏览器都能解析application/json中的非ASCII字符了😃
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             writer = response.getWriter();
             writer.write(string);
