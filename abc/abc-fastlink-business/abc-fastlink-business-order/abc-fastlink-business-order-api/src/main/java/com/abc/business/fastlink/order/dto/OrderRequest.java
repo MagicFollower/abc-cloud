@@ -1,4 +1,4 @@
-package com.abc.business.fastlink.portal.controller.order.dto;
+package com.abc.business.fastlink.order.dto;
 
 import com.abc.system.common.exception.business.BizException;
 import com.abc.system.common.page.PageInfo;
