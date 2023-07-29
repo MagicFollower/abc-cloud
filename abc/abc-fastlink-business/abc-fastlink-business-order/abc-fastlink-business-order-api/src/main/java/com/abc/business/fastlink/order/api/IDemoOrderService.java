@@ -1,6 +1,9 @@
 package com.abc.business.fastlink.order.api;
 
 import com.abc.business.fastlink.order.dto.OrderDTO;
+import com.abc.system.common.response.BaseResponse;
+
+import java.util.List;
 
 /**
  * IDemoOrderService
@@ -17,5 +20,5 @@ public interface IDemoOrderService {
      *
      * @return OrderDTO
      */
-    OrderDTO demo01();
+    BaseResponse<List<OrderDTO>> demo01();
 }
