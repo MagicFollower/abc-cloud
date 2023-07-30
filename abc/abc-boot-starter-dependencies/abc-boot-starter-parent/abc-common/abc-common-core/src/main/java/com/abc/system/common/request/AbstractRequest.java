@@ -1,7 +1,7 @@
 package com.abc.system.common.request;
 
 import com.abc.system.common.exception.business.BizException;
-import com.abc.system.common.page.PageInfo;
+import com.abc.system.common.page.Pageable;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,13 +12,11 @@ import java.io.Serializable;
  * 2.Service层直接继承该抽象类
  */
 @Data
-public abstract class AbstractRequest implements Serializable {
-    /**
-     * 自定义分页实体（与Mybatis无关）
-     * 1. pageNum:  int
-     * 2. pageSize: int
-     */
-    protected PageInfo pageInfo;
+public abstract class AbstractRequest implements Pageable, Serializable {
+
+    /* 与特定业务系统关联的基础属性 */
+    // private String brandCode;
+    // private String tagId;
 
     /**
      * 查询请求参数校验，这是一个tip，它会提醒你要在每一个服务中对参数进行校验
@@ -27,6 +25,7 @@ public abstract class AbstractRequest implements Serializable {
      * 2. 这个方法约定用于查询参数的请求校验；
      * 3. 将该方法用于Controller层，在进行服务RPC之前校验会有效减少无效服务调用。
      * </pre>
+     *
      * @throws BizException 校验失败时，抛出BizException
      */
     protected abstract void requestCheck() throws BizException;
