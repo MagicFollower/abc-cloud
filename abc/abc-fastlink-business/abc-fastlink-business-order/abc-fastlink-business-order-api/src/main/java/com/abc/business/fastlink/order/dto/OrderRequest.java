@@ -13,13 +13,11 @@ import com.abc.system.common.request.AbstractRequest;
  * @Date 2023/5/16 21:25
  * @Version 1.0
  */
-public class OrderRequest<T> extends AbstractRequest {
-
-    private T vo;
+public class OrderRequest<T> extends AbstractRequest<T> {
 
     @Override
     public void requestCheck() throws BizException {
-        if (vo == null) {
+        if (item == null) {
             throw new ValidateException(SystemRetCodeConstants.PARAMETER_EXISTS_ERROR);
         }
     }
