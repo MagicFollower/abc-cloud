@@ -8,6 +8,9 @@ import java.io.Serializable;
 
 /**
  * PageResponse
+ * <pre>
+ * 1.total默认值-1L，提示开发者务必手动填充该参数
+ * </pre>
  *
  * @Description PageResponse 详细介绍
  * @Author Trivis
@@ -18,6 +21,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PageResponse<T> implements Serializable {
-    private long total;
+    // 未分页结果集的大小
+    private long total = -1L;
+
+    // 根据分页参数限制后的分页数据集
     private T data;
 }
