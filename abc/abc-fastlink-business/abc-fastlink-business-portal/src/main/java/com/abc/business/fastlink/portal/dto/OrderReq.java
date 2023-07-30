@@ -1,6 +1,6 @@
 package com.abc.business.fastlink.portal.dto;
 
-import com.abc.system.common.page.Pageable;
+import com.abc.system.common.page.PageInfo;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -22,7 +22,7 @@ import java.io.Serializable;
  * @Version 1.0
  */
 @Data
-public class OrderReq<T> implements Pageable, Serializable {
+public class OrderReq<T> implements Serializable {
     /* 用于控制查询条件、删除条件ids */
     private T item;
 
@@ -40,4 +40,7 @@ public class OrderReq<T> implements Pageable, Serializable {
     /* 2.该场景下，删除操作将会立刻生效，需提供单独的API，此时只有一种调用API的情况 */
     //private List<T> addItems;
     //private List<T> updateItems;
+
+    // 分页对象
+    private PageInfo pageInfo;
 }
