@@ -39,8 +39,8 @@ public class OrderController {
 
     @GetMapping("/demo01")
     public ResponseData<PageResponse<List<OrderDTO>>> demo01() {
-        ResponseProcessor<PageResponse<List<OrderDTO>>> rp = new ResponseProcessor<>();
-        BaseResponse<List<OrderDTO>> baseResponse = iDemoOrderService.demo01();
+        final ResponseProcessor<PageResponse<List<OrderDTO>>> rp = new ResponseProcessor<>();
+        final BaseResponse<List<OrderDTO>> baseResponse = iDemoOrderService.demo01();
         if (!SystemRetCodeConstants.OP_SUCCESS.getCode().equals(baseResponse.getCode())) {
             return rp.setErrorMsg(baseResponse.getCode(), baseResponse.getMsg());
         }
@@ -49,7 +49,7 @@ public class OrderController {
         System.out.println(JSONObject.toJSONString(baseResponse.getResult(), JSONWriter.Feature.PrettyFormat));
         System.out.println("=========================CONTROLLER-END=========================");
 
-        PageResponse<List<OrderDTO>> pageResponse = new PageResponse<>();
+        final PageResponse<List<OrderDTO>> pageResponse = new PageResponse<>();
         pageResponse.setTotal(baseResponse.getTotal());
         pageResponse.setData(baseResponse.getResult());
         return rp.setData(pageResponse);

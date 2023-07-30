@@ -4,6 +4,8 @@ import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.business.BizException;
 import com.abc.system.common.exception.business.ValidateException;
 import com.abc.system.common.request.AbstractRequest;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * OrderRequest
@@ -13,6 +15,8 @@ import com.abc.system.common.request.AbstractRequest;
  * @Date 2023/5/16 21:25
  * @Version 1.0
  */
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class OrderRequest<T> extends AbstractRequest<T> {
 
     @Override
