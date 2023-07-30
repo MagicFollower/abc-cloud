@@ -8,17 +8,20 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 系统内部Service层请求基类
- * 1.Controller层请继承并抽象出AbstractBaseRequest,你可以把一些模板参数封装在内部，例如公司编号）
- * 2.Service层直接继承该抽象类
+ * 系统内部Service层请求抽象基类（业务Service请求实体直接继承该抽象类）
+ * <pre>
+ * 1.part1: 与特定业务系统关联的Service层需要的基础属性
+ * 2.part2: 增删改查数据接收属性 + 分页对象PageInfo
+ * 3.part3: requestCheck查询参数校验抽象方法
+ * </pre>
  */
 @Data
 public abstract class AbstractRequest<T> implements Serializable {
 
     /* 与特定业务系统关联的Service层需要的基础属性 */
-    // private String tag1;
-    // private String tag2;
-    // private String tag3;
+    // private String service_level_tag1;
+    // private String service_level_tag2;
+    // private String service_level_tag3;
 
 
     /* 用于控制查询条件、删除条件ids */
