@@ -5,6 +5,9 @@ spring:
     name: abc-fastlink-business-portal
   main:
     banner-mode: OFF
+  messages:
+    basename: i18n/messages
+    cache-duration: 86400
 
 logging:
   level:
@@ -19,7 +22,6 @@ apollo:
   ### 自定义的系统级别配置缓存
   system:
     namespaces: system.yaml
-
 
 #spring:
 #  redis:

@@ -41,6 +41,11 @@ public class OrderController {
     public ResponseData<PageResponse<List<OrderDTO>>> demo01() {
         final ResponseProcessor<PageResponse<List<OrderDTO>>> rp = new ResponseProcessor<>();
         final BaseResponse<List<OrderDTO>> baseResponse = iDemoOrderService.demo01();
+
+        // 多语言测试1
+        baseResponse.setCode(SystemRetCodeConstants.OP_FAILED.getCode());
+        baseResponse.setMsg(SystemRetCodeConstants.OP_FAILED.getMessage());
+
         if (!SystemRetCodeConstants.OP_SUCCESS.getCode().equals(baseResponse.getCode())) {
             return rp.setErrorMsg(baseResponse.getCode(), baseResponse.getMsg());
         }
@@ -52,7 +57,8 @@ public class OrderController {
         final PageResponse<List<OrderDTO>> pageResponse = new PageResponse<>();
         pageResponse.setTotal(baseResponse.getTotal());
         pageResponse.setData(baseResponse.getResult());
-        return rp.setData(pageResponse);
+        // 多语言测试2
+        return rp.setData(pageResponse, "你好吗？本次访问成功了！");
     }
 
 }

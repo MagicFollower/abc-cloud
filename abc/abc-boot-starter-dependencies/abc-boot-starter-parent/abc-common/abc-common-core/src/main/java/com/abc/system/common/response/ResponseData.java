@@ -1,5 +1,7 @@
 package com.abc.system.common.response;
 
+import com.abc.system.common.config.serializer.I18nJsonSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,6 +27,8 @@ import java.io.Serializable;
 public class ResponseData<T> implements Serializable {
     private Boolean success;
     private int code;
+
+    @JsonSerialize(using = I18nJsonSerializer.class)
     private String message;
     private T result;
 

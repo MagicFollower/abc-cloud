@@ -1,6 +1,8 @@
 package com.abc.system.common.response;
 
+import com.abc.system.common.config.serializer.I18nJsonSerializer;
 import com.abc.system.common.constant.SystemRetCodeConstants;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -78,6 +80,8 @@ public class ResponseProcessor<T> {
     @AllArgsConstructor
     private static class ErrorResponse implements Serializable {
         private String errorCode;
+
+        @JsonSerialize(using = I18nJsonSerializer.class)
         private String message;
     }
 }
