@@ -7,7 +7,7 @@ spring:
     banner-mode: OFF
   messages:
     basename: i18n/messages
-    cache-duration: 86400
+    #cache-duration: 86400
 
 logging:
   level:
