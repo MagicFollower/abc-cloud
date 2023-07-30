@@ -6,9 +6,9 @@ import java.io.Serializable;
 
 /**
  * 系统内部Service层基本响应类（包含响应体数据，例如增加、查询）
- * 1.total:Long
- *   1.1 填充数据的总记录数，分页时
- *   1.2 填充数据的总记录数，不分页时
+ * 1.total:long
+ *   1.1 填充数据的总记录数
+ *   1.2 默认值-1L，提示开发者务必手动填充该参数
  * 2.result:T
  *
  * @param <T>
@@ -18,7 +18,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BaseResponse<T> extends AbstractResponse implements Serializable {
-    private Long total;
+    private long total = -1L;
     private T result;
 
     @Builder

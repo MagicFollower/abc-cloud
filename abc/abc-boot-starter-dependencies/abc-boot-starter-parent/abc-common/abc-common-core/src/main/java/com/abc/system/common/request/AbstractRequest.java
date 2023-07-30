@@ -14,9 +14,10 @@ import java.io.Serializable;
 @Data
 public abstract class AbstractRequest implements Pageable, Serializable {
 
-    /* 与特定业务系统关联的基础属性 */
-    // private String brandCode;
-    // private String tagId;
+    /* 与特定业务系统关联的Service层需要的基础属性 */
+    // private String tag1;
+    // private String tag2;
+    // private String tag3;
 
     /**
      * 查询请求参数校验，这是一个tip，它会提醒你要在每一个服务中对参数进行校验
