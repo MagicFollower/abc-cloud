@@ -47,7 +47,7 @@ public class DemoOrderServiceImpl implements IDemoOrderService {
         System.out.println(JSONObject.toJSONString(orderDTO, JSONWriter.Feature.PrettyFormat));
 
         baseResponse.fill(SystemRetCodeConstants.OP_SUCCESS);
-        baseResponse.setTotal((long) dtoList.size());
+        baseResponse.setTotal(dtoList.size());
         baseResponse.setResult(dtoList);
         return baseResponse;
     }
