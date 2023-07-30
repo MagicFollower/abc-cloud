@@ -62,11 +62,19 @@ public enum SystemRetCodeConstants {
     JWT_PARSE_ERROR("006002", "TOKEN解析异常"),
     JWT_EXPIRED("006003", "TOKEN过期"),
 
+    //##############################################
+    //#####数据校验 响应编码 007
+    //##############################################
+    PARAMETER_EXISTS_ERROR("007001", "必要参数不存在"),
 
 
 
 
-    
+
+
+
+
+
     ANONYMOUS("999999", "ANONYMOUS-MESSAGE");
 
     private String code;

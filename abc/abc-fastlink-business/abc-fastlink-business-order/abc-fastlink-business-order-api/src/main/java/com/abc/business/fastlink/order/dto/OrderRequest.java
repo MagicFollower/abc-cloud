@@ -1,7 +1,8 @@
 package com.abc.business.fastlink.order.dto;
 
+import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.business.BizException;
-import com.abc.system.common.page.PageInfo;
+import com.abc.system.common.exception.business.ValidateException;
 import com.abc.system.common.request.AbstractRequest;
 
 /**
@@ -12,12 +13,14 @@ import com.abc.system.common.request.AbstractRequest;
  * @Date 2023/5/16 21:25
  * @Version 1.0
  */
-public class OrderRequest extends AbstractRequest {
+public class OrderRequest<T> extends AbstractRequest {
+
+    private T vo;
 
     @Override
     public void requestCheck() throws BizException {
-        if (pageInfo == null) {
-            pageInfo = new PageInfo();
+        if (vo == null) {
+            throw new ValidateException(SystemRetCodeConstants.PARAMETER_EXISTS_ERROR);
         }
     }
 }
