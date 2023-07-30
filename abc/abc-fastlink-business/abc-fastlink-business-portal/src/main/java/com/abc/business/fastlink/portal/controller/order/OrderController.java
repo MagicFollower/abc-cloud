@@ -13,6 +13,7 @@ import com.alibaba.fastjson2.JSONWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,6 +40,7 @@ public class OrderController {
 
     @GetMapping("/demo01")
     public ResponseData<PageResponse<List<OrderDTO>>> demo01() {
+
         final ResponseProcessor<PageResponse<List<OrderDTO>>> rp = new ResponseProcessor<>();
         final BaseResponse<List<OrderDTO>> baseResponse = iDemoOrderService.demo01();
 

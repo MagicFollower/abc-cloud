@@ -47,6 +47,11 @@
             </dependency>
             <dependency>
                 <groupId>com.abc</groupId>
+                <artifactId>abc-common-dao</artifactId>
+                <version>${abc-common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.abc</groupId>
                 <artifactId>abc-common-dubbo</artifactId>
                 <version>${abc-common.version}</version>
             </dependency>
