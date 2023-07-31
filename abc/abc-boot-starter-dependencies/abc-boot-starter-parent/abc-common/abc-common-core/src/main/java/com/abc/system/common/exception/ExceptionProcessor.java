@@ -20,7 +20,7 @@ public class ExceptionProcessor {
 
     private ExceptionProcessor(){}
 
-    public static AbstractResponse wrapAndHandleException(AbstractResponse abstractResponse, Exception e) {
+    public static AbstractResponse wrapAndHandleException(AbstractResponse abstractResponse, Throwable e) {
         if(e instanceof BaseException){
             abstractResponse.setCode(((BaseException) e).getErrorCode());
             abstractResponse.setMsg(e.getMessage());
@@ -31,7 +31,7 @@ public class ExceptionProcessor {
         return abstractResponse;
     }
 
-    public static AbstractResponse wrapAndHandleException(AbstractResponse abstractResponse, Exception e,
+    public static AbstractResponse wrapAndHandleException(AbstractResponse abstractResponse, Throwable e,
                                                           String predictableErrorMsg) {
         if(e instanceof BaseException){
             abstractResponse.setCode(((BaseException) e).getErrorCode());
