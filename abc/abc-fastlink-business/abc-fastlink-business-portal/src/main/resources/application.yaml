@@ -11,7 +11,7 @@ spring:
 
 logging:
   level:
-    org.apache.catalina.core.ContainerBase: ERROR
+    org.apache.catalina.core.ContainerBase: OFF
     root: INFO
 
 apollo:

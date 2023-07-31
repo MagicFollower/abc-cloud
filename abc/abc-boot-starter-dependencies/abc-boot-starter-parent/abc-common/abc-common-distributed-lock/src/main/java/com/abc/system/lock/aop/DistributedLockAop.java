@@ -1,10 +1,7 @@
 package com.abc.system.lock.aop;
 
 import com.abc.system.common.constant.SystemRetCodeConstants;
-import com.abc.system.common.exception.ExceptionProcessor;
 import com.abc.system.common.exception.base.BaseException;
-import com.abc.system.common.response.BaseResponse;
-import com.abc.system.common.response.DefaultResponse;
 import com.abc.system.lock.annotation.DistributedLock;
 import com.abc.system.lock.helper.DistributedLockHelper;
 import com.alibaba.fastjson2.JSONObject;
@@ -58,22 +55,12 @@ public class DistributedLockAop {
             lockKey = getLockKey(joinPoint);
             // todo 这里的异常应该封装为单独的异常类
             if (StringUtils.isEmpty(lockKey)) {
-                throw new BaseException(SystemRetCodeConstants.SYSTEM_ERROR.getCode(), "分布式锁key生成异常，加锁已停止");
+                throw new BaseException(SystemRetCodeConstants.SYSTEM_ERROR.getCode(), "key生成失败");
             }
             lock = DistributedLockHelper.lock(lockKey, lockAnnotation.leaseTime(), lockAnnotation.timeUnit());
             returnValue = joinPoint.proceed();
         } catch (Throwable e) {
-            /* AOP异常处理逻辑：正常返回，相应填充异常数据 */
-            /* 1.获取返回数据类型*/
-            /* 2.实例化一个对象作为返回值，只支持DefaultResponse和BaseResponse，无法识别返回值类型时，响应填充null */
-            Class<?> returnType = ((MethodSignature) joinPoint.getSignature()).getMethod().getReturnType();
-            if (DefaultResponse.class.equals(returnType)) {
-                DefaultResponse instance = new DefaultResponse();
-                returnValue = ExceptionProcessor.wrapAndHandleException(instance, e);
-            } else if (BaseResponse.class.equals(returnType)) {
-                BaseResponse<Object> instance = new BaseResponse<>();
-                returnValue = ExceptionProcessor.wrapAndHandleException(instance, e);
-            }
+            throw new BaseException(SystemRetCodeConstants.SYSTEM_ERROR.getCode(), "分布式锁异常: " + e.getMessage());
         } finally {
             if (lock != null) {
                 DistributedLockHelper.unlock(lock);

@@ -49,6 +49,7 @@ public class DemoOrderServiceImpl implements IDemoOrderService {
         baseResponse.fill(SystemRetCodeConstants.OP_SUCCESS);
         baseResponse.setTotal(dtoList.size());
         baseResponse.setResult(dtoList);
+        //throw new BizException(SystemRetCodeConstants.ANONYMOUS);
         return baseResponse;
     }
 }

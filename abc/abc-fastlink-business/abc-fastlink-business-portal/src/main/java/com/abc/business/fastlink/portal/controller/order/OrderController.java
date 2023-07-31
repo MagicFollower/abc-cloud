@@ -13,7 +13,7 @@ import com.alibaba.fastjson2.JSONWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.springframework.data.domain.Example;
+import org.apache.dubbo.rpc.RpcException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,11 +42,24 @@ public class OrderController {
     public ResponseData<PageResponse<List<OrderDTO>>> demo01() {
 
         final ResponseProcessor<PageResponse<List<OrderDTO>>> rp = new ResponseProcessor<>();
-        final BaseResponse<List<OrderDTO>> baseResponse = iDemoOrderService.demo01();
+        // RPC异常_服务未启动/超时：org.apache.dubbo.rpc.RpcException: No provider available from registry
+        //   -> RpcException                       ➡️RuntimeException
+        final BaseResponse<List<OrderDTO>> baseResponse;
+        final String SERVICE_NAME = "iDemoOrderService";
+        try {
+            baseResponse = iDemoOrderService.demo01();
+        } catch (Exception e) {
+            if (e instanceof RpcException) {
+                log.error(String.format("{%s}服务不可用: ", SERVICE_NAME) + e.getMessage());
+                return rp.setErrorMsg(SystemRetCodeConstants.SYSTEM_ERROR);
+            }
+            log.error(String.format("{%s}服务出错: ", SERVICE_NAME) + e.getMessage());
+            return rp.setErrorMsg(SystemRetCodeConstants.SYSTEM_ERROR);
+        }
 
         // 多语言测试1
-        baseResponse.setCode(SystemRetCodeConstants.OP_FAILED.getCode());
-        baseResponse.setMsg(SystemRetCodeConstants.OP_FAILED.getMessage());
+        //baseResponse.setCode(SystemRetCodeConstants.OP_FAILED.getCode());
+        //baseResponse.setMsg(SystemRetCodeConstants.OP_FAILED.getMessage());
 
         if (!SystemRetCodeConstants.OP_SUCCESS.getCode().equals(baseResponse.getCode())) {
             return rp.setErrorMsg(baseResponse.getCode(), baseResponse.getMsg());
@@ -60,7 +73,7 @@ public class OrderController {
         pageResponse.setTotal(baseResponse.getTotal());
         pageResponse.setData(baseResponse.getResult());
         // 多语言测试2
-        return rp.setData(pageResponse, "你好吗？本次访问成功了！");
+        //return rp.setData(pageResponse, "你好吗？本次访问成功了！");
+        return rp.setData(pageResponse);
     }
-
 }

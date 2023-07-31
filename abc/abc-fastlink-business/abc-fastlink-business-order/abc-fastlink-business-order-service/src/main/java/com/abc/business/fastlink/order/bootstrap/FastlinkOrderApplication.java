@@ -2,6 +2,7 @@ package com.abc.business.fastlink.order.bootstrap;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
@@ -13,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @Version 1.0
  */
 @ComponentScan(basePackages = {"com.abc.business.fastlink"})
-@SpringBootApplication
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class FastlinkOrderApplication {
     public static void main(String[] args) {
         // 指定Dubbo日志适配器
