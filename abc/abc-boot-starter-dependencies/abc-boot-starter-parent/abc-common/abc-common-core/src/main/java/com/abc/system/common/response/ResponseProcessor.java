@@ -26,7 +26,7 @@ import java.io.Serializable;
  * 1.setErrorMsg在提供内部错误编号和信息时，将会封装为ResponseErrorData至result中，使controller层代码泛型统一为T
  * </pre>
  */
-@SuppressWarnings({"rawtypes","unchecked"})
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ResponseProcessor<T> {
     private final ResponseData responseData = new ResponseData();
 
@@ -36,12 +36,13 @@ public class ResponseProcessor<T> {
     /**
      * 🔓统一成功响应消息
      *
-     * @param t   t
+     * @param t t
      * @return ResponseData
      */
     public ResponseData<T> setData(T t) {
         return setData(t, null);
     }
+
     /**
      * 🔓统一成功响应消息
      *
@@ -58,7 +59,20 @@ public class ResponseProcessor<T> {
     }
 
     /**
-     * 🔓捕获BizException时使用（捕获后直接使用errorCode+message填充返回）
+     * 🔓🔓填充SystemRetCodeConstants自定义错误编码+错误信息（封装在result中返回）
+     *
+     * @return ResponseData
+     */
+    public ResponseData<T> setErrorMsg(SystemRetCodeConstants codeConstants) {
+        this.responseData.setSuccess(false);
+        this.responseData.setCode(500);
+        this.responseData.setMessage(codeConstants.getMessage());
+        this.responseData.setResult(new ErrorResponse(codeConstants.getCode(), codeConstants.getMessage()));
+        return this.responseData;
+    }
+
+    /**
+     * 🔓填充错误编码+错误信息（封装在result中返回）
      *
      * @param errorCode errorCode
      * @param msg       msg
