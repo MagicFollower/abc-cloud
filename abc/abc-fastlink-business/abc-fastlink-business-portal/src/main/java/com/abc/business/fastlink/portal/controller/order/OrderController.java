@@ -76,4 +76,14 @@ public class OrderController {
         //return rp.setData(pageResponse, "你好吗？本次访问成功了！");
         return rp.setData(pageResponse);
     }
+
+    /**
+     * 测试common-web组件的全局异常拦截器
+     *
+     * @return useless
+     */
+    @GetMapping("/demo02")
+    public ResponseData<PageResponse<List<OrderDTO>>> demo02() {
+        throw new RuntimeException("发生了异常");
+    }
 }
