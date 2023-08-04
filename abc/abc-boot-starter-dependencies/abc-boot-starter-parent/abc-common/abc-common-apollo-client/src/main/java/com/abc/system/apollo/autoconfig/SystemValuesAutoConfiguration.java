@@ -14,6 +14,12 @@ import javax.annotation.PostConstruct;
 
 /**
  * 系统级缓存自定义配置自动配置类
+ * <pre>
+ * 🤗建议每一个配置项值都使用双引号字符串表示
+ * 1.自动监听Apollo中属性变动
+ * 2.Apollo中属性配置为null时，将自动被解析为空字符串，null使用双引号括起来时，才会被正常解析为普通字符串
+ * 3.Apollo中属性被删除时，程序会监听到新值为null，这里会根据新值为null来在全局缓存中移除对应key
+ * </pre>
  *
  * @Description 系统级缓存自定义配置自动配置类
  * @Author Trivis
@@ -54,11 +60,14 @@ public class SystemValuesAutoConfiguration {
         // 为每个namespace注册变更监听事件
         config.addChangeListener(changeEvent -> changeEvent.changedKeys().forEach(key -> {
             ConfigChange configChange = changeEvent.getChange(key);
-            // 将改变后的值放入缓存
-            SystemConfigValues.put(key, configChange.getNewValue());
-
-            log.info(">>>>>>>>>>> refresh Event start|namespaces:{}|" +
-                            "changeType:{}|key:{}|old-value:{}|new-value:{} <<<<<<<<<<<",
+            // 将改变后的值放入缓存/移除
+            if (configChange.getNewValue() == null) {
+                SystemConfigValues.delete(key);
+            } else {
+                SystemConfigValues.put(key, configChange.getNewValue());
+            }
+            log.info(">>>>>>>> \uD83E\uDD20Apollo Refresh Event Start|namespaces:{}|" +
+                            "changeType:{}|key:{}|old-value:{}|new-value:{} <<<<<<<<",
                     changeEvent.getNamespace(), configChange.getChangeType(), key,
                     configChange.getOldValue(), configChange.getNewValue());
         }));
