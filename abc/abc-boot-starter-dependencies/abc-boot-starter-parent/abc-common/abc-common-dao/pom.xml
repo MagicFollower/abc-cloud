@@ -22,6 +22,12 @@
     </properties>
 
     <dependencies>
+        <!-- IdWorker和其他实用工具😎 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-core</artifactId>
+            <version>${mybatis-plus-boot-starter.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
