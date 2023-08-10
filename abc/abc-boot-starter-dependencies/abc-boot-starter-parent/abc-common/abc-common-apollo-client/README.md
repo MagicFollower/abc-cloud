@@ -19,7 +19,7 @@ apollo:
   ### Apollo默认配置
   bootstrap:
     enabled: true
-	namespaces: datasource.yaml, dubbo.yaml, redis.yaml
+    namespaces: datasource.yaml, dubbo.yaml, redis.yaml
   ### 自定义的系统级别配置缓存
   system:
     namespaces: system.yml
