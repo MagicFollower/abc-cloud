@@ -8,11 +8,13 @@ import io.minio.messages.Bucket;
 import io.minio.messages.Item;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,6 +125,10 @@ public class MinioService {
         return true;
     }
 
+    /* ======================================================= */
+    /* =============【上传】、【下载】、【预览】、【删除】============ */
+    /* ======================================================= */
+
     /**
      * 文件上传
      *
@@ -154,6 +160,39 @@ public class MinioService {
     }
 
     /**
+     * 文件下载，直接将数据流写入response
+     *
+     * @param fileName 文件名称
+     * @param res      response 用于将下载文件直接写入response
+     * @throws MinioException MinioException
+     */
+    public void download(String fileName, HttpServletResponse res) throws MinioException {
+        res.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        // CORS not allow customized headers, you must export every customized header manually.
+        // Axios will transfer header-name to lowercase!!!
+        res.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "File-Name,File-Type");
+        GetObjectArgs objectArgs = GetObjectArgs.builder().bucket(prop.getBucketName())
+                .object(fileName).build();
+        try (GetObjectResponse response = minioClient.getObject(objectArgs)) {
+            // CORS, set Content-Length for axios
+            // 😄now, you can use this header-attribute to fill your progress-bar!
+            res.setHeader(HttpHeaders.CONTENT_LENGTH, response.headers().get("Content-Length"));
+            res.addHeader("File-Name", fileName);
+            res.addHeader("File-Type", response.headers().get("Content-Type"));
+            final byte[] buf = new byte[1024 * 5];
+            int len;
+            try (ServletOutputStream stream = res.getOutputStream()) {
+                while ((len = response.read(buf)) != -1) {
+                    stream.write(buf, 0, len);
+                }
+            }
+        } catch (Exception e) {
+            log.error("⚠️ Minio文件下载异常，请检查文件是否存在！" + e.getMessage());
+            throw new MinioException(e.getMessage());
+        }
+    }
+
+    /**
      * 预览文件
      *
      * @param fileName 文件名
@@ -171,39 +210,6 @@ public class MinioService {
             return minioClient.getPresignedObjectUrl(build);
         } catch (Exception e) {
             log.error("⚠️ Minio文件预览异常！" + e.getMessage());
-            throw new MinioException(e.getMessage());
-        }
-    }
-
-
-    /**
-     * 文件下载，直接将数据流写入response
-     *
-     * @param fileName 文件名称
-     * @param res      response 用于将下载文件直接写入response
-     * @throws MinioException MinioException
-     */
-    public void download(String fileName, HttpServletResponse res) throws MinioException {
-        res.setCharacterEncoding("utf-8");
-        // CORS not allow customized headers, you must export every customized header manually.
-        // Axios will transfer header-name to lowercase!!!
-        res.setHeader("Access-Control-Expose-Headers", "File-Name,File-Type");
-        GetObjectArgs objectArgs = GetObjectArgs.builder().bucket(prop.getBucketName())
-                .object(fileName).build();
-        try (GetObjectResponse response = minioClient.getObject(objectArgs)) {
-            // CORS, set Content-Length for axios
-            res.setHeader("Content-Length", response.headers().get("Content-Length"));
-            res.addHeader("File-Name", fileName);
-            res.addHeader("File-Type", response.headers().get("Content-Type"));
-            final byte[] buf = new byte[1024 * 5];
-            int len;
-            try (ServletOutputStream stream = res.getOutputStream()) {
-                while ((len = response.read(buf)) != -1) {
-                    stream.write(buf, 0, len);
-                }
-            }
-        } catch (Exception e) {
-            log.error("⚠️ Minio文件下载异常，请检查文件是否存在！" + e.getMessage());
             throw new MinioException(e.getMessage());
         }
     }
