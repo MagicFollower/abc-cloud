@@ -32,7 +32,7 @@ import java.util.Set;
  *     → `\x00\x05`：这两个字节是Java序列化文件的版本号，表示这个序列化文件是使用Java 5生成的。
  *     → `t`：这个字节表示下一个对象是一个对象类型。
  *     → `\x00\b`：这两个字节表示下一个对象的长度为8个字节（64位）。
- *🤔️手动配置String类型序列化器/自定义序列化器（示例）。
+ * 🤔️手动配置String类型序列化器/自定义序列化器（示例）。
  * {@code
  * @Configuration
  * @EnableCaching
@@ -80,6 +80,17 @@ public class RedisService {
      */
     public <T> void set(final String key, final T value) {
         redisTemplate.opsForValue().set(key, value);
+    }
+
+    /**
+     * 缓存基本的对象，Integer、String、实体类等
+     *
+     * @param key            缓存的键值
+     * @param value          缓存的值
+     * @param timeoutSeconds 秒数
+     */
+    public <T> void set(final String key, final T value, final long timeoutSeconds) {
+        set(key, value, Duration.ofSeconds(timeoutSeconds));
     }
 
     /**
