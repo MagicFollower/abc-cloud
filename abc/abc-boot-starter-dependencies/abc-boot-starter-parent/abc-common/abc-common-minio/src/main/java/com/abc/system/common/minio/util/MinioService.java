@@ -1,6 +1,7 @@
 package com.abc.system.common.minio.util;
 
 import com.abc.system.common.constant.SystemRetCodeConstants;
+import com.abc.system.common.exception.file.RemoteFileDownloadException;
 import com.abc.system.common.minio.config.MinioConfig;
 import com.abc.system.common.response.BaseResponse;
 import io.minio.*;
@@ -16,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -156,7 +156,7 @@ public class MinioService {
             response.setResult(true);
         } catch (Exception e) {
             log.error(">>>>>>>>|Minio#objectExists异常: ", e);
-            response.fill(SystemRetCodeConstants.SYSTEM_BUSINESS);
+            response.fill(SystemRetCodeConstants.REMOTE_FILE_NOT_FOUND);
             response.setResult(false);
         }
         return response;
@@ -187,7 +187,7 @@ public class MinioService {
             response.fill(SystemRetCodeConstants.OP_SUCCESS);
         } catch (Exception e) {
             log.error(">>>>>>>>|Minio#upload异常: ", e);
-            response.fill(SystemRetCodeConstants.SYSTEM_BUSINESS);
+            response.fill(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR);
         }
         response.setResult(originalFilename);
         return response;
@@ -195,12 +195,17 @@ public class MinioService {
 
     /**
      * 文件下载，直接将数据流写入response
+     * <pre>
+     * 1.异常将交由调用方Service/Controller进行处理与控制。
+     *   -> 如果在Controller层调用，可以直接手动拦截或使用全局异常拦截抛出【系统繁忙】并记录日志；
+     *   -> 如果在Service层调用，直接将错误信息原封不动向上抛出至Controller。
+     * </pre>
      *
      * @param fileName 文件名称
      * @param res      response 用于将下载文件直接写入response
-     * @throws FileNotFoundException MinioException
+     * @throws RemoteFileDownloadException 远程文件下载异常
      */
-    public void download(String fileName, HttpServletResponse res) throws FileNotFoundException {
+    public void download(String fileName, HttpServletResponse res) throws RemoteFileDownloadException {
         res.setCharacterEncoding(StandardCharsets.UTF_8.name());
         // CORS not allow customized headers, you must export every customized header manually.
         // Axios will transfer header-name to lowercase!!!
@@ -221,7 +226,7 @@ public class MinioService {
             }
         } catch (Exception e) {
             log.error(">>>>>>>>|Minio#download异常: ", e);
-            throw new FileNotFoundException(e.getMessage());
+            throw new RemoteFileDownloadException(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR);
         }
     }
 
@@ -263,7 +268,7 @@ public class MinioService {
             response.setResult(minioClient.getPresignedObjectUrl(previewArgs));
         } catch (Exception e) {
             log.error(">>>>>>>>|Minio#preview异常, path:{}: ", Paths.get(prop.getBucketName(), fileName), e);
-            response.fill(SystemRetCodeConstants.SYSTEM_BUSINESS);
+            response.fill(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR);
             response.setResult(StringUtils.EMPTY);
         }
         return response;
@@ -290,7 +295,7 @@ public class MinioService {
             response.setResult(true);
         } catch (Exception e) {
             log.error(">>>>>>>>|Minio#remove异常: ", e);
-            response.fill(SystemRetCodeConstants.SYSTEM_BUSINESS);
+            response.fill(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR);
             response.setResult(false);
         }
         return response;
