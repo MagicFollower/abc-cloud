@@ -1,7 +1,7 @@
 package com.abc.system.common.exception.jwt;
 
 import com.abc.system.common.constant.SystemRetCodeConstants;
-import com.abc.system.common.exception.base.BaseException;
+import com.abc.system.common.exception.base.BaseRuntimeException;
 
 /**
  * JWTException
@@ -11,7 +11,7 @@ import com.abc.system.common.exception.base.BaseException;
  * @Date 2023/5/28 8:50
  * @Version 1.0
  */
-public class JWTException extends BaseException {
+public class JWTException extends BaseRuntimeException {
     public JWTException() {
         super();
     }

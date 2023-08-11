@@ -1,6 +1,6 @@
 package com.abc.system.common.filegenerator.service;
 
-import com.abc.system.common.exception.base.BaseException;
+import com.abc.system.common.exception.base.BaseRuntimeException;
 import com.abc.system.common.filegenerator.vo.ExportFileRequest;
 
 import javax.servlet.http.HttpServletResponse;
@@ -22,9 +22,9 @@ public interface GenerateFileService {
      *
      * @param response          响应（HttpServletResponse）
      * @param exportFileRequest 请求参数实体
-     * @throws BaseException 系统异常基类
+     * @throws BaseRuntimeException 系统异常基类
      */
-    void export(HttpServletResponse response, ExportFileRequest exportFileRequest) throws BaseException;
+    void export(HttpServletResponse response, ExportFileRequest exportFileRequest) throws BaseRuntimeException;
 
     /**
      * 导出文件
@@ -37,7 +37,7 @@ public interface GenerateFileService {
      * @param headerType        com.abc.system.common.filegenerator.constant.GenerateFileContentTypeEnum#GENERATOR_HEADER_TYPE_DOWNLOAD:下载,
      *                          com.abc.system.common.filegenerator.constant.GenerateFileContentTypeEnum#GENERATOR_HEADER_TYPE_PREVIEW:预览
      * @param exportFileRequest 请求参数实体
-     * @throws BaseException 系统异常基类
+     * @throws BaseRuntimeException 系统异常基类
      */
-    void export(HttpServletResponse response, String headerType, ExportFileRequest exportFileRequest) throws BaseException;
+    void export(HttpServletResponse response, String headerType, ExportFileRequest exportFileRequest) throws BaseRuntimeException;
 }

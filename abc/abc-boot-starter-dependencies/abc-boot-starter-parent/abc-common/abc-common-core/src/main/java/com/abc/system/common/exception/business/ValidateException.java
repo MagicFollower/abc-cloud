@@ -1,12 +1,12 @@
 package com.abc.system.common.exception.business;
 
 import com.abc.system.common.constant.SystemRetCodeConstants;
-import com.abc.system.common.exception.base.BaseException;
+import com.abc.system.common.exception.base.BaseRuntimeException;
 
 /**
  * 校验异常
  */
-public class ValidateException extends BaseException {
+public class ValidateException extends BaseRuntimeException {
     public ValidateException() {
     }
 

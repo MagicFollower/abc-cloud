@@ -1,7 +1,7 @@
 package com.abc.system.lock.aop;
 
 import com.abc.system.common.constant.SystemRetCodeConstants;
-import com.abc.system.common.exception.base.BaseException;
+import com.abc.system.common.exception.base.BaseRuntimeException;
 import com.abc.system.lock.annotation.DistributedLock;
 import com.abc.system.lock.helper.DistributedLockHelper;
 import com.alibaba.fastjson2.JSONObject;
@@ -55,12 +55,12 @@ public class DistributedLockAop {
             lockKey = getLockKey(joinPoint);
             // todo 这里的异常应该封装为单独的异常类
             if (StringUtils.isEmpty(lockKey)) {
-                throw new BaseException(SystemRetCodeConstants.SYSTEM_ERROR.getCode(), "key生成失败");
+                throw new BaseRuntimeException(SystemRetCodeConstants.SYSTEM_ERROR.getCode(), "key生成失败");
             }
             lock = DistributedLockHelper.lock(lockKey, lockAnnotation.leaseTime(), lockAnnotation.timeUnit());
             returnValue = joinPoint.proceed();
         } catch (Throwable e) {
-            throw new BaseException(SystemRetCodeConstants.SYSTEM_ERROR.getCode(), "分布式锁异常: " + e.getMessage());
+            throw new BaseRuntimeException(SystemRetCodeConstants.SYSTEM_ERROR.getCode(), "分布式锁异常: " + e.getMessage());
         } finally {
             if (lock != null) {
                 DistributedLockHelper.unlock(lock);

@@ -1,7 +1,6 @@
 package com.abc.business.fastlink.order.api;
 
 import com.abc.system.common.exception.business.BizException;
-import com.abc.system.common.exception.business.XxxException;
 import com.abc.system.common.response.BaseResponse;
 
 /**
@@ -15,7 +14,6 @@ import com.abc.system.common.response.BaseResponse;
 public interface FastlinkOrderService {
 
     void example02();
-    void example01() throws XxxException;
 
     BaseResponse<String> query() throws BizException;
 }

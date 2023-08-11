@@ -1,6 +1,6 @@
 package com.abc.system.common.filegenerator.service.impl;
 
-import com.abc.system.common.exception.base.BaseException;
+import com.abc.system.common.exception.base.BaseRuntimeException;
 import com.abc.system.common.exception.business.BizException;
 import com.abc.system.common.filegenerator.constant.GenerateFileContentTypeEnum;
 import com.abc.system.common.filegenerator.constant.GenerateFileRetCodeConstants;
@@ -28,13 +28,13 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class GenerateFileServiceImpl implements GenerateFileService {
     @Override
-    public void export(HttpServletResponse response, ExportFileRequest exportFileRequest) throws BaseException {
+    public void export(HttpServletResponse response, ExportFileRequest exportFileRequest) throws BaseRuntimeException {
         this.export(response, GenerateFileContentTypeEnum.GENERATOR_HEADER_TYPE_DOWNLOAD.getValue(), exportFileRequest);
     }
 
     @Override
     public void export(HttpServletResponse response, String headerType, ExportFileRequest exportFileRequest)
-            throws BaseException {
+            throws BaseRuntimeException {
         OutputStream fastByteArrayOutputStream = null;
         String exportFileName = null;
         try {

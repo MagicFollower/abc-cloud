@@ -1,12 +1,12 @@
 package com.abc.system.common.exception.business;
 
 import com.abc.system.common.constant.SystemRetCodeConstants;
-import com.abc.system.common.exception.base.BaseException;
+import com.abc.system.common.exception.base.BaseRuntimeException;
 
 /**
  * 系统内部自定义业务异常（BusinessException->缩写BizException）
  */
-public class BizException extends BaseException {
+public class BizException extends BaseRuntimeException {
     public BizException() {
     }
 

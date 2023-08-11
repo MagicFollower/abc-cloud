@@ -4,8 +4,7 @@ import com.abc.business.fastlink.goods.api.FastLinkGoodsService;
 import com.abc.business.fastlink.order.api.FastlinkOrderService;
 import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.business.BizException;
-import com.abc.system.common.exception.base.BaseException;
-import com.abc.system.common.exception.business.XxxException;
+import com.abc.system.common.exception.base.BaseRuntimeException;
 import com.abc.system.common.response.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
@@ -32,10 +31,6 @@ public class FastlinkOrderServiceImpl implements FastlinkOrderService {
         throw new BizException(SystemRetCodeConstants.ANONYMOUS);
     }
 
-    @Override
-    public void example01() throws XxxException {
-        throw new XxxException();
-    }
 
     @Override
     public BaseResponse<String> query() throws BizException {
@@ -47,7 +42,7 @@ public class FastlinkOrderServiceImpl implements FastlinkOrderService {
             orderResponse.setMsg(SystemRetCodeConstants.OP_SUCCESS.getMessage());
             orderResponse.setResult(goodsResult + "→" + "order_data");
             orderResponse.setTotal(1L);
-        } catch (BaseException be) {
+        } catch (BaseRuntimeException be) {
             throw new BizException(be.getErrorCode(), be.getMessage());
         }
         return orderResponse;

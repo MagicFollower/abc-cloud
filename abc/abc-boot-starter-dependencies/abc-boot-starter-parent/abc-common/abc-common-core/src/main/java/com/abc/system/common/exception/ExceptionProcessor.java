@@ -1,7 +1,7 @@
 package com.abc.system.common.exception;
 
 import com.abc.system.common.constant.SystemRetCodeConstants;
-import com.abc.system.common.exception.base.BaseException;
+import com.abc.system.common.exception.base.BaseRuntimeException;
 import com.abc.system.common.response.AbstractResponse;
 
 /**
@@ -21,8 +21,8 @@ public class ExceptionProcessor {
     private ExceptionProcessor(){}
 
     public static AbstractResponse wrapAndHandleException(AbstractResponse abstractResponse, Throwable e) {
-        if(e instanceof BaseException){
-            abstractResponse.setCode(((BaseException) e).getErrorCode());
+        if(e instanceof BaseRuntimeException){
+            abstractResponse.setCode(((BaseRuntimeException) e).getErrorCode());
             abstractResponse.setMsg(e.getMessage());
         }else{
             // 未预测异常，不处理
@@ -33,8 +33,8 @@ public class ExceptionProcessor {
 
     public static AbstractResponse wrapAndHandleException(AbstractResponse abstractResponse, Throwable e,
                                                           String predictableErrorMsg) {
-        if(e instanceof BaseException){
-            abstractResponse.setCode(((BaseException) e).getErrorCode());
+        if(e instanceof BaseRuntimeException){
+            abstractResponse.setCode(((BaseRuntimeException) e).getErrorCode());
             abstractResponse.setMsg(predictableErrorMsg);
         }else{
             // 未预测异常，不处理

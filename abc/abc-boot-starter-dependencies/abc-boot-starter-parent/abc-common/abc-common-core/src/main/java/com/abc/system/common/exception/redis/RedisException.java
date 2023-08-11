@@ -1,7 +1,7 @@
 package com.abc.system.common.exception.redis;
 
 import com.abc.system.common.constant.SystemRetCodeConstants;
-import com.abc.system.common.exception.base.BaseException;
+import com.abc.system.common.exception.base.BaseRuntimeException;
 
 /**
  * RedisException
@@ -11,7 +11,7 @@ import com.abc.system.common.exception.base.BaseException;
  * @Date 2023/5/15 23:27
  * @Version 1.0
  */
-public class RedisException extends BaseException {
+public class RedisException extends BaseRuntimeException {
 
     public RedisException() {
         super();
