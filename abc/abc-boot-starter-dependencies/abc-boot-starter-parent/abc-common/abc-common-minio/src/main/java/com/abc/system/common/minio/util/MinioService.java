@@ -1,6 +1,8 @@
 package com.abc.system.common.minio.util;
 
+import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.minio.config.MinioConfig;
+import com.abc.system.common.response.BaseResponse;
 import io.minio.*;
 import io.minio.errors.MinioException;
 import io.minio.http.Method;
@@ -14,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -132,37 +135,62 @@ public class MinioService {
     }
 
     /* ======================================================= */
-    /* =============【上传】、【下载】、【预览】、【删除】============ */
+    /* ======【存在检测】、【上传】、【下载】、【预览】、【删除】======== */
     /* ======================================================= */
 
     /**
-     * 文件上传
+     * 文件存在检测
      *
-     * @param file 文件
-     * @return String 成功返回文件名
+     * @param fileName 文件名
+     * @return BaseResponse of Boolean
+     */
+    public BaseResponse<Boolean> objectExists(String fileName) {
+        BaseResponse<Boolean> response = new BaseResponse<>();
+        try {
+            StatObjectArgs fileStats = StatObjectArgs.builder()
+                    .bucket(prop.getBucketName())
+                    .object(fileName)
+                    .build();
+            minioClient.statObject(fileStats);
+            response.fill(SystemRetCodeConstants.OP_SUCCESS);
+            response.setResult(true);
+        } catch (Exception e) {
+            log.error(">>>>>>>>|Minio#objectExists异常: ", e);
+            response.fill(SystemRetCodeConstants.SYSTEM_BUSINESS);
+            response.setResult(false);
+        }
+        return response;
+    }
+
+    /**
+     * 文件上传
+     * <pre>
+     * 1.文件名称相同会覆盖
+     * </pre>
+     *
+     * @param multipartFile 文件
+     * @return String 成功/失败均返回文件名
      * @throws MinioException MinioException
      */
-    public String upload(MultipartFile file) throws MinioException {
-        String originalFilename = file.getOriginalFilename();
-        // hasText + hasLength
-        if (StringUtils.isBlank(originalFilename)) {
-            throw new RuntimeException("文件名为空!");
-        }
+    public BaseResponse<String> upload(MultipartFile multipartFile) throws MinioException {
+        BaseResponse<String> response = new BaseResponse<>();
+        String originalFilename = StringUtils.EMPTY;
         try {
+            originalFilename = multipartFile.getOriginalFilename();
             PutObjectArgs objectArgs = PutObjectArgs.builder()
                     .bucket(prop.getBucketName())
                     .object(originalFilename)
-                    .stream(file.getInputStream(), file.getSize(), -1)
-                    .contentType(file.getContentType())
+                    .stream(multipartFile.getInputStream(), multipartFile.getSize(), -1)
+                    .contentType(multipartFile.getContentType())
                     .build();
-            //文件名称相同会覆盖
             minioClient.putObject(objectArgs);
+            response.fill(SystemRetCodeConstants.OP_SUCCESS);
         } catch (Exception e) {
             log.error(">>>>>>>>|Minio#upload异常: ", e);
-            throw new MinioException(e.getMessage());
+            response.fill(SystemRetCodeConstants.SYSTEM_BUSINESS);
         }
-        // ok → 返回上传文件存储的名称
-        return originalFilename;
+        response.setResult(originalFilename);
+        return response;
     }
 
     /**
@@ -170,9 +198,9 @@ public class MinioService {
      *
      * @param fileName 文件名称
      * @param res      response 用于将下载文件直接写入response
-     * @throws MinioException MinioException
+     * @throws FileNotFoundException MinioException
      */
-    public void download(String fileName, HttpServletResponse res) throws MinioException {
+    public void download(String fileName, HttpServletResponse res) throws FileNotFoundException {
         res.setCharacterEncoding(StandardCharsets.UTF_8.name());
         // CORS not allow customized headers, you must export every customized header manually.
         // Axios will transfer header-name to lowercase!!!
@@ -181,7 +209,6 @@ public class MinioService {
                 .object(fileName).build();
         try (GetObjectResponse response = minioClient.getObject(objectArgs)) {
             // CORS, set Content-Length for axios
-            // 😄now, you can use this header-attribute to fill your progress-bar!
             res.setHeader(HttpHeaders.CONTENT_LENGTH, response.headers().get("Content-Length"));
             res.addHeader("File-Name", fileName);
             res.addHeader("File-Type", response.headers().get("Content-Type"));
@@ -194,7 +221,7 @@ public class MinioService {
             }
         } catch (Exception e) {
             log.error(">>>>>>>>|Minio#download异常: ", e);
-            throw new MinioException(e.getMessage());
+            throw new FileNotFoundException(e.getMessage());
         }
     }
 
@@ -204,51 +231,70 @@ public class MinioService {
      * <pre>
      * 1.getPresignedObjectUrl 方法不会直接抛出异常来指示文件不存在。
      *   如果调用该方法来获取预签名的对象 URL，且该对象不存在，它将返回一个指向不存在对象的 URL。
-     * 2.要在文件不存在时抛出异常而不是返回一个不存在的 URL，您可以使用 MinIO Java 客户端中的 statObject 方法来检查对象是否存在，然后再决定是否获取预签名的 URL。
-     *   statObject 方法将返回一个对象元数据（ObjectStat）或抛出一个 ErrorResponseException 异常，您可以基于此异常判断是否存在文件。
+     *
+     * 2.接口使用示例:
+     * {@code
+     *     @GetMapping("/preview")
+     *     public ResponseData<String> demo01() {
+     *         final ResponseProcessor<String> rp = new ResponseProcessor<>();
+     *         final String imgName = "img/txx.png";
+     *         BaseResponse<String> preview = minioService.preview(imgName);
+     *         if (!SystemRetCodeConstants.OP_SUCCESS.getCode().equals(preview.getCode())) {
+     *             return rp.setErrorMsg(preview.getCode(), preview.getMsg());
+     *         }
+     *         return rp.setData(preview.getResult());
+     *     }
+     * }
      * </pre>
      *
      * @param fileName 文件名
-     * @return 成功返回预览url, 失败返回空字符串
+     * @return BaseResponse with URL (文件不存在时、其他异常时将返回【系统繁忙】)
      */
-    public String preview(String fileName) throws MinioException {
-        // 查看文件地址
-        GetPresignedObjectUrlArgs previewArgs = GetPresignedObjectUrlArgs.builder()
-                .bucket(prop.getBucketName())
-                .object(fileName)
-                .expiry(30, TimeUnit.MINUTES)  // 30分钟失效，默认7天
-                .method(Method.GET)
-                .build();
-        StatObjectArgs fileStats = StatObjectArgs.builder()
-                .bucket(prop.getBucketName())
-                .object(fileName)
-                .build();
+    public BaseResponse<String> preview(String fileName) {
+        BaseResponse<String> response = new BaseResponse<>();
         try {
-            minioClient.statObject(fileStats);
-            return minioClient.getPresignedObjectUrl(previewArgs);
+            GetPresignedObjectUrlArgs previewArgs = GetPresignedObjectUrlArgs.builder()
+                    .bucket(prop.getBucketName())
+                    .object(fileName)
+                    .expiry(30, TimeUnit.MINUTES)  // 30分钟失效，缺省7天
+                    .method(Method.GET)
+                    .build();
+            response.fill(SystemRetCodeConstants.OP_SUCCESS);
+            response.setResult(minioClient.getPresignedObjectUrl(previewArgs));
         } catch (Exception e) {
             log.error(">>>>>>>>|Minio#preview异常, path:{}: ", Paths.get(prop.getBucketName(), fileName), e);
-            return StringUtils.EMPTY;
+            response.fill(SystemRetCodeConstants.SYSTEM_BUSINESS);
+            response.setResult(StringUtils.EMPTY);
         }
+        return response;
     }
 
     /**
      * 删除
+     * <pre>
+     * 1.removeObject删除时，在文件不存在不会抛出异常😊
+     * </pre>
      *
      * @param fileName 文件名
-     * @return 移除失败返回false
-     * @throws MinioException MinioException
+     * @return BaseResponse of Boolean
      */
-    public boolean remove(String fileName) throws MinioException {
+    public BaseResponse<Boolean> remove(String fileName) {
+        BaseResponse<Boolean> response = new BaseResponse<>();
         try {
-            minioClient.removeObject(RemoveObjectArgs.builder().bucket(prop.getBucketName()).object(fileName).build());
-            return true;
+            RemoveObjectArgs removeObjectArgs = RemoveObjectArgs.builder()
+                    .bucket(prop.getBucketName())
+                    .object(fileName)
+                    .build();
+            minioClient.removeObject(removeObjectArgs);
+            response.fill(SystemRetCodeConstants.OP_SUCCESS);
+            response.setResult(true);
         } catch (Exception e) {
             log.error(">>>>>>>>|Minio#remove异常: ", e);
-            throw new MinioException(e.getMessage());
+            response.fill(SystemRetCodeConstants.SYSTEM_BUSINESS);
+            response.setResult(false);
         }
+        return response;
     }
-
 }
 
 
