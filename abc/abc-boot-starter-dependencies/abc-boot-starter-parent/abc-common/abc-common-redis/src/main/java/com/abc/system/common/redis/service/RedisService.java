@@ -159,8 +159,30 @@ public class RedisService {
      * @return 操作后列表的长度
      */
     public <T> long setList(final String key, final List<T> dataList) {
-        Long count = redisTemplate.opsForList().rightPushAll(key, dataList);
-        return count != null ? count : 0;
+        if (dataList != null && !dataList.isEmpty()) {
+            Long count = redisTemplate.opsForList().rightPushAll(key, dataList);
+            return count != null ? count : 0;
+        }
+        return 0;
+    }
+
+    /**
+     * 缓存List数据
+     *
+     * @param key      缓存的键值
+     * @param dataList 待缓存的List数据
+     * @param duration 过期时间
+     * @return 操作后列表的长度
+     */
+    public <T> long setList(final String key, final List<T> dataList, final Duration duration) {
+        if (dataList != null && !dataList.isEmpty()) {
+            Long count = redisTemplate.opsForList().rightPushAll(key, dataList);
+            if (count != null && count != 0) {
+                expire(key, duration);
+            }
+            return count != null ? count : 0;
+        }
+        return 0;
     }
 
     /**
@@ -182,8 +204,29 @@ public class RedisService {
      */
     public <T> BoundSetOperations<String, T> setSet(final String key, final Set<T> dataSet) {
         BoundSetOperations<String, T> setOperation = redisTemplate.boundSetOps(key);
-        for (T t : dataSet) {
-            setOperation.add(t);
+        if (dataSet != null && !dataSet.isEmpty()) {
+            for (T t : dataSet) {
+                setOperation.add(t);
+            }
+        }
+        return setOperation;
+    }
+
+    /**
+     * 缓存Set
+     *
+     * @param key      缓存键值
+     * @param dataSet  缓存的数据
+     * @param duration 过期时间
+     * @return BoundSetOperations
+     */
+    public <T> BoundSetOperations<String, T> setSet(final String key, final Set<T> dataSet, final Duration duration) {
+        BoundSetOperations<String, T> setOperation = redisTemplate.boundSetOps(key);
+        if (dataSet != null && !dataSet.isEmpty()) {
+            for (T t : dataSet) {
+                setOperation.add(t);
+            }
+            expire(key, duration);
         }
         return setOperation;
     }
@@ -206,7 +249,7 @@ public class RedisService {
      * @param <T>     T
      */
     public <T> void setMap(final String key, final Map<String, T> dataMap) {
-        if (dataMap != null) {
+        if (dataMap != null && !dataMap.isEmpty()) {
             redisTemplate.opsForHash().putAll(key, dataMap);
         }
     }
@@ -219,7 +262,7 @@ public class RedisService {
      * @param <T>     T
      */
     public <T> void setMap(final String key, final Map<String, T> dataMap, final Duration duration) {
-        if (dataMap != null) {
+        if (dataMap != null && !dataMap.isEmpty()) {
             redisTemplate.opsForHash().putAll(key, dataMap);
             expire(key, duration);
         }
