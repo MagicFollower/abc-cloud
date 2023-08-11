@@ -22,6 +22,14 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(MinioConfig.class)
 public class MinioAutoConfiguration {
     private final MinioConfig minioConfig;
+
+    /**
+     * <pre>
+     * 移除指定警告：“必须在有效 Spring Bean 中定义自动装配成员(@Component|@Service|…)”
+     *   1.原因：该类已在com.abc.system.common.minio.config.MinioConfig中通过@Bean方式完成注入。
+     * </pre>
+     */
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     private final MinioClient minioClient;
 
     @Bean

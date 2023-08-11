@@ -38,13 +38,36 @@ public class MinioService {
      * @return List of Bucket
      * @throws MinioException MinioException
      */
-    public List<Bucket> getAllBuckets() throws MinioException {
+    public List<Bucket> listBuckets() throws MinioException {
         try {
             return minioClient.listBuckets();
         } catch (Exception e) {
             log.error("⚠️ Minio异常：{}", e.getMessage());
             throw new MinioException(e.getMessage());
         }
+    }
+
+    /**
+     * 获得所有对象
+     *
+     * @return 存储bucket内文件对象信息（Item列表，注意Item使用FluentBean模式）
+     * @throws MinioException MinioException
+     */
+    public List<Item> listObjects() throws MinioException {
+        Iterable<Result<Item>> results = minioClient.listObjects(
+                ListObjectsArgs.builder()
+                        .bucket(prop.getBucketName())
+                        .build());
+        List<Item> items = new ArrayList<>();
+        try {
+            for (Result<Item> result : results) {
+                items.add(result.get());
+            }
+        } catch (Exception e) {
+            log.error("⚠️ Minio获得所有对象异常：{}", e.getMessage());
+            throw new MinioException(e.getMessage());
+        }
+        return items;
     }
 
     /**
@@ -99,30 +122,6 @@ public class MinioService {
         }
         return true;
     }
-
-    /**
-     * 获得所有对象
-     *
-     * @return 存储bucket内文件对象信息（Item列表，注意Item使用FluentBean模式）
-     * @throws MinioException MinioException
-     */
-    public List<Item> listObjects() throws MinioException {
-        Iterable<Result<Item>> results = minioClient.listObjects(
-                ListObjectsArgs.builder()
-                        .bucket(prop.getBucketName())
-                        .build());
-        List<Item> items = new ArrayList<>();
-        try {
-            for (Result<Item> result : results) {
-                items.add(result.get());
-            }
-        } catch (Exception e) {
-            log.error("⚠️ Minio获得所有对象异常：{}", e.getMessage());
-            throw new MinioException(e.getMessage());
-        }
-        return items;
-    }
-
 
     /**
      * 文件上传
