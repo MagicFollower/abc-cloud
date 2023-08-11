@@ -8,18 +8,24 @@ import io.minio.messages.Bucket;
 import io.minio.messages.Item;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
- * MinioService
+ * Minio服务实例
+ * <pre>
+ * 1.该实例将自动被注入SpringIOC容器;
+ * 2.该实例接口将尽量与S3的接口名称保持一致。
+ * </pre>
  *
  * @Description MinioService 详细介绍
  * @Author Trivis
@@ -44,7 +50,7 @@ public class MinioService {
         try {
             return minioClient.listBuckets();
         } catch (Exception e) {
-            log.error("⚠️ Minio异常：{}", e.getMessage());
+            log.error(">>>>>>>>|Minio#listBuckets异常: ", e);
             throw new MinioException(e.getMessage());
         }
     }
@@ -66,7 +72,7 @@ public class MinioService {
                 items.add(result.get());
             }
         } catch (Exception e) {
-            log.error("⚠️ Minio获得所有对象异常：{}", e.getMessage());
+            log.error(">>>>>>>>|Minio#listObjects异常: ", e);
             throw new MinioException(e.getMessage());
         }
         return items;
@@ -83,7 +89,7 @@ public class MinioService {
         try {
             found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
         } catch (Exception e) {
-            log.error("⚠️ Minio异常：{}", e.getMessage());
+            log.error(">>>>>>>>|Minio#bucketExists异常: ", e);
             throw new MinioException(e.getMessage());
         }
         return found;
@@ -101,7 +107,7 @@ public class MinioService {
                     .bucket(bucketName)
                     .build());
         } catch (Exception e) {
-            log.error("⚠️ Minio异常：{}", e.getMessage());
+            log.error(">>>>>>>>|Minio#addBucket异常: ", e);
             throw new MinioException(e.getMessage());
         }
         return true;
@@ -119,7 +125,7 @@ public class MinioService {
                     .bucket(bucketName)
                     .build());
         } catch (Exception e) {
-            log.error("⚠️ Minio异常：{}", e.getMessage());
+            log.error(">>>>>>>>|Minio#removeBucket异常: ", e);
             throw new MinioException(e.getMessage());
         }
         return true;
@@ -139,7 +145,7 @@ public class MinioService {
     public String upload(MultipartFile file) throws MinioException {
         String originalFilename = file.getOriginalFilename();
         // hasText + hasLength
-        if (!StringUtils.hasLength(originalFilename)) {
+        if (StringUtils.isBlank(originalFilename)) {
             throw new RuntimeException("文件名为空!");
         }
         try {
@@ -152,7 +158,7 @@ public class MinioService {
             //文件名称相同会覆盖
             minioClient.putObject(objectArgs);
         } catch (Exception e) {
-            log.error("⚠️ Minio上传文件异常，请首先检查是否具有上传权限！" + e.getMessage());
+            log.error(">>>>>>>>|Minio#upload异常: ", e);
             throw new MinioException(e.getMessage());
         }
         // ok → 返回上传文件存储的名称
@@ -187,30 +193,42 @@ public class MinioService {
                 }
             }
         } catch (Exception e) {
-            log.error("⚠️ Minio文件下载异常，请检查文件是否存在！" + e.getMessage());
+            log.error(">>>>>>>>|Minio#download异常: ", e);
             throw new MinioException(e.getMessage());
         }
     }
 
     /**
-     * 预览文件
+     * 预览文件（获取预签名对象URL）
+     *
+     * <pre>
+     * 1.getPresignedObjectUrl 方法不会直接抛出异常来指示文件不存在。
+     *   如果调用该方法来获取预签名的对象 URL，且该对象不存在，它将返回一个指向不存在对象的 URL。
+     * 2.要在文件不存在时抛出异常而不是返回一个不存在的 URL，您可以使用 MinIO Java 客户端中的 statObject 方法来检查对象是否存在，然后再决定是否获取预签名的 URL。
+     *   statObject 方法将返回一个对象元数据（ObjectStat）或抛出一个 ErrorResponseException 异常，您可以基于此异常判断是否存在文件。
+     * </pre>
      *
      * @param fileName 文件名
-     * @return 成功返回预览url
-     * @throws MinioException MinioException
+     * @return 成功返回预览url, 失败返回空字符串
      */
     public String preview(String fileName) throws MinioException {
         // 查看文件地址
-        GetPresignedObjectUrlArgs build = GetPresignedObjectUrlArgs.builder()
+        GetPresignedObjectUrlArgs previewArgs = GetPresignedObjectUrlArgs.builder()
                 .bucket(prop.getBucketName())
                 .object(fileName)
+                .expiry(30, TimeUnit.MINUTES)  // 30分钟失效，默认7天
                 .method(Method.GET)
                 .build();
+        StatObjectArgs fileStats = StatObjectArgs.builder()
+                .bucket(prop.getBucketName())
+                .object(fileName)
+                .build();
         try {
-            return minioClient.getPresignedObjectUrl(build);
+            minioClient.statObject(fileStats);
+            return minioClient.getPresignedObjectUrl(previewArgs);
         } catch (Exception e) {
-            log.error("⚠️ Minio文件预览异常！" + e.getMessage());
-            throw new MinioException(e.getMessage());
+            log.error(">>>>>>>>|Minio#preview异常, path:{}: ", Paths.get(prop.getBucketName(), fileName), e);
+            return StringUtils.EMPTY;
         }
     }
 
@@ -226,7 +244,7 @@ public class MinioService {
             minioClient.removeObject(RemoveObjectArgs.builder().bucket(prop.getBucketName()).object(fileName).build());
             return true;
         } catch (Exception e) {
-            log.error("⚠️ Minio异常：{}", e.getMessage());
+            log.error(">>>>>>>>|Minio#remove异常: ", e);
             throw new MinioException(e.getMessage());
         }
     }
