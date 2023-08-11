@@ -85,34 +85,12 @@ public class RedisService {
     /**
      * 缓存基本的对象，Integer、String、实体类等
      *
-     * @param key            缓存的键值
-     * @param value          缓存的值
-     * @param timeoutSeconds 秒数
-     */
-    public <T> void set(final String key, final T value, final long timeoutSeconds) {
-        set(key, value, Duration.ofSeconds(timeoutSeconds));
-    }
-
-    /**
-     * 缓存基本的对象，Integer、String、实体类等
-     *
      * @param key      缓存的键值
      * @param value    缓存的值
      * @param duration 时间范围
      */
     public <T> void set(final String key, final T value, final Duration duration) {
         redisTemplate.opsForValue().set(key, value, duration);
-    }
-
-    /**
-     * 设置有效时间(单位秒)
-     *
-     * @param key            Redis键
-     * @param timeoutSeconds 超时时间
-     * @return true=设置成功；false=设置失败
-     */
-    public boolean expire(final String key, final long timeoutSeconds) {
-        return expire(key, Duration.ofSeconds(timeoutSeconds));
     }
 
     /**
