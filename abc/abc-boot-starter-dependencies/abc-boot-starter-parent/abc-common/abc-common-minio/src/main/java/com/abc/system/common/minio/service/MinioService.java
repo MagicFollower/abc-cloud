@@ -1,4 +1,4 @@
-package com.abc.system.common.minio.util;
+package com.abc.system.common.minio.service;
 
 import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.file.RemoteFileDownloadException;

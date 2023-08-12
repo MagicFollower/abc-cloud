@@ -1,6 +1,6 @@
 package com.abc.system.common.minio.config;
 
-import com.abc.system.common.minio.util.MinioService;
+import com.abc.system.common.minio.service.MinioService;
 import io.minio.MinioClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
