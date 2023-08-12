@@ -147,7 +147,7 @@ public class MinioService {
     }
 
     /* ======================================================= */
-    /* ======【存在检测】、【上传】、【下载】、【预览】、【删除】======== */
+    /* ======【存在检测】、【上传x2】、【下载】、【预览】、【删除】====== */
     /* ======================================================= */
 
     /**
@@ -167,6 +167,7 @@ public class MinioService {
             response.fill(SystemRetCodeConstants.OP_SUCCESS);
             response.setResult(true);
         } catch (Exception e) {
+            log.error(">>>>>>>>|objectExists|error|exception:{}|<<<<<<<<", e.getMessage());
             final String MSG = String.format("Minio#objectExists异常: [%s]",
                     Paths.get(prop.getBucketName(), fileName));
             response.fill(SystemRetCodeConstants.REMOTE_FILE_NOT_FOUND, MSG);
@@ -198,6 +199,7 @@ public class MinioService {
             minioClient.putObject(objectArgs);
             response.fill(SystemRetCodeConstants.OP_SUCCESS);
         } catch (Exception e) {
+            log.error(">>>>>>>>|upload|error|exception:{}|<<<<<<<<", e.getMessage());
             final String MSG = "Minio#objectExists异常";
             response.fill(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR, MSG);
         }
@@ -328,6 +330,7 @@ public class MinioService {
                 }
             }
         } catch (Exception e) {
+            log.error(">>>>>>>>|download|error|exception:{}|<<<<<<<<", e.getMessage());
             // Http请求状态500响应
             res.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             final String MSG = String.format("Minio#download异常: [%s]",
@@ -373,6 +376,7 @@ public class MinioService {
             response.fill(SystemRetCodeConstants.OP_SUCCESS);
             response.setResult(minioClient.getPresignedObjectUrl(previewArgs));
         } catch (Exception e) {
+            log.error(">>>>>>>>|preview|error|exception:{}|<<<<<<<<", e.getMessage());
             final String MSG = String.format("Minio#preview异常: [%s]", Paths.get(prop.getBucketName(), fileName));
             response.fill(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR, MSG);
             response.setResult(StringUtils.EMPTY);
@@ -400,6 +404,7 @@ public class MinioService {
             response.fill(SystemRetCodeConstants.OP_SUCCESS);
             response.setResult(true);
         } catch (Exception e) {
+            log.error(">>>>>>>>|remove|error|exception:{}|<<<<<<<<", e.getMessage());
             final String MSG = String.format("Minio#remove异常: [%s]",
                     Paths.get(prop.getBucketName(), fileName));
             response.fill(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR, MSG);
