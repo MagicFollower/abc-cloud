@@ -387,7 +387,7 @@ public class MinioService {
     /**
      * 删除
      * <pre>
-     * 1.removeObject删除时，在文件不存在不会抛出异常😊
+     * 1.removeObject删除时，在文件不存在不会抛出异常
      * </pre>
      *
      * @param fileName 文件名
