@@ -13,13 +13,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -53,7 +56,7 @@ public class MinioService {
         try {
             return minioClient.listBuckets();
         } catch (Exception e) {
-            log.error(">>>>>>>>|Minio#listBuckets异常: ", e);
+            log.error("❌❌Minio#listBuckets异常:", e);
             throw new MinioException(e.getMessage());
         }
     }
@@ -75,7 +78,7 @@ public class MinioService {
                 items.add(result.get());
             }
         } catch (Exception e) {
-            log.error(">>>>>>>>|Minio#listObjects异常: ", e);
+            log.error("❌❌Minio#listObjects异常:", e);
             throw new MinioException(e.getMessage());
         }
         return items;
@@ -92,7 +95,7 @@ public class MinioService {
         try {
             found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
         } catch (Exception e) {
-            log.error(">>>>>>>>|Minio#bucketExists异常: ", e);
+            log.error("❌❌Minio#bucketExists异常:", e);
             throw new MinioException(e.getMessage());
         }
         return found;
@@ -110,7 +113,7 @@ public class MinioService {
                     .bucket(bucketName)
                     .build());
         } catch (Exception e) {
-            log.error(">>>>>>>>|Minio#addBucket异常: ", e);
+            log.error("❌❌Minio#addBucket异常:", e);
             throw new MinioException(e.getMessage());
         }
         return true;
@@ -128,7 +131,7 @@ public class MinioService {
                     .bucket(bucketName)
                     .build());
         } catch (Exception e) {
-            log.error(">>>>>>>>|Minio#removeBucket异常: ", e);
+            log.error("❌❌Minio#removeBucket异常:", e);
             throw new MinioException(e.getMessage());
         }
         return true;
@@ -155,8 +158,9 @@ public class MinioService {
             response.fill(SystemRetCodeConstants.OP_SUCCESS);
             response.setResult(true);
         } catch (Exception e) {
-            log.error(">>>>>>>>|Minio#objectExists异常: ", e);
-            response.fill(SystemRetCodeConstants.REMOTE_FILE_NOT_FOUND);
+            final String MSG = String.format("❌❌Minio#objectExists异常: [%s]",
+                    Paths.get(prop.getBucketName(), fileName));
+            response.fill(SystemRetCodeConstants.REMOTE_FILE_NOT_FOUND, MSG);
             response.setResult(false);
         }
         return response;
@@ -169,11 +173,10 @@ public class MinioService {
      * </pre>
      *
      * @param multipartFile 文件
-     * @return String 成功/失败均返回文件名
-     * @throws MinioException MinioException
+     * @return String 成功/失败均返回上传文件Path
      */
-    public BaseResponse<String> upload(MultipartFile multipartFile) throws MinioException {
-        BaseResponse<String> response = new BaseResponse<>();
+    public BaseResponse<Path> upload(MultipartFile multipartFile) {
+        BaseResponse<Path> response = new BaseResponse<>();
         String originalFilename = StringUtils.EMPTY;
         try {
             originalFilename = multipartFile.getOriginalFilename();
@@ -186,19 +189,44 @@ public class MinioService {
             minioClient.putObject(objectArgs);
             response.fill(SystemRetCodeConstants.OP_SUCCESS);
         } catch (Exception e) {
-            log.error(">>>>>>>>|Minio#upload异常: ", e);
-            response.fill(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR);
+            final String MSG = "❌❌Minio#objectExists异常";
+            response.fill(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR, MSG);
         }
-        response.setResult(originalFilename);
+        response.setResult(Paths.get(prop.getBucketName(), originalFilename));
         return response;
     }
 
     /**
      * 文件下载，直接将数据流写入response
      * <pre>
-     * 1.异常将交由调用方Service/Controller进行处理与控制。
-     *   -> 如果在Controller层调用，可以直接手动拦截或使用全局异常拦截抛出【系统繁忙】并记录日志；
-     *   -> 如果在Service层调用，直接将错误信息原封不动向上抛出至Controller。
+     * 1.文件不存在会抛出异常:io.minio.errors.ErrorResponseException: The specified key does not exist.
+     * 2.关于下载接口的使用示例 x2
+     *   -> 你需要提前使用全局异常拦截器或手动包装异常响应给Client（用户不可见详细错误，他们只能看到"系统繁忙"，详细错误可以通过日志暴露给开发者）
+     *   -> download接口已将HttpStatus设置为500在异常的情况下，前端仅需要根据HttpStatus决定是否下载/提示错误信息。
+     * 2.1 使用全局异常拦截✨
+     * {@code
+     *     @GetMapping("/download")
+     *     public void demo02(HttpServletResponse response) {
+     *         final ResponseProcessor<String> rp = new ResponseProcessor<>();
+     *         final String imgName = "img/X.png";
+     *         minioService.download(imgName, response);
+     *     }
+     * }
+     * 2.2 手动抛出异常✨
+     * {@code
+     *     @GetMapping("/download")
+     *     public ResponseData<String> demo02(HttpServletResponse response) {
+     *         final ResponseProcessor<String> rp = new ResponseProcessor<>();
+     *         final String imgName = "img/Z.png";
+     *         try {
+     *             minioService.download(imgName, response);
+     *             return null;
+     *         } catch (RemoteFileDownloadException e) {
+     *             log.error(">>>>>>>>|{}:{}|<<<<<<<<", e.getErrorCode(), e.getMessage());
+     *             return new ResponseProcessor<String>().setErrorMsg(SystemRetCodeConstants.SYSTEM_BUSINESS);
+     *         }
+     *     }
+     * }
      * </pre>
      *
      * @param fileName 文件名称
@@ -206,17 +234,21 @@ public class MinioService {
      * @throws RemoteFileDownloadException 远程文件下载异常
      */
     public void download(String fileName, HttpServletResponse res) throws RemoteFileDownloadException {
-        res.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        final String FILE_NAME_HTTP_HEADER = "File-Name";
+        final String FILE_TYPE_HTTP_HEADER = "File-Type";
         // CORS not allow customized headers, you must export every customized header manually.
         // Axios will transfer header-name to lowercase!!!
         res.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "File-Name,File-Type");
         GetObjectArgs objectArgs = GetObjectArgs.builder().bucket(prop.getBucketName())
                 .object(fileName).build();
         try (GetObjectResponse response = minioClient.getObject(objectArgs)) {
-            // CORS, set Content-Length for axios
+            // Set Content-Length for Axios!
             res.setHeader(HttpHeaders.CONTENT_LENGTH, response.headers().get("Content-Length"));
-            res.addHeader("File-Name", fileName);
-            res.addHeader("File-Type", response.headers().get("Content-Type"));
+            final String fileNameInResponseHeader = fileName.substring(fileName.lastIndexOf("/") + 1);
+            res.addHeader(FILE_NAME_HTTP_HEADER,
+                    new String(Base64.getEncoder().encode(fileNameInResponseHeader.getBytes(StandardCharsets.UTF_8))));
+            res.addHeader(FILE_TYPE_HTTP_HEADER,
+                    response.headers().get("Content-Type"));
             final byte[] buf = new byte[1024 * 5];
             int len;
             try (ServletOutputStream stream = res.getOutputStream()) {
@@ -225,8 +257,11 @@ public class MinioService {
                 }
             }
         } catch (Exception e) {
-            log.error(">>>>>>>>|Minio#download异常: ", e);
-            throw new RemoteFileDownloadException(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR);
+            // Http请求状态500响应
+            res.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            final String MSG = String.format("❌❌Minio#download异常: [%s]",
+                    Paths.get(prop.getBucketName(), fileName));
+            throw new RemoteFileDownloadException(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR.getCode(), MSG);
         }
     }
 
@@ -267,8 +302,8 @@ public class MinioService {
             response.fill(SystemRetCodeConstants.OP_SUCCESS);
             response.setResult(minioClient.getPresignedObjectUrl(previewArgs));
         } catch (Exception e) {
-            log.error(">>>>>>>>|Minio#preview异常, path:{}: ", Paths.get(prop.getBucketName(), fileName), e);
-            response.fill(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR);
+            final String MSG = String.format("❌❌Minio#preview异常: [%s]", Paths.get(prop.getBucketName(), fileName));
+            response.fill(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR, MSG);
             response.setResult(StringUtils.EMPTY);
         }
         return response;
@@ -294,8 +329,9 @@ public class MinioService {
             response.fill(SystemRetCodeConstants.OP_SUCCESS);
             response.setResult(true);
         } catch (Exception e) {
-            log.error(">>>>>>>>|Minio#remove异常: ", e);
-            response.fill(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR);
+            final String MSG = String.format("❌❌Minio#remove异常: [%s]",
+                    Paths.get(prop.getBucketName(), fileName));
+            response.fill(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR, MSG);
             response.setResult(false);
         }
         return response;
