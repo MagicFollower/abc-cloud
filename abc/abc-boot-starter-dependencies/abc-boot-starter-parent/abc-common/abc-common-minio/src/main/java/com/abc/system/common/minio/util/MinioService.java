@@ -3,6 +3,7 @@ package com.abc.system.common.minio.util;
 import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.file.RemoteFileDownloadException;
 import com.abc.system.common.minio.config.MinioConfig;
+import com.abc.system.common.minio.constant.ImageTypeMimeEnum;
 import com.abc.system.common.response.BaseResponse;
 import io.minio.*;
 import io.minio.errors.MinioException;
@@ -18,8 +19,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -31,6 +34,10 @@ import java.util.concurrent.TimeUnit;
  * <pre>
  * 1.该实例将自动被注入SpringIOC容器;
  * 2.该实例接口将尽量与S3的接口名称保持一致。
+ *
+ * 关于异常：
+ * 1.MINIO服务下线时，接口调用会抛出异常；
+ * 2.MINIO服务时间和客户端时间差异过大时，会抛出异常；
  * </pre>
  *
  * @Description MinioService 详细介绍
@@ -41,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @RequiredArgsConstructor
 public class MinioService {
+    private static final String[] SUPPORTED_IMAGE_SUFFIX = new String[]{".jpg", ".jpeg", ".png", ".gif"};
+
     private final MinioConfig prop;
 
     // https://min.io/docs/minio/linux/developers/java/API.html
@@ -56,7 +65,7 @@ public class MinioService {
         try {
             return minioClient.listBuckets();
         } catch (Exception e) {
-            log.error("❌❌Minio#listBuckets异常:", e);
+            log.error("Minio#listBuckets异常:", e);
             throw new MinioException(e.getMessage());
         }
     }
@@ -78,7 +87,7 @@ public class MinioService {
                 items.add(result.get());
             }
         } catch (Exception e) {
-            log.error("❌❌Minio#listObjects异常:", e);
+            log.error("Minio#listObjects异常:", e);
             throw new MinioException(e.getMessage());
         }
         return items;
@@ -95,7 +104,7 @@ public class MinioService {
         try {
             found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
         } catch (Exception e) {
-            log.error("❌❌Minio#bucketExists异常:", e);
+            log.error("Minio#bucketExists异常:", e);
             throw new MinioException(e.getMessage());
         }
         return found;
@@ -113,7 +122,7 @@ public class MinioService {
                     .bucket(bucketName)
                     .build());
         } catch (Exception e) {
-            log.error("❌❌Minio#addBucket异常:", e);
+            log.error("Minio#addBucket异常:", e);
             throw new MinioException(e.getMessage());
         }
         return true;
@@ -131,7 +140,7 @@ public class MinioService {
                     .bucket(bucketName)
                     .build());
         } catch (Exception e) {
-            log.error("❌❌Minio#removeBucket异常:", e);
+            log.error("Minio#removeBucket异常:", e);
             throw new MinioException(e.getMessage());
         }
         return true;
@@ -158,7 +167,7 @@ public class MinioService {
             response.fill(SystemRetCodeConstants.OP_SUCCESS);
             response.setResult(true);
         } catch (Exception e) {
-            final String MSG = String.format("❌❌Minio#objectExists异常: [%s]",
+            final String MSG = String.format("Minio#objectExists异常: [%s]",
                     Paths.get(prop.getBucketName(), fileName));
             response.fill(SystemRetCodeConstants.REMOTE_FILE_NOT_FOUND, MSG);
             response.setResult(false);
@@ -167,7 +176,7 @@ public class MinioService {
     }
 
     /**
-     * 文件上传
+     * 文件上传（MultiPart）
      * <pre>
      * 1.文件名称相同会覆盖
      * </pre>
@@ -175,7 +184,7 @@ public class MinioService {
      * @param multipartFile 文件
      * @return String 成功/失败均返回上传文件Path
      */
-    public BaseResponse<Path> upload(MultipartFile multipartFile) {
+    public BaseResponse<Path> upload(@lombok.NonNull MultipartFile multipartFile) {
         BaseResponse<Path> response = new BaseResponse<>();
         String originalFilename = StringUtils.EMPTY;
         try {
@@ -189,10 +198,72 @@ public class MinioService {
             minioClient.putObject(objectArgs);
             response.fill(SystemRetCodeConstants.OP_SUCCESS);
         } catch (Exception e) {
-            final String MSG = "❌❌Minio#objectExists异常";
+            final String MSG = "Minio#objectExists异常";
             response.fill(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR, MSG);
         }
         response.setResult(Paths.get(prop.getBucketName(), originalFilename));
+        return response;
+    }
+
+    /**
+     * 文件上传(File)
+     * <pre>
+     * 1.文件名称相同时，上传正常，文件会覆盖；
+     * 2.file=null: 参数file使用lombok#NonNull进行空参检测，抛出NPE，建议您手动处理该NPE或使用全局异常拦截；
+     * 3.file不存在： 不会抛出异常，获得非成功响应
+     *   3.1 这种场景不应该存在，提供当前API有两个目的：其一为解析参数中的图片base64字符串，其二上传File类型图片，后者你需要手动检测File的存在。
+     *
+     * 使用示例✨
+     * {@code
+     *    @GetMapping("/upload")
+     *    public ResponseData<String> demo04() {
+     *        final ResponseProcessor<String> rp = new ResponseProcessor<>();
+     *        File file = new File("C:\\Users\\xpc\\Pictures\\20230729\\wallhaven-pkpk-.jpg");
+     *        if (file.exists()) {
+     *            BaseResponse<String> uploadImageFileRes = minioService.uploadImageFile(file);
+     *            if (!SystemRetCodeConstants.OP_SUCCESS.getCode().equals(uploadImageFileRes.getCode())) {
+     *                log.error(">>>>>>>>|{}:{}|<<<<<<<<", uploadImageFileRes.getCode(), uploadImageFileRes.getMsg());
+     *                return rp.setErrorMsg(SystemRetCodeConstants.SYSTEM_BUSINESS);
+     *            }
+     *            return rp.setData(uploadImageFileRes.getResult());
+     *        } else {
+     *            return rp.setErrorMsg(SystemRetCodeConstants.SYSTEM_BUSINESS);
+     *        }
+     *    }
+     * }
+     * </pre>
+     *
+     * @param file 文件
+     * @return String 成功/失败均返回上传文件在文件服务器中PathString，文件不存在时则返回文件名PathString
+     */
+    public BaseResponse<String> uploadImageFile(@lombok.NonNull File file) {
+        BaseResponse<String> response = new BaseResponse<>();
+        String originalFilename = file.getName();
+        // 1.文件类型检测（suffix）
+        if (!StringUtils.endsWithAny(originalFilename, SUPPORTED_IMAGE_SUFFIX)) {
+            final String MSG = "Minio#uploadImageFile异常: 文件格式不支持";
+            response.fill(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR, MSG);
+            response.setResult(Paths.get(originalFilename).toString());
+            return response;
+        }
+        final String imageSuffixType = originalFilename
+                .substring(originalFilename.lastIndexOf(".") + 1);
+        // 2.上传
+        try {
+            PutObjectArgs objectArgs = PutObjectArgs.builder()
+                    .bucket(prop.getBucketName())
+                    .object(originalFilename)
+                    .stream(Files.newInputStream(file.toPath()), file.length(), -1)
+                    .contentType(ImageTypeMimeEnum.getMimeByType(imageSuffixType))
+                    .build();
+            minioClient.putObject(objectArgs);
+            response.fill(SystemRetCodeConstants.OP_SUCCESS);
+        } catch (Exception e) {
+            log.error(">>>>>>>>|uploadImageFile|error|exception:{}|<<<<<<<<", e.getMessage());
+            final String MSG = "Minio#uploadImageFile异常";
+            response.fill(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR, MSG);
+        }
+        response.setResult(Paths.get(prop.getBucketName(), originalFilename).toString());
         return response;
     }
 
@@ -259,7 +330,7 @@ public class MinioService {
         } catch (Exception e) {
             // Http请求状态500响应
             res.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            final String MSG = String.format("❌❌Minio#download异常: [%s]",
+            final String MSG = String.format("Minio#download异常: [%s]",
                     Paths.get(prop.getBucketName(), fileName));
             throw new RemoteFileDownloadException(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR.getCode(), MSG);
         }
@@ -302,7 +373,7 @@ public class MinioService {
             response.fill(SystemRetCodeConstants.OP_SUCCESS);
             response.setResult(minioClient.getPresignedObjectUrl(previewArgs));
         } catch (Exception e) {
-            final String MSG = String.format("❌❌Minio#preview异常: [%s]", Paths.get(prop.getBucketName(), fileName));
+            final String MSG = String.format("Minio#preview异常: [%s]", Paths.get(prop.getBucketName(), fileName));
             response.fill(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR, MSG);
             response.setResult(StringUtils.EMPTY);
         }
@@ -329,7 +400,7 @@ public class MinioService {
             response.fill(SystemRetCodeConstants.OP_SUCCESS);
             response.setResult(true);
         } catch (Exception e) {
-            final String MSG = String.format("❌❌Minio#remove异常: [%s]",
+            final String MSG = String.format("Minio#remove异常: [%s]",
                     Paths.get(prop.getBucketName(), fileName));
             response.fill(SystemRetCodeConstants.REMOTE_FILE_SERVICE_ERROR, MSG);
             response.setResult(false);
