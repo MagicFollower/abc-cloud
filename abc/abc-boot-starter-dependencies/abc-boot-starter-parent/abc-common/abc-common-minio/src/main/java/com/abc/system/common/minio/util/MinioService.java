@@ -18,11 +18,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -242,11 +242,11 @@ public class MinioService {
         GetObjectArgs objectArgs = GetObjectArgs.builder().bucket(prop.getBucketName())
                 .object(fileName).build();
         try (GetObjectResponse response = minioClient.getObject(objectArgs)) {
-            // Set Content-Length for Axios!
+            // Set Content-Length manually for Axios!
             res.setHeader(HttpHeaders.CONTENT_LENGTH, response.headers().get("Content-Length"));
             final String fileNameInResponseHeader = fileName.substring(fileName.lastIndexOf("/") + 1);
             res.addHeader(FILE_NAME_HTTP_HEADER,
-                    new String(Base64.getEncoder().encode(fileNameInResponseHeader.getBytes(StandardCharsets.UTF_8))));
+                    URLEncoder.encode(fileNameInResponseHeader, StandardCharsets.UTF_8.name()));
             res.addHeader(FILE_TYPE_HTTP_HEADER,
                     response.headers().get("Content-Type"));
             final byte[] buf = new byte[1024 * 5];
