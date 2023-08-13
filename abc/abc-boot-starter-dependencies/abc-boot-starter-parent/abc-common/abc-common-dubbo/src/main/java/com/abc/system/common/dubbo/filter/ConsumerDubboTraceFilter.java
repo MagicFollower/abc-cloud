@@ -34,20 +34,22 @@ public class ConsumerDubboTraceFilter implements Filter {
      * 处理traceId
      */
     private void processTraceId() {
-        RpcServiceContext rpcContext = RpcContext.getServiceContext();
+        final RpcServiceContext rpcContext = RpcContext.getServiceContext();
         // 从RPC上下文中取得traceId
         String traceId = rpcContext.getAttachment(RpcConstants.RPC_TRACE_ID);
-        if (StringUtils.isNotEmpty(traceId)) {
-            // 将traceId并保存至当前线程
-            DubboTraceThreadLocal.setTraceId(traceId);
-            log.debug(">>>>>>>>>>> dubbo Consumer Context Filter|get rpc context|traceId:{} <<<<<<<<<<<", traceId);
-        } else {
-            // 从当前线程获取traceId，存入rpcContext
-            traceId = DubboTraceThreadLocal.getTraceId();
-            rpcContext.setAttachment(RpcConstants.RPC_TRACE_ID, traceId);
-            log.debug(">>>>>>>>>>> dubbo Consumer Context Filter|get traceId from thread local|" +
-                    "traceId:{} <<<<<<<<<<<", traceId);
-        }
+
+        /* 解决DubboContext中属性异常丢失问题，不再使用 */
+        //if (StringUtils.isNotEmpty(traceId)) {
+        //    // 将traceId并保存至当前线程
+        //    DubboTraceThreadLocal.setTraceId(traceId);
+        //    log.debug(">>>>>>>>|dubbo Consumer Context Filter|get rpc context|traceId:{}|<<<<<<<<", traceId);
+        //} else {
+        //    // 从当前线程获取traceId，存入rpcContext
+        //    traceId = DubboTraceThreadLocal.getTraceId();
+        //    rpcContext.setAttachment(RpcConstants.RPC_TRACE_ID, traceId);
+        //    log.debug(">>>>>>>>|dubbo Consumer Context Filter|get traceId from thread local|" +
+        //            "traceId:{}|<<<<<<<<", traceId);
+        //}
 
         // slf4j 中设置了日志打印格式用作日志链路追踪
         //     ➡️建议在启动类中指定: System.setProperty("dubbo.application.logger","slf4j");
@@ -58,17 +60,17 @@ public class ConsumerDubboTraceFilter implements Filter {
      * 处理euid
      */
     private void processEuid() {
-        RpcServiceContext rpcContext = RpcContext.getServiceContext();
-        String euid = rpcContext.getAttachment(SessionConstants.EUID);
-        if (StringUtils.isNotEmpty(euid)) {
-            // 从RpcContext中获取euid并保存
-            DubboThreadLocal.setEuid(euid);
-            log.debug(">>>>>>>>>>> Dubbo Consumer Context Filter|get rpc context|euid:{} <<<<<<<<<<<", euid);
-        } else {
-            // 从当前线程获取euid，存入rpcContext
-            euid = DubboThreadLocal.getEuid();
-            rpcContext.setAttachment(SessionConstants.EUID, euid);
-            log.debug(">>>>>>>>>>> Dubbo Consumer Context Filter|get euid from thread local|euid:{} <<<<<<<<<<<", euid);
-        }
+        //RpcServiceContext rpcContext = RpcContext.getServiceContext();
+        //String euid = rpcContext.getAttachment(SessionConstants.EUID);
+        //if (StringUtils.isNotEmpty(euid)) {
+        //    // 从RpcContext中获取euid并保存
+        //    DubboThreadLocal.setEuid(euid);
+        //    log.debug(">>>>>>>>|Dubbo Consumer Context Filter|get rpc context|euid:{}|<<<<<<<<", euid);
+        //} else {
+        //    // 从当前线程获取euid，存入rpcContext
+        //    euid = DubboThreadLocal.getEuid();
+        //    rpcContext.setAttachment(SessionConstants.EUID, euid);
+        //    log.debug(">>>>>>>>|Dubbo Consumer Context Filter|get euid from thread local|euid:{}|<<<<<<<<", euid);
+        //}
     }
 }

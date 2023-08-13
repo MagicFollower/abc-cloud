@@ -28,10 +28,12 @@ public class ProviderDubboTraceIdFilter implements Filter {
 
         // 从RPC上下文中取得traceId
         //     ➡️请使用RpcContext.getServiceContext()替换RpcContext.getContext()
-        String traceId = RpcContext.getServiceContext().getAttachment(RpcConstants.RPC_TRACE_ID);
+        final RpcServiceContext rpcServiceContext = RpcContext.getServiceContext();
+        String traceId = rpcServiceContext.getAttachment(RpcConstants.RPC_TRACE_ID);
         // traceId为空则重新生成，并重新设置到RPC上下文中
         if (StringUtils.isEmpty(traceId)) {
             traceId = SpringHelper.getBean(RpcLogTraceHelper.class).getTraceId();
+            rpcServiceContext.setAttachment(RpcConstants.RPC_TRACE_ID, traceId);
         }
 
         // slf4j 中设置了日志打印格式用作日志链路追踪
