@@ -21,6 +21,12 @@
     </properties>
 
     <dependencies>
+        <!-- spring-security-core: SHA512DigestUtils.java -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+        </dependency>
+
         <!-- jsonwebtoken:jjwt-impl -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
