@@ -1,13 +1,14 @@
 package com.abc.system.common.dubbo.local;
 
 /**
- * A
+ * RPC-TRACE本地线程缓存类
  *
- * @Description A 详细介绍
+ * @Description RPC-TRACE本地线程缓存类
  * @Author Trivis
  * @Date 2023/5/13 21:48
  * @Version 1.0
  */
+@Deprecated
 public class DubboTraceThreadLocal {
 
     /**
