@@ -8,7 +8,9 @@
 
 #### 消费者、生产者过滤器
 
-- traceId生成 + ThreadLocal线程内缓存
+ ![java-dubbo-两个过滤器的设计思路](https://github.com/MagicFollower/abc-cloud/blob/main/abc/abc-boot-starter-dependencies/abc-boot-starter-parent/abc-common/abc-common-dubbo/doc/img.png)
+
+- traceId生成、放入RPCContext
 
 > /resources/META-INF/dubbo/com.alibaba.dubbo.rpc.Filter
 >
