@@ -66,7 +66,7 @@ public class BarCodeUtils {
 
 
     /**
-     * 根据content生成条形码
+     * 根据content生成条形码（包含prefix）
      *
      * @param content 条形码内容
      * @param width   图片宽度

@@ -75,7 +75,7 @@ public class QRCodeUtils {
     }
 
     /**
-     * 将生成的二维码转换为前端页面展示的base64
+     * 将生成的二维码转换为前端页面展示的base64（包含prefix）
      *
      * @param content 二维码内容
      * @param width   二维码宽度
@@ -83,7 +83,7 @@ public class QRCodeUtils {
      * @return 前端src直接使用的Base64字符串
      * @throws BizException 校验异常
      */
-    public static String createQRCodeString(String content, int width, int height) throws BizException {
+    public static String createQRCode(String content, int width, int height) throws BizException {
         Map<EncodeHintType, Object> hints = getHintTypeObjectMap();
         BitMatrix bitMatrix = null;
         try {
