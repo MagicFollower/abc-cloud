@@ -24,7 +24,7 @@ import java.util.Objects;
 
 /**
  * JWT生成与解析工具
- *   -> io.jsonwebtoken
+ * -> io.jsonwebtoken
  *
  * @Description <pre>
  * JWT生成与解析工具(jsonwebtoken:jjwt-impl)
@@ -42,6 +42,10 @@ import java.util.Objects;
 @Slf4j
 public class JWTHelper {
 
+    public static String generateJWT(String content) {
+        return generateJWT(content, null);
+    }
+
     /**
      * 获取JWT字符串
      *
@@ -57,8 +61,8 @@ public class JWTHelper {
         return generateJWT(encryptedContent, issuer, currentSystemName);
     }
 
-    public static String generateJWT(String content) {
-        return generateJWT(content, null);
+    public static boolean validateJWT(String jwt) {
+        return validateJWT(jwt, null);
     }
 
     /**
@@ -81,8 +85,8 @@ public class JWTHelper {
         return valid;
     }
 
-    public static boolean validateJWT(String jwt) {
-        return validateJWT(jwt, null);
+    public static String parseUserInfo(String jwt) {
+        return parseUserInfo(jwt, null);
     }
 
     /**
@@ -95,10 +99,6 @@ public class JWTHelper {
      */
     public static String parseUserInfo(String jwt, String currentSystemName) {
         return parseJWT(jwt, currentSystemName).get("user").toString();
-    }
-
-    public static String parseUserInfo(String jwt) {
-        return parseUserInfo(jwt, null);
     }
 
     /*🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎*/
@@ -120,7 +120,7 @@ public class JWTHelper {
                     .build()
                     .parseClaimsJws(jwt)
                     .getBody();
-        }catch (ExpiredJwtException eje) {
+        } catch (ExpiredJwtException eje) {
             log.error(">>>>>>>>|JWT过期|e:{}|<<<<<<<<", eje.getMessage());
             throw new JWTException(SystemRetCodeConstants.JWT_EXPIRED);
         } catch (Exception e) {

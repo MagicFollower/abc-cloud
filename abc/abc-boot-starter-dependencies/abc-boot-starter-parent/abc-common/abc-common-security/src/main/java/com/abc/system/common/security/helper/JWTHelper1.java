@@ -20,7 +20,7 @@ import java.util.Map;
 
 /**
  * JWTHelper1
- *   -> icom.auth0.jwt
+ * -> icom.auth0.jwt
  *
  * @Description <pre>
  * JWT生成与解析工具(auth0:jav-jwt)
@@ -38,6 +38,10 @@ import java.util.Map;
 @Slf4j
 public class JWTHelper1 {
 
+    public static String generateJWT(String content) {
+        return generateJWT(content, null);
+    }
+
     /**
      * 获取JWT字符串
      *
@@ -53,8 +57,8 @@ public class JWTHelper1 {
         return generateJWT(encryptedContent, issuer, currentSystemName);
     }
 
-    public static String generateJWT(String content) {
-        return generateJWT(content, null);
+    public static boolean validateJWT(String jwt) {
+        return validateJWT(jwt, null);
     }
 
     /**
@@ -77,8 +81,8 @@ public class JWTHelper1 {
         return valid;
     }
 
-    public static boolean validateJWT(String jwt) {
-        return validateJWT(jwt, null);
+    public static String parseUserInfo(String jwt) {
+        return parseUserInfo(jwt, null);
     }
 
     /**
@@ -91,10 +95,6 @@ public class JWTHelper1 {
      */
     public static String parseUserInfo(String jwt, String currentSystemName) {
         return parseJWT(jwt, currentSystemName).get("user").asString();
-    }
-
-    public static String parseUserInfo(String jwt) {
-        return parseUserInfo(jwt, null);
     }
 
     /*🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎*/
