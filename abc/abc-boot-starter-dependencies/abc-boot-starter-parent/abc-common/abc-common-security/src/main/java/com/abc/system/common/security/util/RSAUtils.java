@@ -80,6 +80,13 @@ public class RSAUtils {
         return new String(Base64.getEncoder().encode(key.getEncoded()), StandardCharsets.UTF_8);
     }
 
+    public static String encrypt(String str, String publicKey) throws Exception {
+        return encrypt(str, publicKey, null);
+    }
+
+    public static String decrypt(String str, String privateKey) throws Exception {
+        return decrypt(str, privateKey, null);
+    }
 
     /**
      * 公钥加密
