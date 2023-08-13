@@ -2,7 +2,7 @@
 
 <configuration scan="true" scanPeriod="10 seconds">
     <!--日志文件主目录：这里${user.home}为当前服务器用户主目录-->
-    <property name="LOG_PATH" value="${user.home}/logs/abc-fastlink-business-portal"/>
+    <property name="LOG_PATH" value="${user.home}/logs/abc-fastlink-business-goods"/>
     <property name="MODULE_NAME" value="test模块名"/>
     <!-- ERROR级别日志 -->
     <!-- 滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件 RollingFileAppender-->
