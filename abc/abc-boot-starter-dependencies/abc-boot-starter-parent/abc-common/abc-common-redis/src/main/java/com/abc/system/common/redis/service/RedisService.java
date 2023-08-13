@@ -73,6 +73,26 @@ public class RedisService {
     }
 
     /**
+     * 判断 key是否存在
+     *
+     * @param key 键
+     * @return true 存在 false不存在
+     */
+    public boolean hasKey(String key) {
+        return Boolean.TRUE.equals(redisTemplate.hasKey(key));
+    }
+
+    /**
+     * 获得缓存的基本对象列表
+     *
+     * @param pattern 字符串模式（aaa*、*aaa、*aaa*）
+     * @return 对象列表
+     */
+    public Collection<String> keys(final String pattern) {
+        return redisTemplate.keys(pattern);
+    }
+
+    /**
      * 缓存基本的对象，Integer、String、实体类等
      *
      * @param key   缓存的键值
@@ -100,7 +120,7 @@ public class RedisService {
      * @param duration 时间范围
      * @return true=设置成功；false=设置失败
      */
-    public boolean expire(final String key, final Duration duration) {
+    public boolean setExpire(final String key, final Duration duration) {
         return Boolean.TRUE.equals(redisTemplate.expire(key, duration));
     }
 
@@ -178,7 +198,7 @@ public class RedisService {
         if (dataList != null && !dataList.isEmpty()) {
             Long count = redisTemplate.opsForList().rightPushAll(key, dataList);
             if (count != null && count != 0) {
-                expire(key, duration);
+                setExpire(key, duration);
             }
             return count != null ? count : 0;
         }
@@ -226,7 +246,7 @@ public class RedisService {
             for (T t : dataSet) {
                 setOperation.add(t);
             }
-            expire(key, duration);
+            setExpire(key, duration);
         }
         return setOperation;
     }
@@ -264,7 +284,7 @@ public class RedisService {
     public <T> void setMap(final String key, final Map<String, T> dataMap, final Duration duration) {
         if (dataMap != null && !dataMap.isEmpty()) {
             redisTemplate.opsForHash().putAll(key, dataMap);
-            expire(key, duration);
+            setExpire(key, duration);
         }
     }
 
@@ -321,26 +341,6 @@ public class RedisService {
      */
     public boolean deleteMapValue(final String key, final String hKey) {
         return redisTemplate.opsForHash().delete(key, hKey) > 0;
-    }
-
-    /**
-     * 判断 key是否存在
-     *
-     * @param key 键
-     * @return true 存在 false不存在
-     */
-    public boolean hasKey(String key) {
-        return Boolean.TRUE.equals(redisTemplate.hasKey(key));
-    }
-
-    /**
-     * 获得缓存的基本对象列表
-     *
-     * @param pattern 字符串模式（aaa*、*aaa、*aaa*）
-     * @return 对象列表
-     */
-    public Collection<String> keys(final String pattern) {
-        return redisTemplate.keys(pattern);
     }
 }
 
