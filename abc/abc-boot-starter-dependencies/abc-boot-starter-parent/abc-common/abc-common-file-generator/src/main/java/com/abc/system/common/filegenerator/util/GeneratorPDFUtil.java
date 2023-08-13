@@ -9,42 +9,61 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.FastByteArrayOutputStream;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
+import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
 
 /**
- * 生成文件工具类
+ * 生成PDF工具类
  *
- * @Description 生成文件工具类
+ * @Description 生成PDF工具类
  * @Author Trivis
  * @Date 2023/5/10 20:09
  * @Version 1.0
  */
 @Slf4j
-public class GeneratorFileUtils {
+public class GeneratorPDFUtil {
 
-    private GeneratorFileUtils() {
+    private GeneratorPDFUtil() {
+
     }
 
     /**
-     * 导出Excel文件
+     * 通过模板导出pdf文件
      *
-     * @param exportFileRequest 文件导出参数实体
-     * @return OutputStream 文件输出流（OutputStream → FastByteArrayOutputStream）
+     * @param exportFileRequest ExportFileRequest
+     * @return OutputStream
      */
-    public static OutputStream createFile(ExportFileRequest exportFileRequest) {
+    public static OutputStream createPDF(ExportFileRequest exportFileRequest) {
+        // 获取FreeMarker实例
         Configuration configuration = SpringHelper.getBean(Configuration.class);
+
+        // 获取Freemarker配置信息
         FreemarkerProperties freemarkerProperties = SpringHelper.getBean(FreemarkerProperties.class);
-        try (OutputStream out = new FastByteArrayOutputStream();) {
-            // 获取模板、填充数据
-            Template template = configuration.getTemplate(exportFileRequest.getTemplateFile(), freemarkerProperties.getTemplateCharset());
+        try (OutputStream out = new ByteArrayOutputStream()) {
+            // 获取模板文件
+            Template template = configuration.getTemplate(exportFileRequest.getTemplateFile(),
+                    freemarkerProperties.getTemplateCharset());
             StringWriter writer = new StringWriter();
+            // 将数据输出到html中
             template.process(exportFileRequest.getData(), writer);
             writer.flush();
-            out.write(writer.toString().getBytes(freemarkerProperties.getTemplateCharset()));
+
+            String html = writer.toString();
+            ITextRenderer renderer = SpringHelper.getBean(ITextRenderer.class);
+            // 把html代码传入渲染器中
+            renderer.setDocumentFromString(html);
+            // 解决图片相对路径的问题
+            renderer.getSharedContext()
+                    .setBaseURL(freemarkerProperties.getTemplatePath() + freemarkerProperties.getStaticSourcePath());
+            renderer.layout();
+            // 创建PDF流
+            renderer.createPDF(out, false);
+            renderer.finishPDF();
             out.flush();
+
             return out;
         } catch (TemplateNotFoundException e) {
             // 加载模板失败

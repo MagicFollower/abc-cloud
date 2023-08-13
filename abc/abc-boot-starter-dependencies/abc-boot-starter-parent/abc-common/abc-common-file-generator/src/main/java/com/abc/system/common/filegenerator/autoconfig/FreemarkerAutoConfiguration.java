@@ -54,16 +54,6 @@ public class FreemarkerAutoConfiguration {
      */
     @Bean
     public ITextRenderer iTextRenderer() {
-        ITextRenderer renderer = new ITextRenderer();
-        try {
-            //设置 css中 的字体样式（暂时支持宋体、微软雅黑），必须设置，不然中文不显示；
-            if (StringUtils.isNotEmpty(freemarkerProperties.getFontPath())) {
-                // 从外部指定路径加载
-                renderer.getFontResolver().addFont(freemarkerProperties.getFontPath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-            }
-        } catch (Exception e) {
-            log.error(">>>>>>>>>>> add font failed|exception:{} <<<<<<<<<<<", e.getMessage(), e);
-        }
-        return renderer;
+        return new ITextRenderer();
     }
 }

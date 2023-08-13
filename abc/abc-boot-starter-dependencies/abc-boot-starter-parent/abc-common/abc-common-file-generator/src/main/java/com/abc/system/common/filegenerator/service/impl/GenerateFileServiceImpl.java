@@ -6,6 +6,7 @@ import com.abc.system.common.filegenerator.constant.GenerateFileContentTypeEnum;
 import com.abc.system.common.filegenerator.constant.GenerateFileRetCodeConstants;
 import com.abc.system.common.filegenerator.service.GenerateFileService;
 import com.abc.system.common.filegenerator.util.GeneratorFileUtils;
+import com.abc.system.common.filegenerator.util.GeneratorPDFUtil;
 import com.abc.system.common.filegenerator.vo.ExportFileRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -28,20 +29,20 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class GenerateFileServiceImpl implements GenerateFileService {
     @Override
-    public void export(HttpServletResponse response, ExportFileRequest exportFileRequest) throws BaseRuntimeException {
-        this.export(response, GenerateFileContentTypeEnum.GENERATOR_HEADER_TYPE_DOWNLOAD.getValue(), exportFileRequest);
+    public void export(ExportFileRequest exportFileRequest, HttpServletResponse response) throws BaseRuntimeException {
+        this.export(exportFileRequest, GenerateFileContentTypeEnum.GENERATOR_HEADER_TYPE_DOWNLOAD.getValue(), response);
     }
 
     @Override
-    public void export(HttpServletResponse response, String headerType, ExportFileRequest exportFileRequest)
+    public void export(ExportFileRequest exportFileRequest, String headerType, HttpServletResponse response)
             throws BaseRuntimeException {
         OutputStream fastByteArrayOutputStream = null;
         String exportFileName = null;
         try {
             exportFileName = exportFileRequest.getExportFileName();
-            log.info(">>>>>>>>>>> export file|START|headerType:{},filename:{} <<<<<<<<<<<", headerType, exportFileName);
-            if ("pdf".equalsIgnoreCase(getExtension(exportFileName))) {
-                // byteArrayOutputStream = GeneratorPDFUtil.createPDF(exportFileRequest);
+            log.info(">>>>>>>>|export file|START|headerType:{},filename:{}|<<<<<<<<", headerType, exportFileName);
+            if (".pdf".equalsIgnoreCase(getExtension(exportFileName))) {
+                fastByteArrayOutputStream = GeneratorPDFUtil.createPDF(exportFileRequest);
             } else {
                 fastByteArrayOutputStream = GeneratorFileUtils.createFile(exportFileRequest);
             }
@@ -55,10 +56,11 @@ public class GenerateFileServiceImpl implements GenerateFileService {
             // 写入HttpServletResponse
             ((FastByteArrayOutputStream) fastByteArrayOutputStream).writeTo(response.getOutputStream());
             fastByteArrayOutputStream.close();
-            log.info(">>>>>>>>>>> export file|SUCCESS|headerType:{},filename:{} <<<<<<<<<<<", headerType, exportFileName);
+            log.info(">>>>>>>>|export file|SUCCESS|headerType:{},filename:{}|<<<<<<<<", headerType, exportFileName);
         } catch (Exception e) {
-            log.info(">>>>>>>>>>> export file|EXCEPTION|headerType:{},filename:{} <<<<<<<<<<<", headerType, exportFileName);
-            throw new BizException(GenerateFileRetCodeConstants.GENERATOR_TEMPLATE_EXPORT_FILE_ERROR.getCode(), GenerateFileRetCodeConstants.GENERATOR_TEMPLATE_EXPORT_FILE_ERROR.getMessage());
+            log.info(">>>>>>>>|export file|EXCEPTION|headerType:{},filename:{}|<<<<<<<<", headerType, exportFileName);
+            throw new BizException(GenerateFileRetCodeConstants.GENERATOR_TEMPLATE_EXPORT_FILE_ERROR.getCode(),
+                    GenerateFileRetCodeConstants.GENERATOR_TEMPLATE_EXPORT_FILE_ERROR.getMessage());
         }
     }
 

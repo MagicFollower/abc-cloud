@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 public interface GenerateFileService {
     /**
      * 导出文件
+     *
      * <pre>
      *     默认执行，直接导出
      * </pre>
@@ -24,7 +25,7 @@ public interface GenerateFileService {
      * @param exportFileRequest 请求参数实体
      * @throws BaseRuntimeException 系统异常基类
      */
-    void export(HttpServletResponse response, ExportFileRequest exportFileRequest) throws BaseRuntimeException;
+    void export(ExportFileRequest exportFileRequest, HttpServletResponse response) throws BaseRuntimeException;
 
     /**
      * 导出文件
@@ -39,5 +40,5 @@ public interface GenerateFileService {
      * @param exportFileRequest 请求参数实体
      * @throws BaseRuntimeException 系统异常基类
      */
-    void export(HttpServletResponse response, String headerType, ExportFileRequest exportFileRequest) throws BaseRuntimeException;
+    void export(ExportFileRequest exportFileRequest, String headerType, HttpServletResponse response) throws BaseRuntimeException;
 }
