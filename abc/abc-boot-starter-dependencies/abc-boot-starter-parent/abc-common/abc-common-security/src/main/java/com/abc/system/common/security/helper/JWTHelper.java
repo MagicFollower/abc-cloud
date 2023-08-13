@@ -24,6 +24,7 @@ import java.util.Objects;
 
 /**
  * JWT生成与解析工具
+ *   -> io.jsonwebtoken
  *
  * @Description <pre>
  * JWT生成与解析工具(jsonwebtoken:jjwt-impl)
