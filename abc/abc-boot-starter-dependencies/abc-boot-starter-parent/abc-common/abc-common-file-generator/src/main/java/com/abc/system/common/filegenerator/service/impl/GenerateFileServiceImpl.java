@@ -36,11 +36,11 @@ public class GenerateFileServiceImpl implements GenerateFileService {
     @Override
     public void export(ExportFileRequest exportFileRequest, String headerType, HttpServletResponse response)
             throws BaseRuntimeException {
-        OutputStream fastByteArrayOutputStream = null;
+        OutputStream fastByteArrayOutputStream;
         String exportFileName = null;
         try {
             exportFileName = exportFileRequest.getExportFileName();
-            log.info(">>>>>>>>|export file|START|headerType:{},filename:{}|<<<<<<<<", headerType, exportFileName);
+            log.info(">>>>>>>>|export file|START|headerType:{} → filename:{}|<<<<<<<<", headerType, exportFileName);
             if (".pdf".equalsIgnoreCase(getExtension(exportFileName))) {
                 fastByteArrayOutputStream = GeneratorPDFUtil.createPDF(exportFileRequest);
             } else {
@@ -56,9 +56,10 @@ public class GenerateFileServiceImpl implements GenerateFileService {
             // 写入HttpServletResponse
             ((FastByteArrayOutputStream) fastByteArrayOutputStream).writeTo(response.getOutputStream());
             fastByteArrayOutputStream.close();
-            log.info(">>>>>>>>|export file|SUCCESS|headerType:{},filename:{}|<<<<<<<<", headerType, exportFileName);
+            log.info(">>>>>>>>|export file|SUCCESS|headerType:{} → filename:{}|<<<<<<<<", headerType, exportFileName);
         } catch (Exception e) {
-            log.info(">>>>>>>>|export file|EXCEPTION|headerType:{},filename:{}|<<<<<<<<", headerType, exportFileName);
+            log.info(">>>>>>>>|export file|EXCEPTION|headerType:{} → filename:{}|<<<<<<<<",
+                    headerType, exportFileName, e);
             throw new BizException(GenerateFileRetCodeConstants.GENERATOR_TEMPLATE_EXPORT_FILE_ERROR.getCode(),
                     GenerateFileRetCodeConstants.GENERATOR_TEMPLATE_EXPORT_FILE_ERROR.getMessage());
         }

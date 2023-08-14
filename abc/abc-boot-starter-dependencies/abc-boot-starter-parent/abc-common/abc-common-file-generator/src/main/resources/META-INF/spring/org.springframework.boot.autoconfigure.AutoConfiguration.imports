@@ -1,2 +1,2 @@
-com.abc.system.common.filegenerator.config.FreemarkerProperties
+com.abc.system.common.filegenerator.autoconfig.FreemarkerAutoConfiguration
 com.abc.system.common.filegenerator.autoconfig.GenerateFileAutoConfiguration
