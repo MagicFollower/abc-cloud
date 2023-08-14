@@ -94,7 +94,7 @@ public class FreemarkerAutoConfiguration {
                 }
             }
         } catch (IOException e) {
-            log.info(">>>>>>>>|字体目录未配置，使用默认值|<<<<<<<<");
+            log.info(">>>>>>>>|字体目录未配置|<<<<<<<<");
             return iTextRenderer;
         }
         return iTextRenderer;
