@@ -6,8 +6,29 @@ import com.abc.system.common.filegenerator.vo.ExportFileRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 文件生成业务接口
+ * 文件生成业务接口(支持Excel（xls）+ pdf)
+ * <pre>
+ * 1.PDF导出示例
+ * {@code
+ *    @GetMapping("/02")
+ *     public void demo02(HttpServletResponse response) {
+ *         ExportFileRequest exportFileRequest = new ExportFileRequest();
+ *         final String TEMPLATE_NAME = "pdf.ftl";
  *
+ *         HashMap<String, Object> dataSet = Maps.newHashMap();
+ *         AaaDtl aaaDtl = new AaaDtl();
+ *         aaaDtl.setAaaName("AaaName");
+ *         aaaDtl.setAaaCode("AaaCode");
+ *         aaaDtl.setMemo("测试备注，2023年8月14日08:49:55");
+ *         dataSet.put("aaaDtlList", Lists.newArrayList(aaaDtl,aaaDtl,aaaDtl));
+ *         exportFileRequest.setTemplateFile(TEMPLATE_NAME);
+ *         exportFileRequest.setData(dataSet);
+ *         exportFileRequest.setExportFileName("pdf.pdf");
+ *
+ *         generateFileService.export(exportFileRequest, response);
+ *     }
+ * }
+ * </pre>
  * @Description 文件生成业务接口
  * @Author Trivis
  * @Date 2023/5/10 19:32

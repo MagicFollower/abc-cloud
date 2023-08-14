@@ -28,7 +28,11 @@ public class FreemarkerProperties {
     private String templatePath = "/templates";
 
     /**
-     * 静态资源路径（PDF模板使用）
+     * 静态资源路径（PDF模板使用，默认/templates/statics）
      */
-    private String staticSourcePath;
+    private String staticSourcePath = "/templates/statics";
+    /**
+     * 字体文件路径（PDF模板使用，默认/templates/fonts）
+     */
+    private String fontPath = "/templates/fonts";
 }

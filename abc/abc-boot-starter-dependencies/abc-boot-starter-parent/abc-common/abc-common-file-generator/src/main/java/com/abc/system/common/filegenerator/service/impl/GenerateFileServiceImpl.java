@@ -72,6 +72,6 @@ public class GenerateFileServiceImpl implements GenerateFileService {
      * @return 文件拓展名（不含.）
      */
     private String getExtension(String fileName) {
-        return fileName.substring(fileName.lastIndexOf(".") + 1);
+        return fileName.substring(fileName.lastIndexOf("."));
     }
 }
