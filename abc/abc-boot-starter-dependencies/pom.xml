@@ -77,6 +77,9 @@
         <jjwt.version>0.11.5</jjwt.version>
         <java-jwt.version>4.4.0</java-jwt.version>
 
+        <!-- alibaba-easy-excel -->
+        <easyexcel.version>3.3.2</easyexcel.version>
+
         <!-- TOOLS-start -->
         <fastjson2.version>2.0.29</fastjson2.version>
         <guava.version>31.1-jre</guava.version>
