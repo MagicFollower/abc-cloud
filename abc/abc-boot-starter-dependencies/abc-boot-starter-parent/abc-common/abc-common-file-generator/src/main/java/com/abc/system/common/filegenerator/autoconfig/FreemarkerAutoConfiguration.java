@@ -15,7 +15,6 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Locale;
 
 /**
@@ -79,18 +78,24 @@ public class FreemarkerAutoConfiguration {
         ITextRenderer iTextRenderer = new ITextRenderer();
         String fontDirectoryPath = freemarkerProperties.getFontPath();
         // 获取目录中所有字体文件
-        File fileDir = new ClassPathResource(fontDirectoryPath).getFile();
-        File[] fontFiles = fileDir.listFiles();
-        log.info(Arrays.toString(fontFiles));
-        if (fontFiles != null) {
-            for (File fontFile : fontFiles) {
-                if (fontFile.isFile()) {
-                    // 添加字体文件到字体解析器
-                    log.info(">>>>>>>>|加载字体文件:{}", fontFile.getName());
-                    iTextRenderer.getFontResolver()
-                            .addFont(fontFile.getAbsolutePath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+        File fileDir;
+        try {
+            // 目录不存在时，抛出FileNotFoundException
+            fileDir = new ClassPathResource(fontDirectoryPath).getFile();
+            File[] fontFiles = fileDir.listFiles();
+            if (fontFiles != null) {
+                for (File fontFile : fontFiles) {
+                    if (fontFile.isFile()) {
+                        // 添加字体文件到字体解析器
+                        log.info(">>>>>>>>|加载字体文件:{}|<<<<<<<<", fontFile.getName());
+                        iTextRenderer.getFontResolver()
+                                .addFont(fontFile.getAbsolutePath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+                    }
                 }
             }
+        } catch (IOException e) {
+            log.info(">>>>>>>>|字体目录未配置，使用默认值|<<<<<<<<");
+            return iTextRenderer;
         }
         return iTextRenderer;
     }
