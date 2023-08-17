@@ -14,18 +14,18 @@ import com.abc.system.common.exception.base.BaseRuntimeException;
 public class RedisException extends BaseRuntimeException {
 
     public RedisException() {
-        super();
     }
 
     public RedisException(SystemRetCodeConstants systemRetCodeConstants) {
-        super();
-        this.errorCode = systemRetCodeConstants.getCode();
-        this.message = systemRetCodeConstants.getMessage();
+        super(systemRetCodeConstants);
+    }
+
+    public RedisException(SystemRetCodeConstants systemRetCodeConstants, Throwable cause) {
+        super(systemRetCodeConstants, cause);
     }
 
     public RedisException(String errorCode) {
-        super();
-        this.errorCode = errorCode;
+        super(errorCode);
     }
 
     public RedisException(Throwable cause) {
@@ -33,19 +33,14 @@ public class RedisException extends BaseRuntimeException {
     }
 
     public RedisException(String errorCode, Throwable cause) {
-        super(cause);
-        this.errorCode = errorCode;
+        super(errorCode, cause);
     }
 
     public RedisException(String errorCode, String message) {
-        super();
-        this.errorCode = errorCode;
-        this.message = message;
+        super(errorCode, message);
     }
 
     public RedisException(String errorCode, String message, Throwable cause) {
-        super(cause);
-        this.errorCode = errorCode;
-        this.message = message;
+        super(errorCode, message, cause);
     }
 }

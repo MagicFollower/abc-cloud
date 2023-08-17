@@ -13,18 +13,18 @@ import com.abc.system.common.exception.base.BaseRuntimeException;
  */
 public class JWTException extends BaseRuntimeException {
     public JWTException() {
-        super();
     }
 
     public JWTException(SystemRetCodeConstants systemRetCodeConstants) {
-        super();
-        this.errorCode = systemRetCodeConstants.getCode();
-        this.message = systemRetCodeConstants.getMessage();
+        super(systemRetCodeConstants);
+    }
+
+    public JWTException(SystemRetCodeConstants systemRetCodeConstants, Throwable cause) {
+        super(systemRetCodeConstants, cause);
     }
 
     public JWTException(String errorCode) {
-        super();
-        this.errorCode = errorCode;
+        super(errorCode);
     }
 
     public JWTException(Throwable cause) {
@@ -32,19 +32,14 @@ public class JWTException extends BaseRuntimeException {
     }
 
     public JWTException(String errorCode, Throwable cause) {
-        super(cause);
-        this.errorCode = errorCode;
+        super(errorCode, cause);
     }
 
     public JWTException(String errorCode, String message) {
-        super();
-        this.errorCode = errorCode;
-        this.message = message;
+        super(errorCode, message);
     }
 
     public JWTException(String errorCode, String message, Throwable cause) {
-        super(cause);
-        this.errorCode = errorCode;
-        this.message = message;
+        super(errorCode, message, cause);
     }
 }

@@ -23,12 +23,18 @@ public class BaseRuntimeException extends RuntimeException {
         this.message = systemRetCodeConstants.getMessage();
     }
 
+    public BaseRuntimeException(SystemRetCodeConstants systemRetCodeConstants, Throwable cause) {
+        super(cause);
+        this.errorCode = systemRetCodeConstants.getCode();
+        this.message = systemRetCodeConstants.getMessage();
+    }
+
     public BaseRuntimeException(String errorCode) {
         this.errorCode = errorCode;
     }
 
-    public BaseRuntimeException(Throwable throwable) {
-        super(throwable);
+    public BaseRuntimeException(Throwable cause) {
+        super(cause);
     }
 
     public BaseRuntimeException(String errorCode, Throwable cause) {

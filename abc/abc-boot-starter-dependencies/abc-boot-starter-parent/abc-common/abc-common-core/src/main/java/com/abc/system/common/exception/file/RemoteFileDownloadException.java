@@ -46,18 +46,15 @@ public class RemoteFileDownloadException extends BaseRuntimeException {
     }
 
     public RemoteFileDownloadException(SystemRetCodeConstants systemRetCodeConstants) {
-        super();
-        this.errorCode = systemRetCodeConstants.getCode();
-        this.message = systemRetCodeConstants.getMessage();
+        super(systemRetCodeConstants);
+    }
+
+    public RemoteFileDownloadException(SystemRetCodeConstants systemRetCodeConstants, Throwable cause) {
+        super(systemRetCodeConstants, cause);
     }
 
     public RemoteFileDownloadException(String errorCode) {
-        this.errorCode = errorCode;
-    }
-
-    public RemoteFileDownloadException(String errorCode, String message) {
-        this.errorCode = errorCode;
-        this.message = message;
+        super(errorCode);
     }
 
     public RemoteFileDownloadException(Throwable cause) {
@@ -65,13 +62,14 @@ public class RemoteFileDownloadException extends BaseRuntimeException {
     }
 
     public RemoteFileDownloadException(String errorCode, Throwable cause) {
-        super(cause);
-        this.errorCode = errorCode;
+        super(errorCode, cause);
+    }
+
+    public RemoteFileDownloadException(String errorCode, String message) {
+        super(errorCode, message);
     }
 
     public RemoteFileDownloadException(String errorCode, String message, Throwable cause) {
-        super(cause);
-        this.errorCode = errorCode;
-        this.message = message;
+        super(errorCode, message, cause);
     }
 }

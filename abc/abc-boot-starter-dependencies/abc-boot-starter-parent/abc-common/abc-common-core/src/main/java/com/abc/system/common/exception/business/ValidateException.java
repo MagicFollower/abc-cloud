@@ -11,13 +11,15 @@ public class ValidateException extends BaseRuntimeException {
     }
 
     public ValidateException(SystemRetCodeConstants systemRetCodeConstants) {
-        super();
-        this.errorCode = systemRetCodeConstants.getCode();
-        this.message = systemRetCodeConstants.getMessage();
+        super(systemRetCodeConstants);
+    }
+
+    public ValidateException(SystemRetCodeConstants systemRetCodeConstants, Throwable cause) {
+        super(systemRetCodeConstants, cause);
     }
 
     public ValidateException(String errorCode) {
-        this.errorCode = errorCode;
+        super(errorCode);
     }
 
     public ValidateException(Throwable cause) {
@@ -25,18 +27,14 @@ public class ValidateException extends BaseRuntimeException {
     }
 
     public ValidateException(String errorCode, Throwable cause) {
-        super(cause);
-        this.errorCode = errorCode;
+        super(errorCode, cause);
     }
 
     public ValidateException(String errorCode, String message) {
-        this.errorCode = errorCode;
-        this.message = message;
+        super(errorCode, message);
     }
 
     public ValidateException(String errorCode, String message, Throwable cause) {
-        super(cause);
-        this.errorCode = errorCode;
-        this.message = message;
+        super(errorCode, message, cause);
     }
 }

@@ -23,12 +23,18 @@ public class BaseException extends Exception {
         this.message = systemRetCodeConstants.getMessage();
     }
 
+    public BaseException(SystemRetCodeConstants systemRetCodeConstants, Throwable cause) {
+        super(cause);
+        this.errorCode = systemRetCodeConstants.getCode();
+        this.message = systemRetCodeConstants.getMessage();
+    }
+
     public BaseException(String errorCode) {
         this.errorCode = errorCode;
     }
 
-    public BaseException(Throwable throwable) {
-        super(throwable);
+    public BaseException(Throwable cause) {
+        super(cause);
     }
 
     public BaseException(String errorCode, Throwable cause) {
