@@ -72,11 +72,24 @@ public enum SystemRetCodeConstants {
 
 
 
-
     //##############################################
     //#####MQ消息队列异常状态码 008
     //##############################################
     MQ_INIT_ERROR("008001", "MQ初始化异常"),
+    MQ_MESSAGE_EMPTY("008002", "RocketMQ消息为空"),
+    MQ_MESSAGE_LIST_EMPTY("008003", "RocketMQ消息列表为空"),
+    MQ_MESSAGE_LOST_TOPIC("008004", "RocketMQ消息缺失Topic"),
+    MQ_MESSAGE_LOST_GROUP("008005", "RocketMQ消息缺失Group"),
+    MQ_MESSAGE_FORMAT_ERROR("008006", "RocketMQ消息格式异常"),
+    MQ_MESSAGE_SEND_ERROR("008007", "RocketMQ消息发送失败"),
+
+
+
+
+
+
+
+
 
 
 
