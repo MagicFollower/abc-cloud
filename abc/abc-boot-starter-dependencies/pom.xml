@@ -80,6 +80,9 @@
         <!-- alibaba-easy-excel -->
         <easyexcel.version>3.3.2</easyexcel.version>
 
+        <!-- rocketmq -->
+        <rocketmq-client.version>5.1.3</rocketmq-client.version>
+
         <!-- TOOLS-start -->
         <fastjson2.version>2.0.29</fastjson2.version>
         <guava.version>31.1-jre</guava.version>
