@@ -1,0 +1,2 @@
+com.abc.system.common.autoconfig.RocketMQAutoConfiguration
+com.abc.system.common.autoconfig.RocketMQProducerAutoConfiguration
