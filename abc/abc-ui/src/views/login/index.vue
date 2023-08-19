@@ -83,7 +83,7 @@ export default {
         password: this.loginForm.password
       };
       API.getLogin(params).then(res => {
-        const data = res.model;
+        const data = res.result;
         const store = window.localStorage;
         store.setItem('Access-Token', data.accessToken);
         store.setItem('username', data.username);
@@ -96,24 +96,26 @@ export default {
 
 <style rel="stylesheet/scss"  lang="scss">
 $bg: #2d3a4b;
-$light_gray: #f2f2f2;
+$dark_gray: #889aa4;
 
 /* reset element-ui css */
 .login-container {
+  /* 数据自动填充时，input框改变颜色 */
   .el-input {
     display: inline-block;
     // height: 47px;
-    width: 85%;
+    width: 100%;
     input {
       background: transparent;
-      border: 0px;
+      border: 0;
       -webkit-appearance: none;
-      border-radius: 0px;
+      border-radius: 6px;
       padding: 12px 5px 12px 60px;
-      color: $light_gray;
+      color: $dark_gray;
       // height: 47px;
       &:-webkit-autofill {
-        -webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
+        -webkit-box-shadow: 0 0 0 1000px $bg inset !important;
+        /* 自动填充的文本颜色 */
         -webkit-text-fill-color: #fff !important;
       }
     }
@@ -121,7 +123,7 @@ $light_gray: #f2f2f2;
   .el-form-item {
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+    border-radius: 6px;
     color: #454545;
   }
   .el-form-item__content {
@@ -147,15 +149,13 @@ $light_gray: #f2f2f2;
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-$bg: #2d3a4b;
 $dark_gray: #889aa4;
-$light_gray: #eee;
 .login-container {
   position: fixed;
   height: 100%;
   width: 100%;
   // background-color: $bg;
-  background: url('../../assets/img/bg.png') no-repeat center center;
+  background: url('../../assets/img/bg.png') no-repeat center center / cover;
   .login-form {
     position: absolute;
     left: 0;
