@@ -1,7 +1,7 @@
 <template>
-  <!-- 首先使用v-if指令来判断localStorage中是否存在"Access-Token"，如果存在，则渲染<s-container>组件，否则渲染<router-view>组件。 -->
-  <div>
-    <s-container v-if="localStorage.getItem('Access-Token')">
+  <div id="app">
+    <!-- 登录页刷新时，router#from#name为null → 此时from.name=null && to.name=Login-->
+    <s-container v-if="$route.name !== 'Login' && $route.name!==null">
       <!-- <s-container>组件包括三部分：el-breadcrumb面包屑导航、el-breadcrumb-item面包屑导航项和router-view路由视图。 -->
       <!-- el-breadcrumb是Element UI库的一个面包屑导航组件，通过:class绑定了"bread-wrap"样式类。它使用el-breadcrumb-item组件作为导航项。 -->
       <el-breadcrumb separator="/" class="bread-wrap">
