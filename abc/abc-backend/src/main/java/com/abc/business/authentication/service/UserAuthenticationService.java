@@ -19,14 +19,18 @@ package com.abc.business.authentication.service;
 
 import com.abc.business.authentication.AuthenticationResult;
 import com.abc.business.authentication.UserAccountLoginVO;
+import com.abc.business.authentication.config.UserAccountProperties;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.google.common.base.Strings;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.security.core.token.Sha512DigestUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -42,23 +46,17 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  */
 @Component
-@ConfigurationProperties(prefix = "auth")
-@Setter
+@EnableConfigurationProperties({UserAccountProperties.class})
+@RequiredArgsConstructor
 public final class UserAuthenticationService {
-    
-    private static final String JWT_TOKEN_ISSUER = "abc-ui";
 
+    private static final String JWT_TOKEN_ISSUER = "abc-ui";
     // com.auth0.jwt.algorithms.Algorithm
-    private final Algorithm algorithm = Algorithm.HMAC256(RandomStringUtils.randomAlphanumeric(256));
-    
-    private final JWTVerifier verifier = JWT.require(algorithm).withIssuer(JWT_TOKEN_ISSUER).build();
-    
-    private String username;
-    
-    private String password;
-    
-    private int tokenExpiresAfterSeconds = 3600;
-    
+    private static final Algorithm algorithm = Algorithm.HMAC256(RandomStringUtils.randomAlphanumeric(256));
+    private static final JWTVerifier verifier = JWT.require(algorithm).withIssuer(JWT_TOKEN_ISSUER).build();
+
+    private final UserAccountProperties userAccountProperties;
+
     /**
      * 用户验证
      * <pre>
@@ -69,15 +67,26 @@ public final class UserAuthenticationService {
      * @return check success or failure
      */
     public AuthenticationResult checkUser(final UserAccountLoginVO userAccountLoginVO) {
-        if (null == userAccountLoginVO || Strings.isNullOrEmpty(userAccountLoginVO.getUsername()) || Strings.isNullOrEmpty(userAccountLoginVO.getPassword())) {
+        if (null == userAccountLoginVO
+                || Strings.isNullOrEmpty(userAccountLoginVO.getUsername())
+                || Strings.isNullOrEmpty(userAccountLoginVO.getPassword())) {
             return new AuthenticationResult(null, null, false);
         }
-        if (username.equals(userAccountLoginVO.getUsername()) && password.equals(userAccountLoginVO.getPassword())) {
-            return new AuthenticationResult(username, password, true);
+        final String username = userAccountLoginVO.getUsername();
+        final String password = userAccountLoginVO.getPassword();
+        // 处理配置中的所有用户信息
+        // 1.密码Sha512加密
+        if (userAccountProperties != null && CollectionUtils.isNotEmpty(userAccountProperties.getUsers())) {
+            for (UserAccountProperties.UserAccountItem user : userAccountProperties.getUsers()) {
+                if (username.equals(user.getUsername())
+                        && password.equals(Sha512DigestUtils.shaHex(StringUtils.strip(user.getPassword())))) {
+                    return new AuthenticationResult(username, password, true);
+                }
+            }
         }
         return new AuthenticationResult(null, null, false);
     }
-    
+
     /**
      * Get user authentication token.
      *
@@ -86,13 +95,14 @@ public final class UserAuthenticationService {
     public String getToken(final String username) {
         Map<String, Object> payload = new HashMap<>(1, 1);
         payload.put("username", username);
+        int tokenExpiresAfterSeconds = 3600;
         Date expiresAt = new Date(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(tokenExpiresAfterSeconds));
         return JWT.create()
                 .withExpiresAt(expiresAt)
                 .withIssuer(JWT_TOKEN_ISSUER)
                 .withPayload(payload).sign(algorithm);
     }
-    
+
     /**
      * Check if token is valid.
      *
