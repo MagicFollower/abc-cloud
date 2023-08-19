@@ -1,5 +1,6 @@
 package com.abc.system.common.security.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,16 +17,16 @@ import static javax.crypto.Cipher.DECRYPT_MODE;
 import static javax.crypto.Cipher.ENCRYPT_MODE;
 
 /**
- * <pre>
  * AES工具包（自定义实现）
+ * <pre>
+ * 1.withInitial传入秘钥初始化完成后，即可链式调用encrypt/decrypt来进行数据的加密与解密操作，数据UTF-8编码，示例如下：
  * {@code
  *         System.out.println(AESUtils.withInitial("my_secret_key")
  *                 .encrypt("你好"));
  *         System.out.println(AESUtils.withInitial("my_secret_key")
  *                 .decrypt("A0082734A9C2180CD2F9DE0A4EAD6EE0"));
  * }
- *
- * 推荐使用`jncryptor`
+ * 2.其实更推荐使用`jncryptor`, 封装完善且支持salt填充，使得同样content不同加密会输出不同结果，安全性更好，使用示例如下：
  * {@code
  *      <dependency>
  *          <groupId>org.cryptonode.jncryptor</groupId>
@@ -96,35 +97,35 @@ public class AESUtils {
     }
 
     public String encrypt(String content) {
-        Key key = this.getKey(encryptSecret);
-        byte[] result = null;
-
-        try {
-            Cipher cipher = Cipher.getInstance("AES");
-            cipher.init(ENCRYPT_MODE, key);
-            result = cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
-        } catch (Exception e) {
-            log.info(">>>>>>>>|aes encrypted error:{}|<<<<<<<<", e.getMessage(), e);
-        }
-
-        StringBuilder sb = new StringBuilder();
-
-        if (result != null) {
-            for (byte b : result) {
-                String hex = Integer.toHexString(b & 255);
-                if (hex.length() == 1) {
-                    hex = '0' + hex;
-                }
-
-                sb.append(hex.toUpperCase());
+        if (StringUtils.isEmpty(StringUtils.strip(content))) {
+            return null;
+        } else {
+            Key key = this.getKey(encryptSecret);
+            byte[] result = null;
+            try {
+                Cipher cipher = Cipher.getInstance("AES");
+                cipher.init(ENCRYPT_MODE, key);
+                result = cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
+            } catch (Exception e) {
+                log.info(">>>>>>>>|aes encrypted error:{}|<<<<<<<<", e.getMessage(), e);
             }
-        }
+            StringBuilder sb = new StringBuilder();
+            if (result != null) {
+                for (byte b : result) {
+                    String hex = Integer.toHexString(b & 255);
+                    if (hex.length() == 1) {
+                        hex = '0' + hex;
+                    }
 
-        return sb.toString();
+                    sb.append(hex.toUpperCase());
+                }
+            }
+            return sb.toString();
+        }
     }
 
     public String decrypt(String content) {
-        if (content.length() < 1) {
+        if (StringUtils.isEmpty(StringUtils.strip(content))) {
             return null;
         } else {
             byte[] result = new byte[content.length() / 2];
@@ -167,6 +168,11 @@ public class AESUtils {
     }
 
 
+//    /**
+//     * ⚠️SHA1PRNG使用SHA-1算法，而SHA-1已经被认为是不够安全！
+//     * @param secret
+//     * @return
+//     */
 //    private Key getKey(String secret) {
 //        try {
 //            KeyGenerator generator = KeyGenerator.getInstance("AES");
