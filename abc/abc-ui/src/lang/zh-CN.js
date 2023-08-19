@@ -80,6 +80,9 @@ export default {
     labelUserName: '用户名',
     labelPassword: '密码'
   },
+  loginExpireDialog: {
+    msg: '登录状态过期，请重新登录'
+  },
   btn: {
     submit: '提交',
     reset: '重置',

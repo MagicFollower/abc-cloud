@@ -80,6 +80,9 @@ export default {
     labelUserName: 'Username',
     labelPassword: 'Password'
   },
+  loginExpireDialog: {
+    msg: 'Login status expired, please log in again'
+  },
   btn: {
     submit: 'Submit',
     reset: 'Reset',
