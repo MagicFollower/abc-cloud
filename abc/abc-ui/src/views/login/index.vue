@@ -1,52 +1,55 @@
 <template>
   <div class="login-container">
     <el-form
-      ref="loginForm"
-      :model="loginForm"
-      class="login-form"
-      auto-complete="off"
-      label-position="left"
+        ref="loginForm"
+        :model="loginForm"
+        class="login-form"
+        auto-complete="off"
+        label-position="left"
     >
-      <h3 class="title" />
+      <h3 class="title"/>
       <el-form-item prop="username">
         <el-input
-          v-model="loginForm.username"
-          name="username"
-          type="text"
-          auto-complete="off"
-          placeholder="username"
+            v-model="loginForm.username"
+            name="username"
+            type="text"
+            auto-complete="off"
+            placeholder="username"
         >
-          <i slot="prefix" class="icon-user icon-iem" />
+          <i slot="prefix" class="icon-user icon-iem"/>
         </el-input>
       </el-form-item>
       <el-form-item prop="password">
         <el-input
-          :type="pwdType"
-          v-model="loginForm.password"
-          name="password"
-          auto-complete="on"
-          placeholder="password"
-          @keyup.enter.native="handleLogin"
+            :type="pwdType"
+            v-model="loginForm.password"
+            name="password"
+            auto-complete="on"
+            placeholder="password"
+            @keyup.enter.native="handleLogin"
         >
-          <i slot="prefix" class="icon-password icon-iem" />
+          <i slot="prefix" class="icon-password icon-iem"/>
         </el-input>
       </el-form-item>
       <el-form-item class="btn-login">
         <el-button
-          :loading="loading"
-          type="primary"
-          style="width:100%;"
-          @click.native.prevent="handleLogin"
-        >{{ $t("login.btnTxt") }}</el-button>
+            :loading="loading"
+            type="primary"
+            style="width:100%;"
+            @click.native.prevent="handleLogin"
+        >{{ $t("login.btnTxt") }}
+        </el-button>
       </el-form-item>
     </el-form>
-    <s-footer style="position: fixed;bottom: 0;" />
+    <s-footer style="position: fixed;bottom: 0;"/>
   </div>
 </template>
 
 <script>
 import SFooter from '../../components/Footer/index';
 import API from './api';
+import {sha512Base64} from '@/utils/sha512.js';
+
 export default {
   name: 'Login',
   components: {
@@ -80,7 +83,7 @@ export default {
     handleLogin() {
       const params = {
         username: this.loginForm.username,
-        password: this.loginForm.password
+        password: sha512Base64(this.loginForm.password)
       };
       API.getLogin(params).then(res => {
         const data = res.result;
@@ -94,7 +97,7 @@ export default {
 };
 </script>
 
-<style rel="stylesheet/scss"  lang="scss">
+<style rel="stylesheet/scss" lang="scss">
 $bg: #2d3a4b;
 $dark_gray: #889aa4;
 
@@ -105,6 +108,7 @@ $dark_gray: #889aa4;
     display: inline-block;
     // height: 47px;
     width: 100%;
+
     input {
       background: transparent;
       border: 0;
@@ -120,28 +124,34 @@ $dark_gray: #889aa4;
       }
     }
   }
+
   .el-form-item {
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(0, 0, 0, 0.1);
     border-radius: 6px;
     color: #454545;
   }
+
   .el-form-item__content {
     background: #070601;
     border-radius: 6px;
   }
+
   .icon-iem {
     margin: 8px 7px;
     width: 24px;
     height: 24px;
     display: inline-block;
   }
+
   .icon-user {
     background: url('../../assets/img/user.png') no-repeat left center;
   }
+
   .icon-password {
     background: url('../../assets/img/password.png') no-repeat left center;
   }
+
   .btn-login {
     margin-top: 50px;
   }
@@ -156,6 +166,7 @@ $dark_gray: #889aa4;
   width: 100%;
   // background-color: $bg;
   background: url('../../assets/img/bg.png') no-repeat center center / cover;
+
   .login-form {
     position: absolute;
     left: 0;
@@ -165,6 +176,7 @@ $dark_gray: #889aa4;
     padding: 35px 35px 15px 35px;
     margin: 120px auto;
   }
+
   .svg-container {
     padding: 6px 5px 6px 15px;
     color: $dark_gray;
@@ -172,12 +184,14 @@ $dark_gray: #889aa4;
     width: 30px;
     display: inline-block;
   }
+
   .title {
     margin: 0px auto 40px auto;
     height: 86px;
     background: url('../../assets/img/login-logo.png') no-repeat center center;
   }
 }
+
 .footer-copy-right {
   width: 100%;
   line-height: 30px;
