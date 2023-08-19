@@ -90,9 +90,6 @@ public enum SystemRetCodeConstants {
     //#####登录异常状态码 009
     //##############################################
     LOGIN_USERNAME_PASSWORD_ERROR("009001", "用户名或密码错误"),
-    LOGIN_UNAUTHORIZED("009401", "未授权访问"),
-
-
 
 
 
