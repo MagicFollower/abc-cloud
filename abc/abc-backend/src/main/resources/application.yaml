@@ -12,3 +12,5 @@ auth:
   users:
     - username: admin
       password: Admin12345!@#
+    - username: anonymous
+      password: anonymous
