@@ -73,7 +73,7 @@
 
         <!-- Spring-Security-Core -->
         <!-- JJWT -->
-        <spring.security.core.version>6.1.2</spring.security.core.version>
+        <spring.security.core.version>5.8.5</spring.security.core.version>
         <jjwt.version>0.11.5</jjwt.version>
         <java-jwt.version>4.4.0</java-jwt.version>
 
