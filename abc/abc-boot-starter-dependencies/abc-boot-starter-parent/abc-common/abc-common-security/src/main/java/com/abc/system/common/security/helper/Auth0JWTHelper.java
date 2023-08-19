@@ -5,29 +5,25 @@ import com.abc.system.common.exception.jwt.JWTException;
 import com.abc.system.common.helper.SpringHelper;
 import com.abc.system.common.security.config.JWTProperties;
 import com.abc.system.common.security.util.AESUtils;
-import com.google.gson.Gson;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.gson.io.GsonSerializer;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.Map;
 
 /**
- * JWT生成与解析工具
- * -> io.jsonwebtoken
+ * Auth0JWT#jwt生成与解析工具
+ * -> com.auth0.jwt
  *
  * @Description <pre>
- * JWT生成与解析工具(jsonwebtoken:jjwt-impl)
+ * JWT生成与解析工具(auth0:jav-jwt)
  * 1.{@code String generateJWT(String content)}
  *   {@code String generateJWT(String content, String currentSystemName)}
  * 2.{@code boolean validateJWT(String jwt)}
@@ -36,11 +32,11 @@ import java.util.Objects;
  *   {@code String parseUserInfo(String jwt, String currentSystemName))}
  * </pre>
  * @Author Trivis
- * @Date 2023/5/28 8:30
+ * @Date 2023/5/28 11:26
  * @Version 1.0
  */
 @Slf4j
-public class JWTHelper {
+public class Auth0JWTHelper {
 
     public static String generateJWT(String content) {
         return generateJWT(content, null);
@@ -91,14 +87,14 @@ public class JWTHelper {
 
     /**
      * 解析JWT字符串中自定义payload（key="user"）
-     * 1.jwt=null、""等不符合规范的取值时，将抛出异常{@code IllegalArgumentException}
+     * 1.jwt=null、""等不符合规范的取值时，将抛出异常{@code JWTDecodeException}
      *
      * @param jwt               JWT字符串
      * @param currentSystemName 当前系统名称（作为Audience）
      * @return 用户信息
      */
     public static String parseUserInfo(String jwt, String currentSystemName) {
-        return parseJWT(jwt, currentSystemName).get("user").toString();
+        return parseJWT(jwt, currentSystemName).get("user").asString();
     }
 
     /*🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎*/
@@ -108,20 +104,20 @@ public class JWTHelper {
      *
      * @param jwt               JWT
      * @param currentSystemName Audience
-     * @return {@code io.jsonwebtoken.Claims}
+     * @return {@code Map<String, Claim>、com.auth0.jwt.interfaces.Claim} → iss/aud/iat/exp/自定义key
      */
-    private static Claims parseJWT(String jwt, String currentSystemName) {
-        JWTProperties jwtProperties = SpringHelper.getBean(JWTProperties.class);
+    private static Map<String, Claim> parseJWT(String jwt, String currentSystemName) {
         try {
-            return Jwts.parserBuilder()
-                    .requireIssuer(jwtProperties.getIssuer())
-                    .requireAudience(currentSystemName)
-                    .setSigningKey(generateKey())
-                    .build()
-                    .parseClaimsJws(jwt)
-                    .getBody();
-        } catch (ExpiredJwtException eje) {
-            log.error(">>>>>>>>|JWT过期|e:{}|<<<<<<<<", eje.getMessage());
+            JWTProperties jwtProperties = SpringHelper.getBean(JWTProperties.class);
+            Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getSignatureSecret());
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer(jwtProperties.getIssuer())
+                    .withAudience(currentSystemName)
+                    .build();
+            DecodedJWT decodedJWT = verifier.verify(jwt);
+            return decodedJWT.getClaims();
+        } catch (TokenExpiredException tee) {
+            log.error(">>>>>>>>|JWT过期|e:{}|<<<<<<<<", tee.getMessage());
             throw new JWTException(SystemRetCodeConstants.JWT_EXPIRED);
         } catch (Exception e) {
             log.error(">>>>>>>>|JWT解析异常|e:{}|<<<<<<<<", e.getMessage());
@@ -129,15 +125,16 @@ public class JWTHelper {
         }
     }
 
-// 移除原因：解析JWT时框架会自动检测是否过期：ExpiredJwtException
+// 移除原因：解析JWT时框架会自动检测是否过期：TokenExpiredException
 //    /**
 //     * 判断JWT是否过期，在校验JWT通过获取Claims后，需要根据Claims检测JWT是否过期
 //     *
 //     * @param claims {@code io.jsonwebtoken.Claims}
 //     * @return 是否过期（true是，false否）
 //     */
-//    private static boolean isJWTExpired(Claims claims) {
-//        return claims.getExpiration().before(new Date());
+//    private static boolean isJWTExpired(Map<String, Claim> claims) {
+//        Instant exp = Instant.ofEpochSecond(claims.get("exp").asLong());
+//        return exp.isBefore(Instant.now());
 //    }
 
     /**
@@ -164,62 +161,22 @@ public class JWTHelper {
      * @return JWT字符串
      */
     private static String generateJWT(String content, String issuer, String audience, Duration ttlDuration) {
-        return getJwtBuilder(content, issuer, audience, ttlDuration)
-                .serializeToJsonWith(new GsonSerializer<>(new Gson()))
-                .compact();
-    }
-
-    /**
-     * 获得JwtBuilder
-     *
-     * @param content     自定义payload（user: content）
-     * @param issuer      JWT发布者
-     * @param audience    JWT受众
-     * @param ttlDuration JWT存活时间范围（Duration）
-     * @return {@code io.jsonwebtoken.JwtBuilder}
-     */
-    private static JwtBuilder getJwtBuilder(String content, String issuer, String audience, Duration ttlDuration) {
-        if (Objects.isNull(ttlDuration)) {
-            ttlDuration = Duration.of(30L, ChronoUnit.MINUTES);
-        }
-        // 初始化jwt发布时间与过期时间
-        long iat = System.currentTimeMillis();
-        long exp = iat + ttlDuration.toMillis();
-        Date start = new Date(iat);
-        Date end = new Date(exp);
-
-        // 添加自定义payload
-        // user: content
-        HashMap<String, Object> claimsMap = new HashMap<>(1);
-        claimsMap.put("user", content);
-
         try {
-            return Jwts.builder()
-                    .setIssuer(issuer)
-                    .setIssuedAt(start)
-                    .setExpiration(end)
-                    // 指定接受者（解析时可使用requireAudience进行验证）
-                    .setAudience(audience)
-                    // 添加payload，前方sub/iss/iat/exp/aud都将添加到payload中，请合理区分setClaims和addClaims的差异。
-                    .addClaims(claimsMap)
-                    // 指定签名秘钥
-                    .signWith(generateKey());
+            JWTProperties jwtProperties = SpringHelper.getBean(JWTProperties.class);
+            Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getSignatureSecret());
+            long nowMillis = System.currentTimeMillis();
+            Date now = new Date(nowMillis);
+            Date expirationTime = new Date(nowMillis + ttlDuration.toMillis());
+            return JWT.create()
+                    .withIssuer(issuer)
+                    .withAudience(audience)
+                    .withIssuedAt(now)
+                    .withExpiresAt(expirationTime)
+                    .withClaim("user", content)
+                    .sign(algorithm);
         } catch (Exception e) {
             log.error(">>>>>>>>|JWT生成异常|e:{}|<<<<<<<<", e.getMessage());
             throw new JWTException(SystemRetCodeConstants.JWT_GENERATE_ERROR);
         }
-    }
-
-    /**
-     * 生成JJWT签名用密钥
-     *
-     * @return {@code javax.crypto.SecretKey}
-     */
-    private static SecretKey generateKey() {
-        // signature签名秘钥
-        // 密钥位数必须大于256位，一个字符按照8位算，至少32个字符。
-        JWTProperties jwtProperties = SpringHelper.getBean(JWTProperties.class);
-        byte[] jwtKeyBytes = jwtProperties.getSignatureSecret().getBytes(StandardCharsets.UTF_8);
-        return new SecretKeySpec(jwtKeyBytes, 0, jwtKeyBytes.length, "HmacSHA512");
     }
 }
