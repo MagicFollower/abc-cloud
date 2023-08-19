@@ -33,6 +33,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.security.core.token.Sha512DigestUtils;
 import org.springframework.stereotype.Component;
 
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,9 +79,12 @@ public final class UserAuthenticationService {
         // 1.密码Sha512加密
         if (userAccountProperties != null && CollectionUtils.isNotEmpty(userAccountProperties.getUsers())) {
             for (UserAccountProperties.UserAccountItem user : userAccountProperties.getUsers()) {
-                if (username.equals(user.getUsername())
-                        && password.equals(Sha512DigestUtils.shaHex(StringUtils.strip(user.getPassword())))) {
-                    return new AuthenticationResult(username, password, true);
+                if (username.equals(user.getUsername())) {
+                    String _password = Base64.getEncoder()
+                            .encodeToString(Sha512DigestUtils.sha(StringUtils.strip(user.getPassword())));
+                    if (password.equals(_password)) {
+                        return new AuthenticationResult(username, password, true);
+                    }
                 }
             }
         }
