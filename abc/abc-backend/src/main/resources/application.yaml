@@ -1,0 +1,13 @@
+server:
+  port: 18880
+  tomcat:
+    accept-count: 3000
+spring:
+  main:
+    banner-mode: off
+  application:
+    name: abc-backend
+
+auth:
+  username: admin
+  password: Admin12345!@#
