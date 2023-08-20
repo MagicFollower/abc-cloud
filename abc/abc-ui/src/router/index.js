@@ -22,52 +22,10 @@ export const constantRouterMap = [
     name: 'Registry center'
   },
   {
-    path: '/data-source',
-    component: () => import('@/views/data-source'),
-    hidden: true,
-    name: 'Data source'
-  },
-  {
-    path: '/operation-jobs',
-    component: () => import('@/views/operation-jobs'),
-    hidden: true,
-    name: 'Operation-jobs'
-  },
-  {
-    path: '/operation-jobs/status-detail',
-    component: () => import('@/views/operation-jobs-detail'),
-    hidden: true,
-    name: 'Operation-jobs-detail'
-  },
-  {
-    path: '/operation-servers',
-    component: () => import('@/views/operation-servers'),
-    hidden: true,
-    name: 'Operation-servers'
-  },
-  {
-    path: '/operation-servers/status-detail',
-    component: () => import('@/views/operation-servers-detail'),
-    hidden: true,
-    name: 'Operation-servers-detail'
-  },
-  {
     path: '/job-help',
     component: () => import('@/views/help'),
     hidden: true,
     name: 'Help'
-  },
-  {
-    path: '/history-trace',
-    component: () => import('@/views/history-trace'),
-    hidden: true,
-    name: 'History trace'
-  },
-  {
-    path: '/history-status',
-    component: () => import('@/views/history-status'),
-    hidden: true,
-    name: 'History status'
   }
 ];
 
