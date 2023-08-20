@@ -6,15 +6,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.List;
 
 /**
- * UserAccountConfig
+ * 用户账号信息配置类
  *
- * @Description UserAccountConfig
+ * @Description 用户账号信息配置类
  * @Author -
  * @Date 2023/8/19 19:27
  * @Version 1.0
  */
 @Data
-@ConfigurationProperties(prefix = "auth")
+@ConfigurationProperties(prefix = "abc.auth")
 public class UserAccountProperties {
 
     /**
