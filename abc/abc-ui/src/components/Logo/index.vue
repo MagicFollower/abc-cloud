@@ -1,6 +1,6 @@
 <template>
   <div class="s-pro-components-sider-menu-index-logo">
-    <a href="/">
+    <a href="/#/">
       <img src="../../assets/img/sidebar-logo.png" alt="logo" />
       <img class="collapse-logo" src="../../assets/img/logo.png" alt="logo" />
     </a>
