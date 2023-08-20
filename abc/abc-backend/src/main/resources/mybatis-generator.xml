@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<!-- 官方文档：https://gitee.com/free/Mapper/wikis/4.generator/4.1.mappergenerator -->
+<generatorConfiguration>
+
+    <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+
+        <property name="javaFileEncoding" value="UTF-8"/>
+
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>
+            <property name="useMapperCommentGenerator" value="true"/>
+            <property name="beginningDelimiter" value="`"/>
+            <property name="endingDelimiter" value="`"/>
+            <property name="caseSensitive" value="false"/>
+            <property name="forceAnnotation" value="true"/>
+            <property name="generateColumnConsts" value="false"/>
+            <property name="lombok" value="Data,NoArgsConstructor"/>
+        </plugin>
+
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://192.168.204.101:23306/abc-backend?useUnicode=true&amp;characterEncoding=utf8&amp;useOldAliasMetadataBehavior=true&amp;zeroDateTimeBehavior=convertToNull&amp;allowMultiQueries=true&amp;connectionTimeZone=SERVER"
+                        userId="root"
+                        password="Mysql12345">
+            <property name="useInformationSchema" value="true"/>
+            <property name="nullCatalogMeansCurrent" value="true"/>
+        </jdbcConnection>
+
+        <!-- 数值与时间格式：BigDecimal -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="true"/>
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="com.abc.business.web.dal.entity"
+                            targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- XML生成位置，此处保持和java文件在同一目录 -->
+        <sqlMapGenerator targetPackage="com.abc.business.web.dal.persistence"
+                         targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- ANNOTATEDMAPPER/XMLMAPPER -->
+        <javaClientGenerator targetPackage="com.abc.business.web.dal.persistence"
+                             targetProject="src/main/java"
+                             type="XMLMAPPER">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+
+<!--        &lt;!&ndash;        指定需要生成的表&ndash;&gt;-->
+<!--        <table tableName="abc_product" domainObjectName="AbcProduct"-->
+<!--               enableCountByExample="false" enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false" enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="false">-->
+<!--        </table>-->
+
+                <table tableName="%" enableCountByExample="false"
+                       enableUpdateByExample="false" enableDeleteByExample="false"
+                       enableSelectByExample="false" selectByExampleQueryId="false">
+                </table>
+
+    </context>
+</generatorConfiguration>
