@@ -20,24 +20,16 @@ package com.abc.business.authentication.service;
 import com.abc.business.authentication.AuthenticationResult;
 import com.abc.business.authentication.UserAccountLoginVO;
 import com.abc.business.authentication.config.UserAccountProperties;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.abc.system.common.security.helper.Auth0JWTHelper;
 import com.google.common.base.Strings;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.security.core.token.Sha512DigestUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 配置文件中配置用户名与密码
@@ -51,11 +43,6 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public final class UserAuthenticationService {
 
-    private static final String JWT_TOKEN_ISSUER = "abc-ui";
-    // com.auth0.jwt.algorithms.Algorithm
-    private static final Algorithm algorithm = Algorithm.HMAC256(RandomStringUtils.randomAlphanumeric(256));
-    private static final JWTVerifier verifier = JWT.require(algorithm).withIssuer(JWT_TOKEN_ISSUER).build();
-
     private final UserAccountProperties userAccountProperties;
 
     /**
@@ -65,7 +52,7 @@ public final class UserAuthenticationService {
      * </pre>
      *
      * @param userAccountLoginVO UserAccountLoginVO
-     * @return check success or failure
+     * @return AuthenticationResult about check success or failure
      */
     public AuthenticationResult checkUser(final UserAccountLoginVO userAccountLoginVO) {
         if (null == userAccountLoginVO
@@ -92,33 +79,21 @@ public final class UserAuthenticationService {
     }
 
     /**
-     * Get user authentication token.
+     * JWT生成
      *
-     * @return authentication token
+     * @return JWT TOKEN (String)
      */
     public String getToken(final String username) {
-        Map<String, Object> payload = new HashMap<>(1, 1);
-        payload.put("username", username);
-        int tokenExpiresAfterSeconds = 3600;
-        Date expiresAt = new Date(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(tokenExpiresAfterSeconds));
-        return JWT.create()
-                .withExpiresAt(expiresAt)
-                .withIssuer(JWT_TOKEN_ISSUER)
-                .withPayload(payload).sign(algorithm);
+        return Auth0JWTHelper.generateJWT(username);
     }
 
     /**
-     * Check if token is valid.
+     * JWT校验
      *
-     * @param token token
-     * @return is valid
+     * @param token token String
+     * @return true is valid, false is not valid
      */
     public boolean isValidToken(final String token) {
-        try {
-            verifier.verify(token);
-        } catch (JWTVerificationException e) {
-            return false;
-        }
-        return true;
+        return Auth0JWTHelper.validateJWT(token);
     }
 }

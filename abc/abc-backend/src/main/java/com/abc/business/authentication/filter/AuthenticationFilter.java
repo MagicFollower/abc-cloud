@@ -13,6 +13,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,10 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * 登录身份认证过滤器
+ * <pre>
+ * 1.身份认证Filter
+ * 2.JWT校验Filter
+ * </pre>
  *
  * @Description AuthenticationFilter
  * @Author -
@@ -49,11 +54,13 @@ public class AuthenticationFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
+        // 登录校验
         if (LOGIN_URI.equals(httpRequest.getRequestURI())) {
             handleLogin(httpRequest, httpResponse);
         }
+        // JWT校验
         String accessToken = httpRequest.getHeader(ACCESS_TOKEN_HEADER_NAME);
-        if (Strings.isNullOrEmpty(accessToken) || !userAuthenticationService.isValidToken(accessToken)) {
+        if (StringUtils.isBlank(accessToken) || !userAuthenticationService.isValidToken(accessToken)) {
             respondWithUnauthorized(httpResponse);
             return;
         }

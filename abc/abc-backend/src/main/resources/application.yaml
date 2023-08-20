@@ -8,9 +8,10 @@ spring:
   application:
     name: abc-backend
 
-auth:
-  users:
-    - username: admin
-      password: Admin12345!@#
-    - username: anonymous
-      password: anonymous
+abc:
+  auth:
+    users:
+      - username: admin
+        password: Admin12345!@#
+      - username: anonymous
+        password: anonymous
