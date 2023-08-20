@@ -16,32 +16,6 @@ export default {
         ]
       },
       {
-        title: 'Job operation',
-        child: [
-          {
-            title: 'Job dimension',
-            href: '/operation-jobs'
-          },
-          {
-            title: 'Server dimension',
-            href: '/operation-servers'
-          }
-        ]
-      },
-      {
-        title: 'Job history',
-        child: [
-          {
-            title: 'Job trace',
-            href: '/history-trace'
-          },
-          {
-            title: 'History status',
-            href: '/history-status'
-          }
-        ]
-      },
-      {
         title: 'Help',
         href: '/job-help'
       }

@@ -16,32 +16,6 @@ export default {
         ]
       },
       {
-        title: '作业操作',
-        child: [
-          {
-            title: '作业维度',
-            href: '/operation-jobs'
-          },
-          {
-            title: '服务器维度',
-            href: '/operation-servers'
-          }
-        ]
-      },
-      {
-        title: '作业历史',
-        child: [
-          {
-            title: '历史轨迹',
-            href: '/history-trace'
-          },
-          {
-            title: '历史状态',
-            href: '/history-status'
-          }
-        ]
-      },
-      {
         title: '帮助',
         href: '/job-help'
       }
