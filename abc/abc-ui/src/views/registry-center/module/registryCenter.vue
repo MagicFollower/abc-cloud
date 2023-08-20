@@ -5,8 +5,7 @@
         class="btn-plus"
         type="primary"
         icon="el-icon-plus"
-        @click="add"
-      >{{ $t("registryCenter.btnTxt") }}</el-button>
+        @click="add">{{ $t("btn.add") }}</el-button>
     </div>
     <div class="table-wrap">
       <el-table :data="tableData" border style="width: 100%">
@@ -182,18 +181,18 @@ export default {
       this.tableData = data.splice((val - 1) * this.pageSize, this.pageSize);
     },
     getRegCenter() {
-      API.getRegCenter().then(res => {
-        const data = res.model;
-        this.total = data.length;
-        this.cloneTableData = clone(res.model);
-        this.tableData = data.splice(0, this.pageSize);
-      });
-      this.getRegCenterActivated();
+      // API.getRegCenter().then(res => {
+      //   const data = res.model;
+      //   this.total = data.length;
+      //   this.cloneTableData = clone(res.model);
+      //   this.tableData = data.splice(0, this.pageSize);
+      // });
+      // this.getRegCenterActivated();
     },
     getRegCenterActivated() {
-      API.getRegCenterActivated().then(res => {
-        this.setRegCenterActivated(res.model.name);
-      });
+      // API.getRegCenterActivated().then(res => {
+      //   this.setRegCenterActivated(res.model.name);
+      // });
     },
     handleConnect(row) {
       if (row.activated) {
@@ -203,44 +202,44 @@ export default {
           type: 'success'
         });
       } else {
-        const params = {
-          name: row.name
-        };
-        API.postRegCenterConnect(params).then(res => {
-          this.$notify({
-            title: this.$t('common').notify.title,
-            message: this.$t('common').notify.conSucMessage,
-            type: 'success'
-          });
-          this.getRegCenter();
-        });
+        // const params = {
+        //   name: row.name
+        // };
+        // API.postRegCenterConnect(params).then(res => {
+        //   this.$notify({
+        //     title: this.$t('common').notify.title,
+        //     message: this.$t('common').notify.conSucMessage,
+        //     type: 'success'
+        //   });
+        //   this.getRegCenter();
+        // });
       }
     },
     handlerDel(row) {
       const params = {
         name: row.name
       };
-      API.deleteRegCenter(params).then(res => {
-        this.$notify({
-          title: this.$t('common').notify.title,
-          message: this.$t('common').notify.delSucMessage,
-          type: 'success'
-        });
-        this.getRegCenter();
-      });
+      // API.deleteRegCenter(params).then(res => {
+      //   this.$notify({
+      //     title: this.$t('common').notify.title,
+      //     message: this.$t('common').notify.delSucMessage,
+      //     type: 'success'
+      //   });
+      //   this.getRegCenter();
+      // });
     },
     onConfirm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          API.postRegCenter(this.form).then(res => {
-            this.addDialogVisible = false;
-            this.$notify({
-              title: this.$t('common').notify.title,
-              message: this.$t('common').notify.addSucMessage,
-              type: 'success'
-            });
-            this.getRegCenter();
-          });
+          // API.postRegCenter(this.form).then(res => {
+          //   this.addDialogVisible = false;
+          //   this.$notify({
+          //     title: this.$t('common').notify.title,
+          //     message: this.$t('common').notify.addSucMessage,
+          //     type: 'success'
+          //   });
+          //   this.getRegCenter();
+          // });
         } else {
           console.log('error submit!!');
           return false;

@@ -12,6 +12,7 @@ import Language from './lang/index';
 import store from './store';
 import Vuex from 'vuex';
 /* css样式 */
+import 'element-ui/lib/theme-chalk/index.css';
 import 'normalize.css/normalize.css';
 import '@/assets/styles/theme.scss';
 import '@/assets/styles/index.scss';

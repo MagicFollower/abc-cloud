@@ -1,42 +1,31 @@
 export default {
   common: {
     home: 'Home',
+    homeInfo: '🚀🚀🚀 Welcome Home 🚀🚀🚀',
     menuData: [
       {
-        title: 'Global settings',
+        title: 'Product',
         child: [
           {
-            title: 'Registry center',
-            href: '/registry-center'
+            title: 'ProductInfo',
+            href: '/product-info'
           },
           {
-            title: 'Event trace data source',
-            href: '/data-source'
+            title: 'ProductType',
+            href: '/product-type'
           }
         ]
       },
       {
         title: 'Help',
-        href: '/job-help'
+        child: [
+          {
+            title: 'HelpDocument',
+            href: '/help'
+          }
+        ]
       }
     ],
-    connected: 'Connected',
-    connection: 'Connection',
-    noRegistry: 'No connected registry center',
-    del: 'Delete',
-    notify: {
-      title: 'Prompt',
-      addSucMessage: 'Add Succeeded',
-      editSucMessage: 'Edit Succeeded',
-      actionSucMessage: 'Operation Succeeded',
-      conSucMessage: 'Connection Succeeded',
-      conFailMessage: 'Connection Failed',
-      delSucMessage: 'Delete Succeeded',
-      delFailMessage: 'Delete Failed',
-      updateCompletedMessage: 'Update Completed',
-      updateFaildMessage: 'Update Faild',
-      confirmDelOperator: 'Confirm delete'
-    },
     loginOut: 'Sign Out',
     dropdownList: [
       {
@@ -49,6 +38,9 @@ export default {
       }
     ]
   },
+  btn: {
+    add: 'Add',
+  },
   login: {
     btnTxt: 'Login',
     labelUserName: 'Username',
@@ -60,14 +52,6 @@ export default {
   },
   loginExpireDialog: {
     msg: 'Login status expired, please log in again'
-  },
-  btn: {
-    submit: 'Submit',
-    reset: 'Reset',
-    cancel: 'Cancel',
-    confirm: 'Confirm',
-    add: 'Add',
-    remove: 'Remove'
   },
   registryCenter: {
     btnTxt: 'ADD',
@@ -99,176 +83,17 @@ export default {
       digest: 'Please enter a digest'
     }
   },
-  dataSource: {
-    btnTxt: 'ADD',
-    addDialog: {
-      title: 'Add a data source',
-      name: 'Name',
-      driver: 'Driver',
-      url: 'Url',
-      username: 'Username',
-      password: 'Password',
-      btnConfirmTxt: 'Confirm',
-      btnCancelTxt: 'Cancel',
-      btnConnectTestTxt: 'Test connect'
-    },
-    table: {
-      operate: 'Operate',
-      operateConnect: 'Connect',
-      operateConnected: 'Connected',
-      operateDel: 'Del',
-      operateEdit: 'Edit'
-    },
-    rules: {
-      name: 'Please enter the name of the data source',
-      driver: 'Please enter the driver of the data source',
-      url: 'Please enter the url of the data source',
-      username: 'Please enter the username of the data source',
-      password: 'Please enter the password of the data source'
-    }
-  },
-  operationJobs: {
-    labelInfo: {
-      jobName: 'Job name',
-      shardingTotalCount: 'Sharding total count',
-      cron: 'Crontab',
-      description: 'Description',
-      status: 'Status',
-      jobParameter: 'Job parameter',
-      maxTimeDiffSeconds: 'Max time diff seconds',
-      reconcileIntervalMinutes: 'Reconcile interval minutes',
-      monitorExecution: 'Monitor execution',
-      failover: 'Failover',
-      misfire: 'Misfire',
-      streamingProcess: 'Streaming process',
-      shardingItemParameters: 'Sharding item parameters',
-      jobShardingStrategyType: 'Job sharding strategy type',
-      jobExecutorServiceHandlerType: 'Job thread pool handler type',
-      jobErrorHandlerType: 'Job error handler type',
-      item: 'Sharding item',
-      serverIp: 'Server IP',
-      instanceId: 'PID',
-      editTitle: 'Update job',
-      props: 'Job properties',
-      prop: {
-        name: 'Property name',
-        value: 'Property value'
-      }
-    },
-    table: {
-      operate: 'Operation'
-    },
-    rules: {
-      jobName: 'Please enter the Job name',
-      shardingTotalCount: 'Please enter the Sharding total count',
-      cron: 'Please enter the Crontab',
-      description: 'Please enter the Description',
-      status: 'Please enter the Status'
-    },
-    statusText: {
-      OK: 'OK',
-      DISABLED: 'Disabled',
-      CRASHED: 'Crashed',
-      PENDING: 'Staging',
-      RUNNING: 'Running',
-      SHARDING_FLAG: 'SHARDING_FLAG'
-    },
-    actionText: {
-      modify: 'Update',
-      detail: 'Detail',
-      trigger: 'Trigger',
-      disable: 'Disable',
-      enable: 'Enable',
-      shutdown: 'Shutdown',
-      remove: 'Remove'
-    },
-    actionConfirm: {
-      shutdown: 'Are you sure to shutdown the job?'
-    }
-  },
-  operationServers: {
-    labelInfo: {
-      serverIp: 'Server IP',
-      instancesNum: 'Instance count',
-      instanceCount: 'Instance count',
-      jobsNum: 'Job num',
-      disabledJobsNum: 'Disabled jobs num',
-      jobName: 'Job name',
-      status: 'Status',
-      operate: 'Operation'
-    },
-    statusText: {
-      OK: 'Enabled',
-      DISABLED: 'Disabled',
-      CRASHED: 'Crashed',
-      PENDING: 'Staging',
-      SHARDING_FLAG: 'SHARDING_FLAG'
-    },
-    actionText: {
-      detail: 'Detail',
-      disable: 'Disable',
-      enable: 'Enable',
-      shutdown: 'Shutdown',
-      remove: 'Remove'
-    },
-    actionConfirm: {
-      shutdown: 'Are you sure to shutdown the server?'
-    }
-  },
-  historyTrace: {
-    column: {
-      jobName: 'Job name',
-      serverIp: 'Server IP',
-      shardingItem: 'Sharding item',
-      executeResult: 'Execute result',
-      failureCause: 'Failure reason',
-      startTime: 'Start time',
-      completeTime: 'Complete time'
-    },
-    searchForm: {
-      jobName: 'Job name',
-      serverIp: 'Server ip',
-      startTimeRange: 'Start time range',
-      startTimeFrom: 'Start time from',
-      startTimeTo: 'Start time to',
-      executeResult: 'Select execute result',
-      executeSuccess: 'Success',
-      executeFailed: 'Failure'
-    }
-  },
-  historyStatus: {
-    column: {
-      jobName: 'Job name',
-      shardingItem: 'Sharding item',
-      state: 'Status',
-      createTime: 'Creation time',
-      remark: 'Comments'
-    },
-    searchForm: {
-      jobName: 'Job name',
-      creationTimeRange: 'Creation time range',
-      creationTimeFrom: 'Creation time from',
-      creationTimeTo: 'Creation time to',
-      state: 'Select state',
-      stateStaging: 'Staging',
-      stateFailed: 'Failed',
-      stateFinished: 'Finished',
-      stateRunning: 'Running',
-      stateError: 'Error',
-      stateKilled: 'Killed'
-    }
-  },
   help: {
     design_concept_title: 'Design concept',
-    design_concept_info_1: 'Console is not related to Elastic Job, it just reading data from registry center and showing the status of jobs, or updating data to registry center which will change the configuration.',
-    design_concept_info_2: 'Console can operate lifecycle for jobs, such as enable and disable, but can not the start and stop job\'s process, because of console server and job servers are completely distributed, console can not control the job servers.',
+    design_concept_info_1: 'Concept1',
+    design_concept_info_2: 'Concept2',
     major_features_title: 'Major features',
-    major_features_info_1: 'View status of jobs and servers',
-    major_features_info_2: 'Quick update and delete jobs',
-    major_features_info_3: 'Disable and enable Jobs',
-    major_features_info_4: 'Multiple registry centers supported',
-    major_features_info_5: 'Trace jobs execute history',
+    major_features_info_1: 'Feature1',
+    major_features_info_2: 'Feature2',
+    major_features_info_3: 'Feature3',
+    major_features_info_4: 'Feature4',
+    major_features_info_5: 'Feature5',
     unsupported_title: 'Unsupported',
-    unsupported_info: 'Add job. Because of job is added at first running time automatically, it is unnecessary to add job from console. So just start the job app.'
+    unsupported_info: 'Unsupported1'
   }
 };

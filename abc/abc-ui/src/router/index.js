@@ -6,7 +6,13 @@ Vue.use(Router);
 export const constantRouterMap = [
   {
     path: '/',
-    component: () => import('@/views/login'),
+    component: () => import('@/views/main'),
+    hidden: true
+  },
+  {
+    path: '/main',
+    component: () => import('@/views/main'),
+    name: 'Main',
     hidden: true
   },
   {
@@ -16,13 +22,19 @@ export const constantRouterMap = [
     hidden: true
   },
   {
-    path: '/registry-center',
+    path: '/product-info',
     component: () => import('@/views/registry-center'),
     hidden: true,
-    name: 'Registry center'
+    name: 'ProductInfo'
   },
   {
-    path: '/job-help',
+    path: '/product-type',
+    component: () => import('@/views/registry-center'),
+    hidden: true,
+    name: 'ProductType'
+  },
+  {
+    path: '/help',
     component: () => import('@/views/help'),
     hidden: true,
     name: 'Help'

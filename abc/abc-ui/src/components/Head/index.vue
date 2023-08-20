@@ -27,13 +27,6 @@
           </el-dropdown>
         </div>
       </div>
-      <el-breadcrumb separator="/" class="bread-nav">
-        <el-breadcrumb-item>
-          <a
-            style="font-weight: bold; color: #E17425;"
-          >{{ $store.state.global.regCenterActivated || $t("common.noRegistry") }}</a>
-        </el-breadcrumb-item>
-      </el-breadcrumb>
     </div>
   </div>
 </template>

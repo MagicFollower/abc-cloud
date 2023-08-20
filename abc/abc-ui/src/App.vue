@@ -10,7 +10,7 @@
         <!-- $t('common.home')是Vue国际化特性的使用方式。$t是Vue I18n插件提供的用于翻译文本的方法。
              传递给$t的参数是一个字符串'common.home'，表示要翻译的文本在语言包中的路径。
              它会根据当前语言环境找到对应的翻译文本，然后将翻译后的文本显示在面包屑导航项中。 -->
-        <el-breadcrumb-item :to="{ path: '/' }">{{
+        <el-breadcrumb-item>{{
             $t('common.home')
           }}
         </el-breadcrumb-item>

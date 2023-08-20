@@ -1,35 +1,33 @@
 <template>
   <div class="s-menu">
     <el-menu
-      :collapse="isCollapse"
-      :default-active="defActive"
-      background-color="#090a01"
-      text-color="#fff"
-      active-text-color="#fff"
-      class="el-menu-vertical-menu"
-      @open="handleOpen"
-      @close="handleClose"
-    >
+        :collapse="isCollapse"
+        :default-active="defActive"
+        background-color="#090a01"
+        text-color="#fff"
+        active-text-color="#ffd04b"
+        class="el-menu-vertical-menu"
+        @open="handleOpen"
+        @close="handleClose">
       <s-logo/>
       <template v-for="(item, index) in menuData">
-        <el-submenu v-if="item.child && item.child.length" :index="String(index)" :key="String(index)">
+        <!-- 存在子菜单 -->
+        <el-submenu :index="String(index)" :key="String(index)">
           <template slot="title">
-            <i class="icon-sidebar"/>
-            <span slot="title">{{ item.title }}</span>
+            <i class="el-icon-menu"></i>
+            <span>{{ item.title }}</span>
           </template>
           <a v-for="(itm, idx) in item.child" :href="'#' + itm.href" :key="String(idx)">
-            <el-menu-item :index="itm.href">{{ itm.title }}</el-menu-item>
+            <el-menu-item style="margin-left: 9px" :index="itm.href">{{ itm.title }}</el-menu-item>
           </a>
         </el-submenu>
-        <a v-else :href="'#' + item.href" :key="String(index)">
-          <el-menu-item :index="item.href">{{ item.title }}</el-menu-item>
-        </a>
       </template>
     </el-menu>
   </div>
 </template>
 <script>
 import SLogo from '../Logo/index.vue';
+
 export default {
   name: 'Menu',
   components: {
@@ -82,31 +80,39 @@ export default {
 <style lang="scss">
 .s-menu {
   height: 100%;
+
   .el-menu--collapse {
     height: 100%;
-    width: 80px;
+    width: 70px;
+
     .s-pro-components-sider-menu-index-logo {
-      padding-left: 22px;
+      padding-left: 16px;
     }
   }
+
   .el-menu-vertical-menu:not(.el-menu--collapse) {
     width: 256px;
     height: 100%;
   }
+
   .el-menu-item {
     background: #090a01;
   }
+
   .el-menu {
     border-right: none;
   }
+
   .el-submenu {
     .el-menu {
       background: #090a01;
     }
   }
+
   .is-active {
     background-color: #e17425 !important;
   }
+
   .icon-sidebar {
     background: url("../../assets/img/sidebar-icon.png") no-repeat left center;
     display: inline-block;
@@ -114,16 +120,19 @@ export default {
     height: 16px;
     margin-right: 4px;
   }
+
   .el-menu--collapse {
     img {
       display: none;
     }
+
     .collapse-logo {
       display: block;
       margin-top: 13px;
     }
   }
 }
+
 .el-menu--vertical {
   .is-active {
     background-color: #e17425 !important;

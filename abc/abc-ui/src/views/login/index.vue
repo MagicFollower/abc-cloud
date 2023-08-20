@@ -81,11 +81,6 @@ export default {
       immediate: true
     }
   },
-  created() {
-    if (window.localStorage.getItem('Access-Token')) {
-      location.href = '#/registry-center';
-    }
-  },
   methods: {
     handleLogin: _.debounce(
       function () {
@@ -102,7 +97,7 @@ export default {
           const store = window.localStorage;
           store.setItem('Access-Token', data.accessToken);
           store.setItem('username', data.username);
-          location.href = '#/registry-center';
+          location.href = '#/';
         });
       }, 200
     )
