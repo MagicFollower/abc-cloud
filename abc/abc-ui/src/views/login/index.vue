@@ -19,7 +19,7 @@
           <i slot="prefix" class="icon-user icon-iem"/>
         </el-input>
       </el-form-item>
-      <p v-if="pUserNameTip">{{$t("login.inputTip.pUserName")}}</p>
+      <p style="color: white;" v-if="pUserNameTip">{{$t("login.inputTip.pUserName")}}</p>
       <el-form-item prop="password">
         <el-input
             :type="pwdType"
@@ -32,7 +32,7 @@
           <i slot="prefix" class="icon-password icon-iem"/>
         </el-input>
       </el-form-item>
-      <p v-if="pPasswordTip">{{$t("login.inputTip.pPassword")}}</p>
+      <p style="color: white;" v-if="pPasswordTip">{{$t("login.inputTip.pPassword")}}</p>
       <el-form-item class="btn-login">
         <el-button
             :loading="loading"
@@ -111,7 +111,7 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-$bg: #2d3a4b;
+$bg: #000000;
 $dark_gray: #889aa4;
 
 /* reset element-ui css */
