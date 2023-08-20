@@ -15,3 +15,5 @@ abc:
         password: Admin12345!@#
       - username: anonymous
         password: anonymous
+  jwt:
+    issuer: abc-backend
