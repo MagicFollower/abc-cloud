@@ -51,7 +51,7 @@
       <div class="pagination">
         <el-pagination
           :total="total"
-          :current-page="currentPage"
+          :current-page="pageNum"
           background
           layout="prev, pager, next"
           @current-change="handleCurrentChange"
@@ -167,7 +167,7 @@ export default {
       },
       tableData: [],
       cloneTableData: [],
-      currentPage: 1,
+      pageNum: 1,
       pageSize: 10,
       total: 0
     };
