@@ -49,6 +49,7 @@
 import SFooter from '../../components/Footer/index';
 import API from './api';
 import {sha512Base64} from '@/utils/sha512.js';
+import _ from 'lodash';
 
 export default {
   name: 'Login',
@@ -80,19 +81,21 @@ export default {
     }
   },
   methods: {
-    handleLogin() {
-      const params = {
-        username: this.loginForm.username,
-        password: sha512Base64(this.loginForm.password)
-      };
-      API.getLogin(params).then(res => {
-        const data = res.result;
-        const store = window.localStorage;
-        store.setItem('Access-Token', data.accessToken);
-        store.setItem('username', data.username);
-        location.href = '#/registry-center';
-      });
-    }
+    handleLogin: _.debounce(
+      function () {
+        const params = {
+          username: this.loginForm.username,
+          password: sha512Base64(this.loginForm.password)
+        };
+        API.getLogin(params).then(res => {
+          const data = res.result;
+          const store = window.localStorage;
+          store.setItem('Access-Token', data.accessToken);
+          store.setItem('username', data.username);
+          location.href = '#/registry-center';
+        });
+      }, 200
+    )
   }
 };
 </script>
