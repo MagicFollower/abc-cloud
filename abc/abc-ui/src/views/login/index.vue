@@ -14,7 +14,7 @@
             name="username"
             type="text"
             auto-complete="off"
-            placeholder="username"
+            :placeholder="labelUsername"
         >
           <i slot="prefix" class="icon-user icon-iem"/>
         </el-input>
@@ -25,7 +25,7 @@
             v-model="loginForm.password"
             name="password"
             auto-complete="on"
-            placeholder="password"
+            :placeholder="labelPassword"
             @keyup.enter.native="handleLogin"
         >
           <i slot="prefix" class="icon-password icon-iem"/>
@@ -58,6 +58,8 @@ export default {
   },
   data() {
     return {
+      labelUsername: this.$t('login.labelUserName'),
+      labelPassword: this.$t('login.labelPassword'),
       loginForm: {
         username: '',
         password: ''
@@ -83,6 +85,8 @@ export default {
   methods: {
     handleLogin: _.debounce(
       function () {
+        // 数据检测
+
         const params = {
           username: this.loginForm.username,
           password: sha512Base64(this.loginForm.password)

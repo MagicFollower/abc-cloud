@@ -67,7 +67,7 @@ export default {
   },
   input: {
     pUserName: 'Please enter user name',
-    pPaasword: 'Please enter your password'
+    pPassword: 'Please enter your password'
   },
   registryCenter: {
     btnTxt: 'ADD',
