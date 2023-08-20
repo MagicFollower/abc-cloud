@@ -19,6 +19,7 @@
           <i slot="prefix" class="icon-user icon-iem"/>
         </el-input>
       </el-form-item>
+      <p v-if="pUserNameTip">{{$t("login.inputTip.pUserName")}}</p>
       <el-form-item prop="password">
         <el-input
             :type="pwdType"
@@ -31,6 +32,7 @@
           <i slot="prefix" class="icon-password icon-iem"/>
         </el-input>
       </el-form-item>
+      <p v-if="pPasswordTip">{{$t("login.inputTip.pPassword")}}</p>
       <el-form-item class="btn-login">
         <el-button
             :loading="loading"
@@ -60,6 +62,8 @@ export default {
     return {
       labelUsername: this.$t('login.labelUserName'),
       labelPassword: this.$t('login.labelPassword'),
+      pUserNameTip: false,
+      pPasswordTip: false,
       loginForm: {
         username: '',
         password: ''
@@ -86,7 +90,9 @@ export default {
     handleLogin: _.debounce(
       function () {
         // 数据检测
-
+        this.pUserNameTip = _.trim(this.loginForm.username).length === 0;
+        this.pPasswordTip = _.trim(this.loginForm.password).length === 0;
+        if(this.pUserNameTip || this.pPasswordTip) return;
         const params = {
           username: this.loginForm.username,
           password: sha512Base64(this.loginForm.password)

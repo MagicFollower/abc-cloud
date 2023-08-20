@@ -52,7 +52,11 @@ export default {
   login: {
     btnTxt: 'Login',
     labelUserName: 'Username',
-    labelPassword: 'Password'
+    labelPassword: 'Password',
+    inputTip: {
+      pUserName: 'Please enter user name',
+      pPassword: 'Please enter your password'
+    },
   },
   loginExpireDialog: {
     msg: 'Login status expired, please log in again'
@@ -64,10 +68,6 @@ export default {
     confirm: 'Confirm',
     add: 'Add',
     remove: 'Remove'
-  },
-  input: {
-    pUserName: 'Please enter user name',
-    pPassword: 'Please enter your password'
   },
   registryCenter: {
     btnTxt: 'ADD',

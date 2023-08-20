@@ -52,7 +52,11 @@ export default {
   login: {
     btnTxt: '登录',
     labelUserName: '用户名',
-    labelPassword: '密码'
+    labelPassword: '密码',
+    inputTip: {
+      pUserName: '请输入用户名',
+      pPassword: '请输入密码'
+    },
   },
   loginExpireDialog: {
     msg: '登录状态过期，请重新登录'
@@ -64,10 +68,6 @@ export default {
     confirm: '确定',
     add: '添加',
     remove: '移除'
-  },
-  input: {
-    pUserName: '请输入用户名',
-    pPassword: '请输入密码'
   },
   registryCenter: {
     btnTxt: '添加',
