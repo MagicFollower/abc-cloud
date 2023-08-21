@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.abc.business.images.mapper.ZipInfoMapper">
-
-    <select id="_locateBy" resultType="com.abc.business.images.domain.entity.zip.ZipInfo">
-        SELECT * FROM zipinfo WHERE INSTR(files_info->>'$[*].name', #{filename})>0 ORDER BY size ASC LIMIT 1;
-    </select>
-
-</mapper>
