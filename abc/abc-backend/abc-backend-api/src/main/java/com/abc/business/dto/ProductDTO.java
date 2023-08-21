@@ -17,6 +17,7 @@ import java.util.Date;
 @Data
 public class ProductDTO implements Serializable {
     private Long id;
+    private String typeName;
     private String code;
     private String name;
     private BigDecimal actPrice;
