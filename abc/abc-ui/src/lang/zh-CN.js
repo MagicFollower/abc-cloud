@@ -36,7 +36,8 @@ export default {
         title: 'English',
         command: 'English'
       }
-    ]
+    ],
+    tableDataEmptyText: '暂无数据',
   },
   btn: {
     add: '添加',
@@ -54,7 +55,6 @@ export default {
     msg: '登录状态过期，请重新登录'
   },
   productInfo: {
-    btnTxt: '添加',
     grid: {
       code: '编码',
       name: '名称',
@@ -68,14 +68,13 @@ export default {
       updateTime: '更新时间'
     },
     addDialog: {
-      name: '注册中心名称',
-      address: '注册中心地址',
-      namespaces: '命名空间',
-      title: '添加注册中心',
-      editTitle: '编辑注册中心',
-      centerType: '注册中心类型',
-      orchestrationName: '数据治理实例',
-      digest: '登录凭证',
+      title: '添加商品',
+      code: '编码',
+      name: '名称',
+      typeName: '类型',
+      actPrice: '实际价格',
+      salePrice: '销售价格',
+      memo: '备注',
       btnConfirmTxt: '确定',
       btnCancelTxt: '取消'
     },
@@ -87,12 +86,31 @@ export default {
       operateEdit: '编辑'
     },
     rules: {
-      name: '请输入注册中心名称',
-      centerType: '请选择注册中心类型',
-      namespaces: '请输入命名空间',
-      address: '请选输入注册中心地址',
-      orchestrationName: '请输入数据治理实例名称',
-      digest: '请输入登录凭证'
+      code: '请输入商品编码',
+      name: '请输入商品名称',
+      typeName: '请选择商品类型',
+      actPrice: '请输入商品实际价格',
+      salePrice: '请输入商品销售价格',
+      memo: '请输入商品备注',
+    }
+  },
+  productType: {
+    grid: {
+      code: '编码',
+      name: '名称',
+      memo: '备注',
+    },
+    table: {
+      operate: '操作',
+      operateConnect: '连接',
+      operateConnected: '已连接',
+      operateDel: '删除',
+      operateEdit: '编辑'
+    },
+    rules: {
+      code: '请输入商品类型编码',
+      name: '请输入商品类型名称',
+      memo: '请输入商品类型备注',
     }
   },
   help: {

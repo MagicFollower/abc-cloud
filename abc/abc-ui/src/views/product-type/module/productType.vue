@@ -1,103 +1,60 @@
 <template>
-  <el-row class="box-card">
-    <div class="btn-group">
-      <el-button
-          class="btn-plus"
-          type="primary"
-          icon="el-icon-plus"
-          @click="add">{{ $t("btn.add") }}
-      </el-button>
-    </div>
-    <div class="table-wrap">
-      <el-table :data="tableData" border style="width: 100%">
+  <el-row v-loading="tableLoading" element-loading-background="rgba(255, 255, 255, 0.5)" style="height: 100%;">
+    <div class="table_with_pagination">
+      <div class="btn-group">
+        <el-button
+            class="btn-plus"
+            type="primary"
+            icon="el-icon-plus"
+            @click="add">{{ $t("btn.add") }}
+        </el-button>
+      </div>
+      <el-table
+          :data="tableData"
+          :empty-text="$t('common.tableDataEmptyText')" border style="width: 100%">
         <el-table-column
             v-for="(item, index) in column"
             :key="index"
             :prop="item.prop"
             :label="item.label"
-            :width="item.width"
-        />
-        <el-table-column :label="$t('productInfo.table.operate')" fixed="right" width="200">
+            :width="item.width"/>
+        <el-table-column :label="$t('productType.table.operate')" fixed="right" width="200">
           <template slot-scope="scope">
             <el-tooltip
-                :content="!scope.row.activated ? $t('productInfo.table.operateConnect'): $t('productInfo.table.operateConnected')"
+                :content="!scope.row.activated ? $t('productType.table.operateConnect'): $t('productType.table.operateConnected')"
                 class="item"
                 effect="dark"
-                placement="top"
-            >
+                placement="top">
               <el-button
                   :type="scope.row.activated ? 'success' : 'primary'"
                   icon="el-icon-link"
                   size="small"
-                  @click="handleConnect(scope.row)"
-              />
+                  @click="handleConnect(scope.row)"/>
             </el-tooltip>
             <el-tooltip
-                :content="$t('productInfo.table.operateDel')"
+                :content="$t('productType.table.operateDel')"
                 class="item"
                 effect="dark"
-                placement="top"
-            >
+                placement="top">
               <el-button
                   size="small"
                   type="danger"
                   icon="el-icon-delete"
-                  @click="handlerDel(scope.row)"
-              />
+                  @click="handlerDel(scope.row)"/>
             </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
       <div class="pagination">
         <el-pagination
+            class="pagination"
             :total="total"
             :current-page="pageNum"
             background
             layout="prev, pager, next"
-            @current-change="handleCurrentChange"
-        />
+            @current-change="handleCurrentChange"/>
       </div>
     </div>
-    <el-dialog
-        :title="$t('productInfo.grid.title')"
-        :visible.sync="addDialogVisible"
-        width="1010px"
-    >
-      <el-form ref="form" :model="form" :rules="rules" label-width="170px">
-        <el-form-item :label="$t('productInfo.grid.name')" prop="name">
-          <el-input :placeholder="$t('productInfo.rules.name')" v-model="form.name" autocomplete="off"/>
-        </el-form-item>
-        <el-form-item :label="$t('productInfo.grid.address')" prop="zkAddressList">
-          <el-input
-              :placeholder="$t('productInfo.rules.address')"
-              v-model="form.zkAddressList"
-              autocomplete="off"
-          />
-        </el-form-item>
-        <el-form-item :label="$t('productInfo.grid.namespaces')" prop="namespace">
-          <el-input
-              :placeholder="$t('productInfo.rules.namespaces')"
-              v-model="form.namespace"
-              autocomplete="off"
-          />
-        </el-form-item>
-        <el-form-item :label="$t('productInfo.grid.digest')">
-          <el-input
-              :placeholder="$t('productInfo.rules.digest')"
-              v-model="form.digest"
-              autocomplete="off"
-          />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="addDialogVisible = false">{{ $t("productInfo.grid.btnCancelTxt") }}</el-button>
-        <el-button
-            type="primary"
-            @click="onConfirm('form')"
-        >{{ $t("productInfo.grid.btnConfirmTxt") }}
-        </el-button>
-      </div>
-    </el-dialog>
   </el-row>
 </template>
 <script>
@@ -112,54 +69,48 @@ export default {
       addDialogVisible: false,
       column: [
         {
-          label: this.$t('productInfo').grid.name,
+          label: this.$t('productType').grid.code,
+          prop: 'code'
+        },
+        {
+          label: this.$t('productType').grid.name,
           prop: 'name'
+        },
+        {
+          label: this.$t('productType').grid.memo,
+          prop: 'memo'
         }
       ],
       form: {
+        code: '',
         name: '',
-        zkAddressList: '',
-        namespace: '',
-        digest: ''
+        memo: ''
       },
       rules: {
+        code: [
+          {
+            required: true,
+            message: this.$t('productType').rules.code,
+            trigger: 'change'
+          }
+        ],
         name: [
           {
             required: true,
-            message: this.$t('productInfo').rules.name,
+            message: this.$t('productType').rules.name,
             trigger: 'change'
           }
         ],
-        zkAddressList: [
+        memo: [
           {
             required: true,
-            message: this.$t('productInfo').rules.address,
+            message: this.$t('productType').rules.memo,
             trigger: 'change'
           }
         ],
-        namespace: [
-          {
-            required: true,
-            message: this.$t('productInfo').rules.namespaces,
-            trigger: 'change'
-          }
-        ],
-        instanceType: [
-          {
-            required: true,
-            message: this.$t('productInfo').rules.centerType,
-            trigger: 'change'
-          }
-        ],
-        orchestrationName: [
-          {
-            required: true,
-            message: this.$t('productInfo').rules.orchestrationName,
-            trigger: 'change'
-          }
-        ]
       },
       tableData: [],
+      tableLoading: false,
       cloneTableData: [],
       pageNum: 1,
       pageSize: 10,
@@ -167,27 +118,26 @@ export default {
     };
   },
   created() {
-    this.getRegCenter();
+    this.getProductType();
   },
   methods: {
+    // TODO 待删除
     ...mapActions(['setRegCenterActivated']),
     handleCurrentChange(val) {
       const data = clone(this.cloneTableData);
       this.tableData = data.splice((val - 1) * this.pageSize, this.pageSize);
     },
-    getRegCenter() {
-      // API.getRegCenter().then(res => {
-      //   const data = res.model;
-      //   this.total = data.length;
-      //   this.cloneTableData = clone(res.model);
-      //   this.tableData = data.splice(0, this.pageSize);
-      // });
-      // this.getRegCenterActivated();
-    },
-    getRegCenterActivated() {
-      // API.getRegCenterActivated().then(res => {
-      //   this.setRegCenterActivated(res.model.name);
-      // });
+    getProductType() {
+      this.tableLoading = true;
+      API.queryProductType().then(res => {
+        const data = res.result;
+        this.total = data.length;
+        this.cloneTableData = clone(data);
+        this.tableData = data.splice(0, this.pageSize);
+        this.tableLoading = false;
+      }).catch(err => {
+        this.tableLoading = false;
+      });
     },
     handleConnect(row) {
       if (row.activated) {
@@ -249,11 +199,20 @@ export default {
 </script>
 <style lang='scss' scoped>
 .btn-group {
-  margin-bottom: 20px;
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.table_with_pagination {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .pagination {
-  float: right;
-  margin: 10px -10px 10px 0;
+  margin: 5px -10px 0 0;
+  display: flex;
+  justify-content: end;
+  align-items: start;
 }
 </style>

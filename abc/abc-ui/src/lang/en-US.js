@@ -36,7 +36,8 @@ export default {
         title: 'English',
         command: 'en-US'
       }
-    ]
+    ],
+    tableDataEmptyText: 'Empty',
   },
   btn: {
     add: 'Add',
@@ -54,7 +55,6 @@ export default {
     msg: 'Login status expired, please log in again'
   },
   productInfo: {
-    btnTxt: 'ADD',
     grid: {
       code: 'code',
       name: 'name',
@@ -68,14 +68,13 @@ export default {
       updateTime: 'updateTime'
     },
     addDialog: {
-      title: 'Add a registry center',
-      editTitle: 'Edit registry center',
-      name: 'Name',
-      centerType: 'Instance Type',
-      address: 'Zookeeper address',
-      orchestrationName: 'Orchestration Name',
-      namespaces: 'Namespace',
-      digest: 'Digest',
+      title: 'add product',
+      code: 'code',
+      name: 'name',
+      typeName: 'type',
+      actPrice: 'actPrice',
+      salePrice: 'salePrice',
+      memo: 'memo',
       btnConfirmTxt: 'Confirm',
       btnCancelTxt: 'Cancel'
     },
@@ -87,12 +86,31 @@ export default {
       operateEdit: 'Edit'
     },
     rules: {
-      name: 'Please enter the name of the registration center',
-      address: 'Please enter the registration center Address',
-      namespaces: 'Please enter a Namespace',
-      centerType: 'Please select a Center Type',
-      orchestrationName: 'Please enter a Orchestration Name',
-      digest: 'Please enter a digest'
+      code: 'Please enter the product code',
+      name: 'Please enter the product code',
+      typeName: 'Please enter the product type',
+      actPrice: 'Please enter the product actPrice',
+      salePrice: 'Please enter the product salePrice',
+      memo: 'Please enter the product memo',
+    }
+  },
+  productType: {
+    grid: {
+      code: 'code',
+      name: 'name',
+      memo: 'memo',
+    },
+    table: {
+      operate: 'Operate',
+      operateConnect: 'Connect',
+      operateConnected: 'Connected',
+      operateDel: 'Del',
+      operateEdit: 'Edit'
+    },
+    rules: {
+      code: 'Please enter the product type code',
+      name: 'Please enter the product type code',
+      memo: 'Please enter the product type memo',
     }
   },
   help: {

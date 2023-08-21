@@ -1,15 +1,18 @@
 <template>
-  <el-row class="box-card">
-    <div class="btn-group">
-      <el-button
-          class="btn-plus"
-          type="primary"
-          icon="el-icon-plus"
-          @click="add">{{ $t("btn.add") }}
-      </el-button>
-    </div>
-    <div class="table-wrap">
-      <el-table :data="tableData" border style="width: 100%">
+  <el-row v-loading="tableLoading" element-loading-background="rgba(255, 255, 255, 0.5)" style="height: 100%;">
+    <!-- 在Flex容器中的元素将竖向排列，从上到下依次显示，靠左对齐 -->
+    <div class='table_with_pagination'>
+      <div class="btn-group">
+        <el-button
+            class="btn-plus"
+            type="primary"
+            icon="el-icon-plus"
+            @click="add">{{ $t("btn.add") }}
+        </el-button>
+      </div>
+      <el-table
+          :data="tableData"
+          :empty-text="$t('common.tableDataEmptyText')" border>
         <el-table-column
             v-for="(item, index) in gridColumns"
             :key="index"
@@ -56,32 +59,34 @@
     <el-dialog
         :title="$t('productInfo.addDialog.title')"
         :visible.sync="addDialogVisible"
-        width="1010px"
-    >
+        @open="addDialogOpen"
+        @closed="addDialogClose"
+        width="1010px">
+      <!-- model绑定数据列表，rules绑定校验规则列表 -->
       <el-form ref="form" :model="form" :rules="rules" label-width="170px">
+        <!-- prop用于规格匹配 -->
+        <el-form-item :label="$t('productInfo.addDialog.typeName')" prop="typeName">
+          <!-- el-select的v-model用于双向绑定待填充数据 -->
+          <el-select clearable v-model="form.typeName" :placeholder="$t('productInfo.addDialog.typeName')">
+            <el-option v-for="(item, index) in fromProductTypeList"
+                       :key="index" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('productInfo.addDialog.code')" prop="code">
+          <!-- el-input的v-model用于双向绑定待填充数据 -->
+          <el-input :placeholder="$t('productInfo.rules.code')" v-model="form.code" autocomplete="off"/>
+        </el-form-item>
         <el-form-item :label="$t('productInfo.addDialog.name')" prop="name">
           <el-input :placeholder="$t('productInfo.rules.name')" v-model="form.name" autocomplete="off"/>
         </el-form-item>
-        <el-form-item :label="$t('productInfo.addDialog.address')" prop="zkAddressList">
-          <el-input
-              :placeholder="$t('productInfo.rules.address')"
-              v-model="form.zkAddressList"
-              autocomplete="off"
-          />
+        <el-form-item :label="$t('productInfo.addDialog.actPrice')" prop="actPrice">
+          <el-input :placeholder="$t('productInfo.rules.actPrice')" v-model="form.actPrice" autocomplete="off"/>
         </el-form-item>
-        <el-form-item :label="$t('productInfo.addDialog.namespaces')" prop="namespace">
-          <el-input
-              :placeholder="$t('productInfo.rules.namespaces')"
-              v-model="form.namespace"
-              autocomplete="off"
-          />
+        <el-form-item :label="$t('productInfo.addDialog.salePrice')" prop="salePrice">
+          <el-input :placeholder="$t('productInfo.rules.salePrice')" v-model="form.salePrice" autocomplete="off"/>
         </el-form-item>
-        <el-form-item :label="$t('productInfo.addDialog.digest')">
-          <el-input
-              :placeholder="$t('productInfo.rules.digest')"
-              v-model="form.digest"
-              autocomplete="off"
-          />
+        <el-form-item :label="$t('productInfo.addDialog.memo')">
+          <el-input :placeholder="$t('productInfo.rules.memo')" v-model="form.memo" autocomplete="off"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -132,12 +137,22 @@ export default {
         }
       ],
       form: {
+        code: '',
         name: '',
-        zkAddressList: '',
-        namespace: '',
-        digest: ''
+        typeName: '',
+        actPrice: '',
+        salePrice: '',
+        memo: '',
       },
+      fromProductTypeList: [],
       rules: {
+        code: [
+          {
+            required: true,
+            message: this.$t('productInfo').rules.code,
+            trigger: 'change'
+          }
+        ],
         name: [
           {
             required: true,
@@ -145,36 +160,30 @@ export default {
             trigger: 'change'
           }
         ],
-        zkAddressList: [
+        typeName: [
           {
             required: true,
-            message: this.$t('productInfo').rules.address,
+            message: this.$t('productInfo').rules.typeName,
             trigger: 'change'
           }
         ],
-        namespace: [
+        actPrice: [
           {
             required: true,
-            message: this.$t('productInfo').rules.namespaces,
+            message: this.$t('productInfo').rules.actPrice,
             trigger: 'change'
           }
         ],
-        instanceType: [
+        salePrice: [
           {
             required: true,
-            message: this.$t('productInfo').rules.centerType,
+            message: this.$t('productInfo').rules.salePrice,
             trigger: 'change'
           }
         ],
-        orchestrationName: [
-          {
-            required: true,
-            message: this.$t('productInfo').rules.orchestrationName,
-            trigger: 'change'
-          }
-        ]
       },
       tableData: [],
+      tableLoading: false,
       cloneTableData: [],
       pageNum: 1,
       pageSize: 10,
@@ -185,19 +194,35 @@ export default {
     this.getProductInfo();
   },
   methods: {
+    // TODO 待删除
     ...mapActions(['setRegCenterActivated']),
+    getProductInfo() {
+      this.tableLoading = true;
+      API.queryProductInfo().then(res => {
+        const data = res.result;
+        this.total = data.length;
+        this.cloneTableData = clone(data);
+        this.tableData = data.splice(0, this.pageSize);
+        this.tableLoading = false;
+      }).catch(err => {
+        this.tableLoading = false;
+      });
+    },
     handleCurrentChange(val) {
       const data = clone(this.cloneTableData);
       this.tableData = data.splice((val - 1) * this.pageSize, this.pageSize);
     },
-    getProductInfo() {
-      API.queryProductInfo().then(res => {
-        const data = res.result;
-        this.total = data.length;
-        this.cloneTableData = clone(res.model);
-        this.tableData = data.splice(0, this.pageSize);
+    /* 弹窗打开时，加载商品类型数据 */
+    /* 弹窗关闭结束时，清空填充信息+规则提示信息 */
+    addDialogOpen() {
+      API.queryProductType().then(res => {
+        this.fromProductTypeList = res.result;
       });
     },
+    addDialogClose() {
+      this.$refs.form.resetFields();
+    },
+
     handleConnect(row) {
       if (row.activated) {
         this.$notify({
@@ -258,11 +283,18 @@ export default {
 </script>
 <style lang='scss' scoped>
 .btn-group {
-  margin-bottom: 20px;
+  display: flex;
+  margin-bottom: 10px;
 }
-
+.table_with_pagination {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 .pagination {
-  float: right;
-  margin: 10px -10px 10px 0;
+  margin: 5px -10px 0 0;
+  display: flex;
+  justify-content: end;
+  align-items: start;
 }
 </style>
