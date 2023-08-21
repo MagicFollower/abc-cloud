@@ -11,7 +11,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.204.101:23306/abc-backend?autoReconnect=true&useServerPreparedStmts=true&cachePrepStmts=true&rewriteBatchedStatements=true&allowMultiQueries=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&connectionTimeZone=SERVER
     username: root
-    password: ********************
+    password: Mysql12345
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       ### 最小空闲连接，默认值10，小于0或大于maximum-pool-size，都会重置为maximum-pool-size
@@ -19,7 +19,7 @@ spring:
       ### 最大连接数，小于等于0会被重置为默认值10；大于零小于1会被重置为minimum-idle的值
       maximum-pool-size: 20
       ### 连接池名称，默认HikariPool-1
-      pool-name: HikariPool-Abc-1
+      pool-name: HikariPool(abc-backend)
       ### 连接超时时间:毫秒，小于250毫秒，会被重置为默认值30秒
       connection-timeout: 10000
       ### 连接测试查询
