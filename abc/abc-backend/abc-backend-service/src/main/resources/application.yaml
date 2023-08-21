@@ -1,7 +1,5 @@
 server:
   port: 18880
-  tomcat:
-    accept-count: 3000
 spring:
   main:
     banner-mode: off
@@ -17,7 +15,7 @@ spring:
       ### 最小空闲连接，默认值10，小于0或大于maximum-pool-size，都会重置为maximum-pool-size
       minimum-idle: 10
       ### 最大连接数，小于等于0会被重置为默认值10；大于零小于1会被重置为minimum-idle的值
-      maximum-pool-size: 20
+      maximum-pool-size: 1000
       ### 连接池名称，默认HikariPool-1
       pool-name: HikariPool(abc-backend)
       ### 连接超时时间:毫秒，小于250毫秒，会被重置为默认值30秒

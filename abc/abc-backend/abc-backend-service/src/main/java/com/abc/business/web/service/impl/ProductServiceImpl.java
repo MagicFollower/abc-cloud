@@ -45,6 +45,12 @@ public class ProductServiceImpl implements IProductService {
         List<ProductDTO> dtoList;
 
         try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
             Map<Long, String> productTypeIdToNameMap = productTypeMapper.selectAll()
                     .stream().collect(Collectors.toMap(AbcProductType::getId, AbcProductType::getName));
             List<AbcProduct> abcProducts = productMapper.selectAll();
