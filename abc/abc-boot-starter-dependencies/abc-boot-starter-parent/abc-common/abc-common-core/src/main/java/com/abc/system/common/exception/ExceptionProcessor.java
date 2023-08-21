@@ -7,8 +7,7 @@ import com.abc.system.common.response.AbstractResponse;
 /**
  * 异常处理器工具
  *
- * @Description
- * <pre>
+ * @Description <pre>
  *   1.用于微服务Service层对异常（服务层可预测异常BaseException的子类）信息的包装，将异常编码+信息写入到AbstractResponse中；
  *   2.命名风格和ResponseProcessor保持一致。
  * </pre>
@@ -18,28 +17,27 @@ import com.abc.system.common.response.AbstractResponse;
  */
 public class ExceptionProcessor {
 
-    private ExceptionProcessor(){}
-
-    public static AbstractResponse wrapAndHandleException(AbstractResponse abstractResponse, Throwable e) {
-        if(e instanceof BaseRuntimeException){
-            abstractResponse.setCode(((BaseRuntimeException) e).getErrorCode());
-            abstractResponse.setMsg(e.getMessage());
-        }else{
-            // 未预测异常，不处理
-            abstractResponse.fill(SystemRetCodeConstants.SYSTEM_ERROR);
-        }
-        return abstractResponse;
+    private ExceptionProcessor() {
     }
 
-    public static AbstractResponse wrapAndHandleException(AbstractResponse abstractResponse, Throwable e,
-                                                          String predictableErrorMsg) {
-        if(e instanceof BaseRuntimeException){
+    public static void wrapAndHandleException(AbstractResponse abstractResponse, Throwable e) {
+        if (e instanceof BaseRuntimeException) {
             abstractResponse.setCode(((BaseRuntimeException) e).getErrorCode());
-            abstractResponse.setMsg(predictableErrorMsg);
-        }else{
+            abstractResponse.setMsg(e.getMessage());
+        } else {
             // 未预测异常，不处理
             abstractResponse.fill(SystemRetCodeConstants.SYSTEM_ERROR);
         }
-        return abstractResponse;
+    }
+
+    public static void wrapAndHandleException(AbstractResponse abstractResponse, Throwable e,
+                                              String predictableErrorMsg) {
+        if (e instanceof BaseRuntimeException) {
+            abstractResponse.setCode(((BaseRuntimeException) e).getErrorCode());
+            abstractResponse.setMsg(predictableErrorMsg);
+        } else {
+            // 未预测异常，不处理
+            abstractResponse.fill(SystemRetCodeConstants.SYSTEM_ERROR);
+        }
     }
 }
