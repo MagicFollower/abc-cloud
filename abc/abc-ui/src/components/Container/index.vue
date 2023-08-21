@@ -1,7 +1,7 @@
 <template>
   <!-- 左右结构：el-aside + el-container -->
   <el-container style="height: 100%;">
-    <el-aside width="auto">
+    <el-aside width="auto" style="height: 100vh">
       <s-menu :is-collapse="isCollapse" />
     </el-aside>
     <el-container>
