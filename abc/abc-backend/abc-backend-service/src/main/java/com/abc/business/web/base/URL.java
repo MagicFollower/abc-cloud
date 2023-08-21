@@ -10,6 +10,7 @@ package com.abc.business.web.base;
  */
 public class URL {
 
-    public static final String PRODUCT = "/product";
-    public static final String PRODUCT_ADD = "/product/add";
+    public static final String PRODUCT = "/api/product-info";
+    public static final String PRODUCT_QUERY_ALL = PRODUCT + "/queryAll";
+    public static final String PRODUCT_ADD = PRODUCT + "/add";
 }

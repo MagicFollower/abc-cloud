@@ -53,16 +53,28 @@ export default {
   loginExpireDialog: {
     msg: '登录状态过期，请重新登录'
   },
-  registryCenter: {
+  productInfo: {
     btnTxt: '添加',
-    registDialog: {
+    grid: {
+      code: '编码',
+      name: '名称',
+      typeName: '类型',
+      actPrice: '实际价格',
+      salePrice: '销售价格',
+      memo: '备注',
+      createUser: '创建用户',
+      createTime: '创建时间',
+      updateUser: '更新用户',
+      updateTime: '更新时间'
+    },
+    addDialog: {
+      name: '注册中心名称',
+      address: '注册中心地址',
+      namespaces: '命名空间',
       title: '添加注册中心',
       editTitle: '编辑注册中心',
-      name: '注册中心名称',
       centerType: '注册中心类型',
-      address: '注册中心地址',
       orchestrationName: '数据治理实例',
-      namespaces: '命名空间',
       digest: '登录凭证',
       btnConfirmTxt: '确定',
       btnCancelTxt: '取消'

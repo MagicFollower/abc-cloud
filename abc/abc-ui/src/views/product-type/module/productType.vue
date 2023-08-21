@@ -2,46 +2,47 @@
   <el-row class="box-card">
     <div class="btn-group">
       <el-button
-        class="btn-plus"
-        type="primary"
-        icon="el-icon-plus"
-        @click="add">{{ $t("btn.add") }}</el-button>
+          class="btn-plus"
+          type="primary"
+          icon="el-icon-plus"
+          @click="add">{{ $t("btn.add") }}
+      </el-button>
     </div>
     <div class="table-wrap">
       <el-table :data="tableData" border style="width: 100%">
         <el-table-column
-          v-for="(item, index) in column"
-          :key="index"
-          :prop="item.prop"
-          :label="item.label"
-          :width="item.width"
+            v-for="(item, index) in column"
+            :key="index"
+            :prop="item.prop"
+            :label="item.label"
+            :width="item.width"
         />
-        <el-table-column :label="$t('registryCenter.table.operate')" fixed="right" width="200">
+        <el-table-column :label="$t('productInfo.table.operate')" fixed="right" width="200">
           <template slot-scope="scope">
             <el-tooltip
-              :content="!scope.row.activated ? $t('registryCenter.table.operateConnect'): $t('registryCenter.table.operateConnected')"
-              class="item"
-              effect="dark"
-              placement="top"
+                :content="!scope.row.activated ? $t('productInfo.table.operateConnect'): $t('productInfo.table.operateConnected')"
+                class="item"
+                effect="dark"
+                placement="top"
             >
               <el-button
-                :type="scope.row.activated ? 'success' : 'primary'"
-                icon="el-icon-link"
-                size="small"
-                @click="handleConnect(scope.row)"
+                  :type="scope.row.activated ? 'success' : 'primary'"
+                  icon="el-icon-link"
+                  size="small"
+                  @click="handleConnect(scope.row)"
               />
             </el-tooltip>
             <el-tooltip
-              :content="$t('registryCenter.table.operateDel')"
-              class="item"
-              effect="dark"
-              placement="top"
+                :content="$t('productInfo.table.operateDel')"
+                class="item"
+                effect="dark"
+                placement="top"
             >
               <el-button
-                size="small"
-                type="danger"
-                icon="el-icon-delete"
-                @click="handlerDel(scope.row)"
+                  size="small"
+                  type="danger"
+                  icon="el-icon-delete"
+                  @click="handlerDel(scope.row)"
               />
             </el-tooltip>
           </template>
@@ -49,59 +50,61 @@
       </el-table>
       <div class="pagination">
         <el-pagination
-          :total="total"
-          :current-page="pageNum"
-          background
-          layout="prev, pager, next"
-          @current-change="handleCurrentChange"
+            :total="total"
+            :current-page="pageNum"
+            background
+            layout="prev, pager, next"
+            @current-change="handleCurrentChange"
         />
       </div>
     </div>
     <el-dialog
-      :title="$t('registryCenter.registDialog.title')"
-      :visible.sync="addDialogVisible"
-      width="1010px"
+        :title="$t('productInfo.grid.title')"
+        :visible.sync="addDialogVisible"
+        width="1010px"
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="170px">
-        <el-form-item :label="$t('registryCenter.registDialog.name')" prop="name">
-          <el-input :placeholder="$t('registryCenter.rules.name')" v-model="form.name" autocomplete="off" />
+        <el-form-item :label="$t('productInfo.grid.name')" prop="name">
+          <el-input :placeholder="$t('productInfo.rules.name')" v-model="form.name" autocomplete="off"/>
         </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.address')" prop="zkAddressList">
+        <el-form-item :label="$t('productInfo.grid.address')" prop="zkAddressList">
           <el-input
-            :placeholder="$t('registryCenter.rules.address')"
-            v-model="form.zkAddressList"
-            autocomplete="off"
+              :placeholder="$t('productInfo.rules.address')"
+              v-model="form.zkAddressList"
+              autocomplete="off"
           />
         </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.namespaces')" prop="namespace">
+        <el-form-item :label="$t('productInfo.grid.namespaces')" prop="namespace">
           <el-input
-            :placeholder="$t('registryCenter.rules.namespaces')"
-            v-model="form.namespace"
-            autocomplete="off"
+              :placeholder="$t('productInfo.rules.namespaces')"
+              v-model="form.namespace"
+              autocomplete="off"
           />
         </el-form-item>
-        <el-form-item :label="$t('registryCenter.registDialog.digest')">
+        <el-form-item :label="$t('productInfo.grid.digest')">
           <el-input
-            :placeholder="$t('registryCenter.rules.digest')"
-            v-model="form.digest"
-            autocomplete="off"
+              :placeholder="$t('productInfo.rules.digest')"
+              v-model="form.digest"
+              autocomplete="off"
           />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="addDialogVisible = false">{{ $t("registryCenter.registDialog.btnCancelTxt") }}</el-button>
+        <el-button @click="addDialogVisible = false">{{ $t("productInfo.grid.btnCancelTxt") }}</el-button>
         <el-button
-          type="primary"
-          @click="onConfirm('form')"
-        >{{ $t("registryCenter.registDialog.btnConfirmTxt") }}</el-button>
+            type="primary"
+            @click="onConfirm('form')"
+        >{{ $t("productInfo.grid.btnConfirmTxt") }}
+        </el-button>
       </div>
     </el-dialog>
   </el-row>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import {mapActions} from 'vuex';
 import clone from 'lodash/clone';
 import API from '../api';
+
 export default {
   name: 'RegistryCenter',
   data() {
@@ -109,16 +112,8 @@ export default {
       addDialogVisible: false,
       column: [
         {
-          label: this.$t('registryCenter').registDialog.name,
+          label: this.$t('productInfo').grid.name,
           prop: 'name'
-        },
-        {
-          label: this.$t('registryCenter').registDialog.address,
-          prop: 'zkAddressList'
-        },
-        {
-          label: this.$t('registryCenter').registDialog.namespaces,
-          prop: 'namespace'
         }
       ],
       form: {
@@ -131,35 +126,35 @@ export default {
         name: [
           {
             required: true,
-            message: this.$t('registryCenter').rules.name,
+            message: this.$t('productInfo').rules.name,
             trigger: 'change'
           }
         ],
         zkAddressList: [
           {
             required: true,
-            message: this.$t('registryCenter').rules.address,
+            message: this.$t('productInfo').rules.address,
             trigger: 'change'
           }
         ],
         namespace: [
           {
             required: true,
-            message: this.$t('registryCenter').rules.namespaces,
+            message: this.$t('productInfo').rules.namespaces,
             trigger: 'change'
           }
         ],
         instanceType: [
           {
             required: true,
-            message: this.$t('registryCenter').rules.centerType,
+            message: this.$t('productInfo').rules.centerType,
             trigger: 'change'
           }
         ],
         orchestrationName: [
           {
             required: true,
-            message: this.$t('registryCenter').rules.orchestrationName,
+            message: this.$t('productInfo').rules.orchestrationName,
             trigger: 'change'
           }
         ]
@@ -256,6 +251,7 @@ export default {
 .btn-group {
   margin-bottom: 20px;
 }
+
 .pagination {
   float: right;
   margin: 10px -10px 10px 0;

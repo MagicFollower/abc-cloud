@@ -53,9 +53,21 @@ export default {
   loginExpireDialog: {
     msg: 'Login status expired, please log in again'
   },
-  registryCenter: {
+  productInfo: {
     btnTxt: 'ADD',
-    registDialog: {
+    grid: {
+      code: 'code',
+      name: 'name',
+      typeName: 'type',
+      actPrice: 'actPrice',
+      salePrice: 'salePrice',
+      memo: 'memo',
+      createUser: 'createUser',
+      createTime: 'createTime',
+      updateUser: 'updateUser',
+      updateTime: 'updateTime'
+    },
+    addDialog: {
       title: 'Add a registry center',
       editTitle: 'Edit registry center',
       name: 'Name',

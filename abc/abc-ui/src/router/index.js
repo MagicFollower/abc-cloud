@@ -23,13 +23,13 @@ export const constantRouterMap = [
   },
   {
     path: '/product-info',
-    component: () => import('@/views/registry-center'),
+    component: () => import('@/views/product-info'),
     hidden: true,
     name: 'ProductInfo'
   },
   {
     path: '/product-type',
-    component: () => import('@/views/registry-center'),
+    component: () => import('@/views/product-type'),
     hidden: true,
     name: 'ProductType'
   },
