@@ -2,10 +2,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.abc.vue</groupId>
-    <artifactId>abc-ui</artifactId>
+    <artifactId>abc-ui-version1</artifactId>
     <version>3.0.2</version>
 
-    <name>abc-ui</name>
+    <name>abc-ui-version1</name>
 
     <properties>
         <node.version>v18.17.1</node.version>
