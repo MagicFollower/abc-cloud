@@ -20,6 +20,7 @@ module.exports = defineConfig({
       }
     },
     disableHostCheck: true,
-    port: 8880
+    port: 8880,
+    open: true
   }
 });
