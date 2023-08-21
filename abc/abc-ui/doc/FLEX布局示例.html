@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .fill-height {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .fixed-height {
+      height: 100px;
+      display: flex;
+      justify-content: end;
+      align-items: end;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="fill-height">
+      <!-- 第一个元素内容 -->
+      First Element
+    </div>
+    <div class="fixed-height">
+      <!-- 第二个元素内容 -->
+      Second Element
+    </div>
+  </div>
+</body>
+</html>
