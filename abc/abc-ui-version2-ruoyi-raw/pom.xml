@@ -5,7 +5,7 @@
     <artifactId>abc-ui-version2-ruoyi-raw</artifactId>
     <version>0.0.1</version>
 
-    <name>abc-ui-version2</name>
+    <name>abc-ui-version2-ruoyi-raw</name>
 
     <properties>
         <node.version>v14.21.3</node.version>
