@@ -86,9 +86,18 @@ export default {
       redirect: undefined
     }
   },
+  // listen route change, if changed, save new
+  // 1.when logout, logout method will set redirect query-para in login URL,
+  //   the watch attribute there will watch the change when /login path add new query-para(redirect) and then record it.
+  // 2.test it: you can visit 'http://localhost:9528/#/login?aaa=123', then you can find some logs in browser console.
+  // 3.handler value is a function, this function has one/two parameters, one is newValue, two is oldValue&newValue;
   watch: {
     $route: {
       handler: function(route) {
+        console.log('START>>>>>>>>>>>>>>')
+        console.log(route.query)
+        console.log(route.query.redirect)
+        console.log('END>>>>>>>>>>>>>>>>')
         this.redirect = route.query && route.query.redirect
       },
       immediate: true
@@ -112,6 +121,7 @@ export default {
           // 暂停1s
           setTimeout(() => {
             this.$store.dispatch('user/login', this.loginForm).then(() => {
+              // login successfully, change route to root path
               this.$router.push({ path: this.redirect || '/' })
               this.loading = false
             }).catch(() => {

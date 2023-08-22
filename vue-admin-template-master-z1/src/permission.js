@@ -10,6 +10,9 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login'] // no redirect whitelist
 
+// 1.check token(cookie) exists
+// 2.check to#url whether in whiteList
+// 3.else to login page
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()

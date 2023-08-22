@@ -46,12 +46,13 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
+    // if using cascading-route, you can use redirect attribute to set default subpage
     redirect: '/dashboard',
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: 'Dashboard', icon: 'dashboard'}
     }]
   },
 
