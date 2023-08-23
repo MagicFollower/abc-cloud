@@ -6,11 +6,6 @@ const tokens = {
     token: 'editor-token'
   }
 }
-// passwords for admin and editor
-const passwords = {
-  admin: 'Admin12345',
-  editor: '123456'
-}
 
 const users = {
   'admin-token': {
@@ -41,23 +36,6 @@ module.exports = [
         return {
           code: 60204,
           message: 'Account and password are incorrect.'
-        }
-      }
-
-      // password-check
-      if (username === 'admin') {
-        if (password !== passwords[username]) {
-          return {
-            code: 60204,
-            message: 'Account and password are incorrect.'
-          }
-        }
-      } else if (username === 'editor') {
-        if (password !== passwords[username]) {
-          return {
-            code: 60204,
-            message: 'Account and password are incorrect.'
-          }
         }
       }
 
