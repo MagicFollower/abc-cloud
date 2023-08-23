@@ -121,7 +121,7 @@ export default {
           // 暂停1s
           setTimeout(() => {
             this.$store.dispatch('user/login', this.loginForm).then(() => {
-              // login successfully, change route to root path
+              // login successfully, change route to a root path
               this.$router.push({ path: this.redirect || '/' })
               this.loading = false
             }).catch(() => {

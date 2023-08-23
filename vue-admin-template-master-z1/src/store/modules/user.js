@@ -5,6 +5,11 @@ import { sha512base64 } from '@/utils/sha512'
 
 const getDefaultState = () => {
   return {
+    // current page refresh, the state in page will be reloaded,
+    //   → so store's token-attribute value will be reloaded from Cookies again!!!
+    //   → when current page refresh, userinfo(this is name) in store will be reset,
+    //     → and the router-guard (@/permission.js) will check hasToken but do not have userInfo(there is name) in store,
+    //     → so, router-guard will resend request to fetch userInfo and store it.
     token: getToken(),
     name: '',
     avatar: ''

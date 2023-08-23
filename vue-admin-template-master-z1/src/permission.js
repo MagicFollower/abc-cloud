@@ -21,6 +21,8 @@ router.beforeEach(async(to, from, next) => {
   document.title = getPageTitle(to.meta.title)
 
   // determine whether the user has logged in
+  // tips!!!
+  //   → there is bind to [state in vuex: user/token], about 'fist login' or 'page refresh'.
   const hasToken = getToken()
 
   if (hasToken) {
