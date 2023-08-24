@@ -276,8 +276,8 @@ public class RedissonHelper {
      * @param key      待分页的KEY
      * @return 指定分页内的数据
      */
-    public static PageResponse<List<String>> getPageInfoFromRedis(PageInfo pageInfo, String key) {
-        PageResponse<List<String>> pageResponse = new PageResponse<>();
+    public static PageResponse getPageInfoFromRedis(PageInfo pageInfo, String key) {
+        PageResponse pageResponse = new PageResponse();
         if (StringUtils.isEmpty(key)) {
             log.warn(">>>>>>>>>>> query page data from redis|key is empty <<<<<<<<<<<");
             return pageResponse;
@@ -291,7 +291,7 @@ public class RedissonHelper {
         Instant startTime = Instant.now();
         RScoredSortedSet<String> rScoredSortedSet = redissonClient.getScoredSortedSet(key);
         List<String> result = (List<String>) rScoredSortedSet.valueRangeReversed(start, end);
-        pageResponse = new PageResponse<>();
+        pageResponse = new PageResponse();
         pageResponse.setData(result);
         pageResponse.setTotal(rScoredSortedSet.size());
         Instant endTime = Instant.now();

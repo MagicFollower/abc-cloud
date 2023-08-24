@@ -39,11 +39,11 @@ public class OrderController {
 
 
     @GetMapping("/demo01")
-    public ResponseData<PageResponse<List<OrderDTO>>> demo01() {
+    public ResponseData<PageResponse> demo01() {
 
-        final ResponseProcessor<PageResponse<List<OrderDTO>>> rp = new ResponseProcessor<>();
+        final ResponseProcessor<PageResponse> rp = new ResponseProcessor<>();
         // RPC异常_服务未启动/超时：org.apache.dubbo.rpc.RpcException: No provider available from registry
-        //   -> RpcException                       ➡️RuntimeException
+        //   -> RpcException➡️RuntimeException
         final BaseResponse<List<OrderDTO>> baseResponse;
         final String SERVICE_NAME = "iDemoOrderService";
         try {
@@ -69,7 +69,7 @@ public class OrderController {
         System.out.println(JSONObject.toJSONString(baseResponse.getResult(), JSONWriter.Feature.PrettyFormat));
         System.out.println("=========================CONTROLLER-END=========================");
 
-        final PageResponse<List<OrderDTO>> pageResponse = new PageResponse<>();
+        final PageResponse pageResponse = new PageResponse();
         pageResponse.setTotal(baseResponse.getTotal());
         pageResponse.setData(baseResponse.getResult());
         // 多语言测试2
@@ -83,7 +83,7 @@ public class OrderController {
      * @return useless
      */
     @GetMapping("/demo02")
-    public ResponseData<PageResponse<List<OrderDTO>>> demo02() {
+    public ResponseData<PageResponse> demo02() {
         throw new RuntimeException("发生了异常");
     }
 }

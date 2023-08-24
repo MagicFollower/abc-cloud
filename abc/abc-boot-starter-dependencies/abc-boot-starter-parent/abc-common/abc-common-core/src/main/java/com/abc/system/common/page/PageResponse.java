@@ -20,10 +20,10 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PageResponse<T> implements Serializable {
+public class PageResponse implements Serializable {
     // 未分页结果集的大小
     private long total = -1L;
 
     // 根据分页参数限制后的分页数据集
-    private T data;
+    private Object data;
 }
