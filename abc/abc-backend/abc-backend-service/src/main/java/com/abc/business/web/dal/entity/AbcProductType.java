@@ -1,19 +1,26 @@
 package com.abc.business.web.dal.entity;
 
-import java.util.Date;
-import javax.persistence.*;
+import com.abc.system.dao.tkmybatis.idgenerator.AbcTkGlobalIdGen;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tk.mybatis.mapper.annotation.KeySql;
+
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.util.Date;
 
 /**
  * 表名：abc_product_type
  * 表注释：商品类型
-*/
+ */
 @Data
 @NoArgsConstructor
 @Table(name = "`abc_product_type`")
 public class AbcProductType {
+    @Id
     @Column(name = "`id`")
+    @KeySql(genId = AbcTkGlobalIdGen.class)
     private Long id;
 
     /**

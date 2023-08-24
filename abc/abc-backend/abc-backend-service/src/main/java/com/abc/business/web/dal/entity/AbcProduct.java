@@ -3,8 +3,11 @@ package com.abc.business.web.dal.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
+
+import com.abc.system.dao.tkmybatis.idgenerator.AbcTkGlobalIdGen;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tk.mybatis.mapper.annotation.KeySql;
 
 /**
  * 表名：abc_product
@@ -16,6 +19,7 @@ import lombok.NoArgsConstructor;
 public class AbcProduct {
     @Id
     @Column(name = "`id`")
+    @KeySql(genId = AbcTkGlobalIdGen.class)
     private Long id;
 
     /**

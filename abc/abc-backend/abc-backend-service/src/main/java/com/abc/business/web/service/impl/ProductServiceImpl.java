@@ -78,6 +78,9 @@ public class ProductServiceImpl implements IProductService {
     public DefaultResponse add(ProductRequest<ProductVO> request) {
         DefaultResponse defaultResponse = new DefaultResponse();
 
+        AbcProduct abcProduct = new AbcProduct();
+        productMapper.insertSelective(abcProduct);
+
         // TODO
         defaultResponse.fill(SystemRetCodeConstants.OP_SUCCESS);
         return defaultResponse;
