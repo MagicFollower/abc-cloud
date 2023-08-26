@@ -14,6 +14,7 @@ import tk.mybatis.mapper.genid.GenId;
  *      @KeySql(genId = AbcTkGlobalIdGen.class)
  *      private Long id;
  * }
+ *   1.2 mybatis-generator无法自动添加@KeySql，你需要手动在生成的实体主键上添加该ID生成注解。
  * 🤔️它什么时候生效？
  * 1.insert/insertSelective的时候会生效
  * 2.如果insert/insertSelective的实体中id已经赋值，则使用已经存在的值，当id=null时，会自动生成id并填充
