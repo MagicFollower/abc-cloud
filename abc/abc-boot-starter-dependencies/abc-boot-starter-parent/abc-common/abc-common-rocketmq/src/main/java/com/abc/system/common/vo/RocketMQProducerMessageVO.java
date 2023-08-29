@@ -13,8 +13,8 @@ import java.io.Serializable;
  * 🔍核心配置属性
  * 1.topic
  * 2.content
- * 3.tags
- * 4.id
+ * 3.tags → "KEYS"
+ * 4.id   → "TAGS"
  * 5.(delayTimeLevel=0)
  * 6.(msgKey=自动生成)
  * </pre>

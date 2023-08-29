@@ -40,7 +40,11 @@ public class RocketMQConsumerVO {
      * 消息模式（广播模式、集群模式[默认]）
      * <pre>
      * 1.MessageModel.BROADCASTING
+     *   → 表示消息消费者以集群模式进行消费。在集群模式下，消费者组中的每个消费者将从某个 Topic 的一个队列中消费消息。
+     *   → RocketMQ 负责实现消费者负载均衡，即将消息平均分配给消费者组中的每个消费者。
+     *   → 当某个消费者出现故障时，RocketMQ 会将该消费者未消费的消息重新分配给其他消费者，从而实现高可用性。
      * 2.MessageModel.CLUSTERING
+     *   → 在广播模式下，消费者组中的每个消费者都会收到相同的消息副本。
      * </pre>
      */
     private MessageModel messageModel;
