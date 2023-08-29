@@ -40,7 +40,7 @@ public class RocketMQProducerMessageVO implements Serializable {
      * 填充Message#DelayTimeLevel
      * <pre>
      * 关于DelayTimeLevel级别与时间的对应关系🤔️
-     *   → 默认18级: [1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h]
+     *   → 默认19级: [0s 1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h]
      * </pre>
      */
     private int delayTimeLevel;
