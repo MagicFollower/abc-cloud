@@ -9,6 +9,15 @@ import java.io.Serializable;
 
 /**
  * RocketMQProducerMessageVO[自定义消息结构]
+ * <pre>
+ * 🔍核心配置属性
+ * 1.topic
+ * 2.content
+ * 3.tags
+ * 4.id
+ * 5.(delayTimeLevel=0)
+ * 6.(msgKey=自动生成)
+ * </pre>
  *
  * @Description RocketMQProducerMessageVO[自定义消息结构]
  * @Author -
@@ -21,21 +30,22 @@ import java.io.Serializable;
 @Builder
 public class RocketMQProducerMessageVO implements Serializable {
     /**
-     * 填充Message#Keys
+     * 填充Message#KEYS (同一KEYS的多条消息会被发送到Topic的同一个Queue中，一个Queue原生支持消息的顺序消费)
      */
     private Long id;
     /**
-     * 填充Message#Topic（必填）
+     * 填充Message#Topic（必填）🔍常见：根据业务区分
      */
     private String topic;
     /**
-     * 填充Message#Tags
+     * 填充Message#Tags 🔍常见：根据业务下的表名区分，针对不同表作出不同的决策
      */
     private String tags;
     /**
      * 填充Message#Body
      */
     private Object content;
+
     /**
      * 填充Message#DelayTimeLevel
      * <pre>
