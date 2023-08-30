@@ -37,6 +37,9 @@ public interface IRocketMQProducerService {
 
     /**
      * 同步单条发送（有序）
+     * <pre>
+     * 1.基于msgKey实现自定义消息队列选择器（MessageQueueSelector），实现相同msgKey的消息将会被发送至同一消息队列的效果。
+     * </pre>
      *
      * @param mqMessage RocketMQMessage
      * @return SendResult

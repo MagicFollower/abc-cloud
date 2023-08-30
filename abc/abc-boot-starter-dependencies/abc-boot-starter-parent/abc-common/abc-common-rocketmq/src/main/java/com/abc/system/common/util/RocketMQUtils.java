@@ -32,8 +32,11 @@ public class RocketMQUtils {
     public static Message convertToMessage(RocketMQProducerMessageVO mqMessage) {
         Message message = new Message();
 
+        // RocketMQ可以开启消息自动去重，此时会使用到KEYS属性。如果没有开启（默认情况下）这个参数不会有任何作用。
+        //   →使用该内置的属性（set/get），你可以在消费者端或生产者端进行手动控制数据的重复检测（可以使用单独的数据表记录已经发送的数据或其他方案）
         String id = mqMessage.getId() == null ? UUID.randomUUID().toString() : mqMessage.getId().toString();
         message.setKeys(id);
+
         message.setTopic(mqMessage.getTopic());
         message.setTags(mqMessage.getTags());
 
@@ -48,7 +51,7 @@ public class RocketMQUtils {
         }
         message.setBody(body.getBytes(StandardCharsets.UTF_8));
 
-        // 18级: [1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h]
+        // 19级: [0s 1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h]
         message.setDelayTimeLevel(mqMessage.getDelayTimeLevel());
         return message;
     }

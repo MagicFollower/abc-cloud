@@ -88,6 +88,10 @@ public class RocketMQProducerServiceImpl implements IRocketMQProducerService {
 
         try {
             sendMsg = RocketMQUtils.convertToMessage(message);
+            // 该代码片段使用了自定义的MessageQueueSelector实现，根据消息的msgKey来选择消息被发送到的消息队列。
+            // 这样可以确保具有相同msgKey的消息被发送到同一个消息队列，实现顺序消息的发送和消费。
+            // 🔍send#3参数版本，参数三中的属性会作为参数二中select方法的第三个参数
+            // 🔍😄当然，你可以使用官方提供的SelectMessageQueueByHash（基于参数三HashCode的消息队列选择器），也可以自己手动控制（如下）。
             SendResult sendResult = this.rocketMQProducer.send(sendMsg, new MessageQueueSelector() {
                 public MessageQueue select(List<MessageQueue> mqs, Message message, Object msgKey) {
                     int code;
@@ -97,7 +101,7 @@ public class RocketMQProducerServiceImpl implements IRocketMQProducerService {
                             code = Math.abs(code);
                         }
                     } else {
-                        // 目前统一控制RocketMQProducerMessageVO#msgKey为String
+                        // 统一控制RocketMQProducerMessageVO#msgKey为String
                         LOGGER.error(">>>>>>>>|send orderly message failed|msgKey type only support String|<<<<<<<<");
                         throw new RocketMQException(SystemRetCodeConstants.MQ_MESSAGE_FORMAT_ERROR);
                     }
