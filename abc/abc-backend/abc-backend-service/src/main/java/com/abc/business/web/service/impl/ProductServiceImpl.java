@@ -13,6 +13,8 @@ import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.ExceptionProcessor;
 import com.abc.system.common.response.BaseResponse;
 import com.abc.system.common.response.DefaultResponse;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -79,7 +81,9 @@ public class ProductServiceImpl implements IProductService {
         DefaultResponse defaultResponse = new DefaultResponse();
 
         AbcProduct abcProduct = new AbcProduct();
-        productMapper.insertSelective(abcProduct);
+        productMapper.insert(abcProduct);
+        // 原数据的ID会被自动填充
+        System.out.println(JSONObject.toJSONString(abcProduct, JSONWriter.Feature.PrettyFormat));
 
         // TODO
         defaultResponse.fill(SystemRetCodeConstants.OP_SUCCESS);
