@@ -22,7 +22,8 @@ import java.util.List;
 /**
  * AbstractMQConsumer
  * <pre>
- * 示例
+ * 下面给出两种启动方式：
+ * ① 启动方式一
  * 1.第一步：定义一个消费者
  * {@code
  *     @Slf4j
@@ -48,6 +49,32 @@ import java.util.List;
  * {@code
  *     new MyConsumer().start();
  * }
+ *
+ * ② 启动方式二
+ * {@code
+ *     @Slf4j
+ *     @Component
+ *     public class MyConsumer02 extends AbstractMQConsumer {
+ *
+ *         // PostConstruct注解修饰的方法会在bean初始化完成后调用。它的作用是在bean的所有依赖关系注入完成之后进行一些初始化操作。
+ *         @PostConstruct
+ *         private void start() {
+ *             RocketMQConsumerVO mqConsumerVO = RocketMQConsumerVO.builder()
+ *                     .group("consumer-group-01-name")
+ *                     .topic("my-topic")
+ *                     .messageModel(MessageModel.CLUSTERING).build();
+ *             super.registryConsumer(mqConsumerVO);
+ *             log.info(">>>>>>>>>>>>|MyConsumer02消费者启动了\uD83D\uDE80\uD83D\uDE80\uD83D\uDE80|<<<<<<<<<<<<");
+ *         }
+ *
+ *         @Override
+ *         protected ConsumeConcurrentlyStatus onMessage(MessageExt messageExt) {
+ *             String messageBody = new String(messageExt.getBody(), StandardCharsets.UTF_8);
+ *             log.info(">>>>>>>>>>>>|MyConsumer02 get Message → {}", messageBody);
+ *             return CONSUME_SUCCESS;
+ *         }
+ *     }
+ *     }
  * </pre>
  *
  * @Description AbstractMQConsumer
