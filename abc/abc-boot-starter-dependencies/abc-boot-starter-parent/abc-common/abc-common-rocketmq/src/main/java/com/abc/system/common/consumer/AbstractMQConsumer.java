@@ -111,7 +111,13 @@ public abstract class AbstractMQConsumer implements MessageListenerConcurrently,
     public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> messageExtList,
                                                     ConsumeConcurrentlyContext consumeConcurrentlyContext) {
         this.LOGGER.info(">>>>>>>>|receive mq message|message size:{}|<<<<<<<<", messageExtList.size());
-        messageExtList.forEach(this::onMessage);
+        for (MessageExt messageExt : messageExtList) {
+            ConsumeConcurrentlyStatus consumeConcurrentlyStatus = onMessage(messageExt);
+            if(consumeConcurrentlyStatus.equals(ConsumeConcurrentlyStatus.RECONSUME_LATER)){
+                this.LOGGER.info(">>>>>>>>|receive mq message|process abort|\uD83E\uDD74error-keys:[{}]|<<<<<<<<", messageExt.getKeys());
+                return ConsumeConcurrentlyStatus.RECONSUME_LATER;
+            }
+        }
         this.LOGGER.info(">>>>>>>>|receive mq message|process end|success|<<<<<<<<");
         return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
     }
@@ -134,6 +140,10 @@ public abstract class AbstractMQConsumer implements MessageListenerConcurrently,
                 consumer.setConsumerGroup(this.rocketMQConsumerVO.getGroup());
                 int maxReconsumeTimes = this.rocketMQConsumerVO.getMaxReconsumeTimes();
                 if (maxReconsumeTimes > 0 && maxReconsumeTimes <= 16) {
+                    // default=-1 => In concurrent mode, -1 means 16; In orderly mode, -1 means Integer.MAX_VALUE.
+                    // 错误重试间隔：
+                    // 1.🔍RocketMQ中支持延迟消息，延迟消息分为19个级别： [0s 1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h]
+                    // 2.🔍错误重试间隔分为16个级别，从10s开始：[10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h]
                     consumer.setMaxReconsumeTimes(maxReconsumeTimes);
                 }
 
