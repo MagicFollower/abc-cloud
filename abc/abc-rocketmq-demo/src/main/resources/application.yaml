@@ -1,0 +1,6 @@
+abc:
+  rocketmq:
+    producer:
+      enable: true
+    nameServers: 192.168.204.103:9876;192.168.204.104:9876;192.168.204.105:9876
+    producerGroup: "producer-group-name"
