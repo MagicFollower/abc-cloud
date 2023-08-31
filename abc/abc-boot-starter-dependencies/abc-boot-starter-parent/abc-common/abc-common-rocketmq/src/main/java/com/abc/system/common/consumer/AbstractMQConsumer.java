@@ -3,7 +3,6 @@ package com.abc.system.common.consumer;
 import com.abc.system.common.config.RocketMQConfigProperties;
 import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.RocketMQException;
-import com.abc.system.common.helper.SpringHelper;
 import com.abc.system.common.vo.RocketMQConsumerVO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
@@ -15,6 +14,10 @@ import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.remoting.protocol.heartbeat.MessageModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.lang.NonNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,35 +25,7 @@ import java.util.List;
 /**
  * AbstractMQConsumer
  * <pre>
- * 下面给出两种启动方式：
- * ① 启动方式一
- * 1.第一步：定义一个消费者
- * {@code
- *     @Slf4j
- *     public class MyConsumer extends AbstractMQConsumer {
- *         public void start(){
- *             RocketMQConsumerVO mqConsumerVO = RocketMQConsumerVO.builder()
- *                     .group("my-consumer-group")
- *                     .topic("my-topic")
- *                     .messageModel(MessageModel.CLUSTERING).build();
- *             super.registryConsumer(mqConsumerVO);
- *             log.info(">>>>>>>>|MyConsumer消费者启动了\uD83D\uDE80\uD83D\uDE80\uD83D\uDE80|<<<<<<<<");
- *         }
- *
- *         @Override
- *         protected ConsumeConcurrentlyStatus onMessage(MessageExt messageExt) {
- *             String messageBody = new String(messageExt.getBody(), StandardCharsets.UTF_8);
- *             log.info(">>>>>>>>|MyConsumer get Message → {}", messageBody);
- *             return CONSUME_SUCCESS;
- *         }
- *     }
- * }
- * 2.第二步：启动消费者
- * {@code
- *     new MyConsumer().start();
- * }
- *
- * ② 启动方式二
+ * 使用方式⤵️
  * {@code
  *     @Slf4j
  *     @Component
@@ -82,9 +57,11 @@ import java.util.List;
  * @Date 2023/8/17 20:56
  * @Version 1.0
  */
-public abstract class AbstractMQConsumer implements MessageListenerConcurrently {
+public abstract class AbstractMQConsumer implements MessageListenerConcurrently, ApplicationContextAware {
     protected Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     protected RocketMQConsumerVO rocketMQConsumerVO;
+
+    private ApplicationContext context;
 
     /**
      * 子类重写onMessage消费方法
@@ -146,7 +123,7 @@ public abstract class AbstractMQConsumer implements MessageListenerConcurrently 
     private void initConsumer() {
         this.LOGGER.info(">>>>>>>>|init rocket mq consumer|start|<<<<<<<<");
         // 获取RocketMQ配置属性，使用到配置中的NameServers
-        RocketMQConfigProperties rocketMQConfigProperties = SpringHelper.getBean(RocketMQConfigProperties.class);
+        RocketMQConfigProperties rocketMQConfigProperties = context.getBean(RocketMQConfigProperties.class);
         if (StringUtils.isEmpty(rocketMQConfigProperties.getNameServers())) {
             throw new RocketMQException(">>>>>>>>|rocket mq name sever is empty|<<<<<<<<");
         } else {
@@ -175,5 +152,10 @@ public abstract class AbstractMQConsumer implements MessageListenerConcurrently 
                 throw new RocketMQException(SystemRetCodeConstants.MQ_INIT_ERROR, e);
             }
         }
+    }
+
+    @Override
+    public void setApplicationContext(@NonNull ApplicationContext applicationContext) throws BeansException {
+        context = applicationContext;
     }
 }
