@@ -12,6 +12,7 @@ import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 
 import static org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+import static org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus.RECONSUME_LATER;
 
 /**
  * MyConsumer02
@@ -46,6 +47,8 @@ public class MyConsumer02 extends AbstractMQConsumer {
     protected ConsumeConcurrentlyStatus onMessage(MessageExt messageExt) {
         String messageBody = new String(messageExt.getBody(), StandardCharsets.UTF_8);
         log.info(">>>>>>>>>>>>|MyConsumer02 get Message → {}", messageBody);
-        return CONSUME_SUCCESS;
+        // TIPS!!! Just for test about Message-Auto-Resend.
+        // return CONSUME_SUCCESS;
+        return RECONSUME_LATER;
     }
 }
