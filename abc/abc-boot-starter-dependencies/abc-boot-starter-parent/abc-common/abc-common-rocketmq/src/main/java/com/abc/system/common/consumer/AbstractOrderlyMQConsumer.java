@@ -76,7 +76,15 @@ public abstract class AbstractOrderlyMQConsumer implements MessageListenerOrderl
     public ConsumeOrderlyStatus consumeMessage(List<MessageExt> messageExtList,
                                                ConsumeOrderlyContext consumeOrderlyContext) {
         this.LOGGER.info(">>>>>>>>|receive mq orderly message |message size:{}|<<<<<<<<", messageExtList.size());
-        messageExtList.forEach(this::onMessage);
+        for (MessageExt messageExt : messageExtList) {
+            ConsumeOrderlyStatus consumeOrderlyStatus = onMessage(messageExt);
+            if (consumeOrderlyStatus.equals(ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT)) {
+                this.LOGGER.info(">>>>>>>>|receive mq orderly message|process abort|" +
+                        "current queue will be stopped for some time!|" +
+                        "\uD83E\uDD74error-keys:[{}]|<<<<<<<<", messageExt.getKeys());
+                return ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
+            }
+        }
         this.LOGGER.info(">>>>>>>>|receive mq orderly message|process end|success|<<<<<<<<");
         return ConsumeOrderlyStatus.SUCCESS;
     }
@@ -106,7 +114,7 @@ public abstract class AbstractOrderlyMQConsumer implements MessageListenerOrderl
                 }
 
                 consumer.subscribe(this.rocketMQConsumerVO.getTopic(), tags);
-                // consumer.registerMessageListener(this::consumeMessage);
+                //consumer.registerMessageListener(this::consumeMessage);
                 consumer.registerMessageListener(this);
                 consumer.start();
                 this.LOGGER.info(">>>>>>>>|init orderly mq consumer rocket mq consumer|success|<<<<<<<<");
