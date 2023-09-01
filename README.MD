@@ -5,8 +5,8 @@
 ---
 
 #### 🔍The meaning of MicroService (why we need microservice)?
-1. [seperated config file]
-2. [integrated with system (deeply)]
+1. [ seperated config file (`配置解耦`) ] 
+2. [ integrated with system (`业务耦合`) ]
 
 try to think about this environment: integrated one of [MQ product] in system that has many business-modules.
 
