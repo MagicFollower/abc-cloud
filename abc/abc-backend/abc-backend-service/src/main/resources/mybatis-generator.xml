@@ -36,6 +36,8 @@
 
         <javaModelGenerator targetPackage="com.abc.business.web.dal.entity"
                             targetProject="src/main/java">
+            <!--继承AbcBaseEntity，父类中属性存在时，子类属性将不再自动生成-->
+            <property name="rootClass" value="com.abc.system.dao.base.AbcBaseEntity"/>
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>

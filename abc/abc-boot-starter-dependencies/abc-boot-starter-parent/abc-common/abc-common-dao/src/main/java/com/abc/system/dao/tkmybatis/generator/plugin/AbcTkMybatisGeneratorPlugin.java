@@ -1,6 +1,7 @@
 package com.abc.system.dao.tkmybatis.generator.plugin;
 
 import com.abc.system.dao.tkmybatis.idgenerator.AbcTkGlobalIdGen;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldNameConstants;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -34,7 +35,9 @@ public class AbcTkMybatisGeneratorPlugin extends PluginAdapter {
     @Override
     public boolean modelBaseRecordClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         topLevelClass.addImportedType(FieldNameConstants.class.getCanonicalName());
+        topLevelClass.addImportedType(EqualsAndHashCode.class.getCanonicalName());
         topLevelClass.addAnnotation("@FieldNameConstants");
+        topLevelClass.addAnnotation("@EqualsAndHashCode(callSuper = true)");
         return super.modelBaseRecordClassGenerated(topLevelClass, introspectedTable);
     }
 
