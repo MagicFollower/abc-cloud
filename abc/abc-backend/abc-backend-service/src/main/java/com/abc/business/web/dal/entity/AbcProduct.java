@@ -4,6 +4,7 @@ import com.abc.system.dao.base.AbcBaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldNameConstants;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -16,6 +17,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
+@FieldNameConstants
 @Table(name = "`abc_product`")
 public class AbcProduct extends AbcBaseEntity {
     /**

@@ -50,6 +50,13 @@
             <version>${pagehelper-spring-boot-starter.version}</version>
         </dependency>
 
+        <!-- 自定义代码生成器插件所需依赖 -->
+        <dependency>
+            <groupId>org.mybatis.generator</groupId>
+            <artifactId>mybatis-generator-core</artifactId>
+            <version>${mybatis-generator-core.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.abc</groupId>
             <artifactId>abc-common-core</artifactId>

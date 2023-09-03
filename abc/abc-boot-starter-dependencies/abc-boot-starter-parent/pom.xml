@@ -77,6 +77,12 @@
                             <artifactId>mapper</artifactId>
                             <version>${tk.mybatis.mapper.version}</version>
                         </dependency>
+                        <!-- 自定义mybatis代码生成器插件包（AbcTkMybatisGeneratorPlugin） -->
+                        <dependency>
+                            <groupId>com.abc</groupId>
+                            <artifactId>abc-common-dao</artifactId>
+                            <version>0.0.1-SNAPSHOT</version>
+                        </dependency>
                     </dependencies>
                     <executions>
                         <execution>
