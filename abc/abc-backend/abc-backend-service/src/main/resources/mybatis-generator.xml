@@ -10,6 +10,8 @@
 
         <property name="javaFileEncoding" value="UTF-8"/>
 
+        <plugin type="com.abc.system.dao.tkmybatis.generator.plugin.AbcTkMybatisGeneratorPlugin"/>
+
         <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
             <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>
             <property name="useMapperCommentGenerator" value="true"/>
