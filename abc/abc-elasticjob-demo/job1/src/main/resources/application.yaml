@@ -1,0 +1,32 @@
+server:
+  port: 61001
+
+spring:
+  main:
+    banner-mode: off
+  application:
+    name: springboot-demo-elastic-job-job1
+
+elasticjob:
+  jobs:
+    Job1001:
+      description: 介绍文本
+      # https://cron.qqe2.com/
+      cron: 0/1 * * * * ?
+      elasticJobClass: org.example.job.Job1001
+      # 分片，一般情况下设置为1
+      shardingTotalCount: 2
+      # 失效转移
+      failover: true
+      # 错过重新执行
+      misfire: true
+      # 是否覆盖已存在作业
+      overwrite: true
+  regCenter:
+    namespace: myJob
+    serverLists: localhost:2181
+    max-retries: 3
+    base-sleep-time-milliseconds: 1000
+    max-sleep-time-milliseconds: 3000
+    session-timeout-milliseconds: 6000
+    connection-timeout-milliseconds: 6000
