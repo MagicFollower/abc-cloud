@@ -25,6 +25,8 @@ export default {
     return {
       filterText: '',
       nodes: [],
+      nodesNotLeaf: [],
+      nodesLeaf: [],
       data2: [{
         id: 1,
         title: 'Level one 1🚀',
@@ -88,15 +90,20 @@ export default {
         this.traverseNode(rootNode)
       })
       console.log(this.nodes)
+      console.log(this.nodesNotLeaf)
+      console.log(this.nodesLeaf)
     },
     traverseNode(node) {
       // node: isLeaf + childNodes + parent + data[id+title] + ...
       this.nodes.push(node)
       // !node.isLeaf
-      if (node.childNodes) {
+      if (node.childNodes.length > 0) {
+        this.nodesNotLeaf.push(node)
         node.childNodes.forEach(childNode => {
           this.traverseNode(childNode)
         })
+      } else {
+        this.nodesLeaf.push(node)
       }
     }
   }
