@@ -2,6 +2,8 @@
   <div class="app-container">
     <el-input v-model="filterText" placeholder="Filter keyword" style="margin-bottom:30px;" />
 
+    <!-- :default-expanded-keys="[data2[0].id]" -->
+    <!-- default-expand-all -->
     <el-tree
       ref="tree2"
       :data="data2"
@@ -11,6 +13,7 @@
       default-expand-all
     />
 
+    <el-button @click="getAllNodes">点我</el-button>
   </div>
 </template>
 
@@ -20,44 +23,45 @@ export default {
   data() {
     return {
       filterText: '',
+      nodes: [],
       data2: [{
         id: 1,
-        label: 'Level one 1',
+        title: 'Level one 1🚀',
         children: [{
           id: 4,
-          label: 'Level two 1-1',
+          title: 'Level two 1-1',
           children: [{
             id: 9,
-            label: 'Level three 1-1-1'
+            title: 'Level three 1-1-1'
           }, {
             id: 10,
-            label: 'Level three 1-1-2'
+            title: 'Level three 1-1-2'
           }]
         }]
       }, {
         id: 2,
-        label: 'Level one 2',
+        title: 'Level one 2🚀',
         children: [{
           id: 5,
-          label: 'Level two 2-1'
+          title: 'Level two 2-1'
         }, {
           id: 6,
-          label: 'Level two 2-2'
+          title: 'Level two 2-2'
         }]
       }, {
         id: 3,
-        label: 'Level one 3',
+        title: 'Level one 3🚀',
         children: [{
           id: 7,
-          label: 'Level two 3-1'
+          title: 'Level two 3-1'
         }, {
           id: 8,
-          label: 'Level two 3-2'
+          title: 'Level two 3-2'
         }]
       }],
       defaultProps: {
         children: 'children',
-        label: 'label'
+        label: 'title'
       }
     }
   },
@@ -67,10 +71,32 @@ export default {
     }
   },
 
+  mounted() {
+    this.$refs.tree2.store.root.childNodes.forEach(rootNode => {
+      console.log(rootNode)
+    })
+  },
+
   methods: {
     filterNode(value, data) {
       if (!value) return true
-      return data.label.indexOf(value) !== -1
+      return data.title.indexOf(value) !== -1
+    },
+    getAllNodes() {
+      this.$refs.tree2.store.root.childNodes.forEach(rootNode => {
+        this.traverseNode(rootNode)
+      })
+      console.log(this.nodes)
+    },
+    traverseNode(node) {
+      // node: isLeaf + childNodes + parent + data[id+title] + ...
+      this.nodes.push(node)
+      // !node.isLeaf
+      if (node.childNodes) {
+        node.childNodes.forEach(childNode => {
+          this.traverseNode(childNode)
+        })
+      }
     }
   }
 }
