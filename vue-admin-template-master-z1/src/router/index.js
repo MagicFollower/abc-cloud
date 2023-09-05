@@ -42,7 +42,6 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-
   {
     path: '/',
     component: Layout,
@@ -52,7 +51,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard'}
+      meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
   },
 
@@ -149,7 +148,17 @@ export const constantRoutes = [
       }
     ]
   },
-
+  {
+    path: '/typing-data',
+    component: Layout,
+    redirect: '/typing-data',
+    children: [{
+      path: 'typing-data',
+      name: 'TypingData',
+      component: () => import('@/views/typing-data'),
+      meta: { title: 'TypingData', icon: 'form' }
+    }]
+  },
   {
     path: 'external-link',
     component: Layout,
