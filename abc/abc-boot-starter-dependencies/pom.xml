@@ -39,6 +39,7 @@
         <abc-common.version>0.0.1-SNAPSHOT</abc-common.version>
 
         <spring-boot.version>2.7.11</spring-boot.version>
+        <janino.version>3.1.10</janino.version>
 
         <!-- DAO-start -->
         <mybatis-plus-boot-starter.version>3.5.3.1</mybatis-plus-boot-starter.version>
@@ -215,6 +216,12 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
                 <version>${spring-boot.version}</version>
+            </dependency>
+            <!-- logback使用，在xml文件中使用if -->
+            <dependency>
+                <groupId>org.codehaus.janino</groupId>
+                <artifactId>janino</artifactId>
+                <version>${janino.version}</version>
             </dependency>
             <!-- spring-boot end -->
 
