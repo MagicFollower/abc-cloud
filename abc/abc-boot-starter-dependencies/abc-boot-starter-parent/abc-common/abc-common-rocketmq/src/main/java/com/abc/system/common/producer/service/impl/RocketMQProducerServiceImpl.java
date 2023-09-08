@@ -29,7 +29,7 @@ import java.util.UUID;
 /**
  * RocketMQ生产者接口实现（自动注入 → heilan.rocketmq.producer.enable）
  * <pre>
- * 示例
+ * 🔍示例一
  * {@code
  *    @GetMapping("/demo01")
  *     public String demo01() {
@@ -40,6 +40,35 @@ import java.util.UUID;
  *         SendResult sendResult = rocketMQProducerService.sendOrdered(rocketMQProducerMessageVO);
  *
  *         return JSONObject.toJSONString(sendResult, JSONWriter.Feature.PrettyFormat);
+ *     }
+ * }
+ *
+ * 🔍示例二：设置消息延迟发送（适用于主子表更新时，主表更新后延迟N秒后发送子表同步消息，子表消息在延迟后可正常获得主表同步后的数据，2/3[5s/10s]即可）
+ * {@code
+ *     @RestController
+ *     @RequiredArgsConstructor
+ *     public class DemoController {
+ *
+ *         private final IRocketMQProducerService rocketMQProducerService;
+ *
+ *         @GetMapping("/demo01")
+ *         public String demo01() {
+ *             String currentTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS").format(LocalDateTime.now());
+ *             RocketMQProducerMessageVO rocketMQProducerMessageVO = RocketMQProducerMessageVO.builder()
+ *                     .topic("my-topic")
+ *                     .delayTimeLevel(2)
+ *                     .content("111 → hello,world → " + currentTime).build();
+ *             SendResult sendResult = rocketMQProducerService.sendOrdered(rocketMQProducerMessageVO);
+ *
+ *             RocketMQProducerMessageVO rocketMQProducerMessageVO1 = RocketMQProducerMessageVO.builder()
+ *                     .topic("my-topic")
+ *                     .delayTimeLevel(0)
+ *                     .content("222 → hello,world → " + currentTime).build();
+ *             SendResult sendResult1 = rocketMQProducerService.sendOrdered(rocketMQProducerMessageVO1);
+ *
+ *             return "200";
+ *         }
+ *
  *     }
  * }
  * </pre>
