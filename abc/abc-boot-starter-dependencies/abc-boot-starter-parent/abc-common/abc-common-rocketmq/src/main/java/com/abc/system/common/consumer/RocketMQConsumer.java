@@ -15,5 +15,9 @@ public class RocketMQConsumer extends DefaultMQPushConsumer {
         // 设置批处理数量（默认1，此处设置用于提示可以修改相关参数）
         //   → 默认=1，在实现MessageListenerConcurrently接口处理消息时，可以更简单的控制错误重试（见AbstractOrderlyMQConsumer#consumeMessage）
         this.setConsumeMessageBatchMaxSize(1);
+        // 设置消费者线程池的最小线程数
+        this.setConsumeThreadMin(20);
+        // 设置消费者线程池的最大线程数
+        this.setConsumeThreadMax(20);
     }
 }
