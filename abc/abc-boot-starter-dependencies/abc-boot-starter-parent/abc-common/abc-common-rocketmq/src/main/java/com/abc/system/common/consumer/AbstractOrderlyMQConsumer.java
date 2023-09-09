@@ -34,7 +34,7 @@ public abstract class AbstractOrderlyMQConsumer implements MessageListenerOrderl
     private RocketMQConfigProperties rocketMQConfigProperties;
 
     /**
-     * 子类重新onMessage消费方法
+     * 子类重新onMessage消费方法（模板设计模式）
      *
      * @param messageExt MessageExt
      * @return ConsumeOrderlyStatus
@@ -73,6 +73,7 @@ public abstract class AbstractOrderlyMQConsumer implements MessageListenerOrderl
         }
     }
 
+    @Override
     public ConsumeOrderlyStatus consumeMessage(List<MessageExt> messageExtList,
                                                ConsumeOrderlyContext consumeOrderlyContext) {
         this.LOGGER.info(">>>>>>>>|receive mq orderly message |message size:{}|<<<<<<<<", messageExtList.size());

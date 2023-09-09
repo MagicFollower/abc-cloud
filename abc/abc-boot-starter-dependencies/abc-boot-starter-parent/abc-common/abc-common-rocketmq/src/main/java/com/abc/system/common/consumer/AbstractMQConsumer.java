@@ -64,7 +64,7 @@ public abstract class AbstractMQConsumer implements MessageListenerConcurrently,
     private ApplicationContext context;
 
     /**
-     * 子类重写onMessage消费方法
+     * 子类重写onMessage消费方法（模板设计模式）
      * <pre>
      * 1.MessageExt是RocketMQ中的消息扩展类，用于表示从消息队列中消费到的消息。
      *   → 它是对RocketMQ原生消息(Message)的进一步封装，提供了更多的属性和方法来处理和获取消息的相关信息。
@@ -108,6 +108,7 @@ public abstract class AbstractMQConsumer implements MessageListenerConcurrently,
         }
     }
 
+    @Override
     public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> messageExtList,
                                                     ConsumeConcurrentlyContext consumeConcurrentlyContext) {
         this.LOGGER.info(">>>>>>>>|receive mq message|message size:{}|<<<<<<<<", messageExtList.size());
