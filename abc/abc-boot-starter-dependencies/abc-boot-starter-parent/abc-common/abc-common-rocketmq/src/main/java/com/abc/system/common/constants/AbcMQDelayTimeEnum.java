@@ -12,6 +12,7 @@ import lombok.Getter;
  */
 @Getter
 public enum AbcMQDelayTimeEnum {
+    DELAY_TIME_ZERO(0, "0S"),
     DELAY_TIME_ONE_SECOND(1, "1S"),
     DELAY_TIME_FIVE_SECOND(2, "5s"),
     DELAY_TIME_TEN_SECOND(3, "10s"),

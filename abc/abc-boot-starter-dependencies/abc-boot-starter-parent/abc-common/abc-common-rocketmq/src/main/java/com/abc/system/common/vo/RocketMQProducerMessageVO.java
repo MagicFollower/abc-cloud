@@ -47,7 +47,7 @@ public class RocketMQProducerMessageVO implements Serializable {
     private Object content;
 
     /**
-     * 填充Message#DelayTimeLevel
+     * 填充Message#DelayTimeLevel，当前模块提供枚举类{@code AbcMQDelayTimeEnum}
      * <pre>
      * 关于DelayTimeLevel级别与时间的对应关系🤔️
      *   → 默认19级: [0s 1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h]
