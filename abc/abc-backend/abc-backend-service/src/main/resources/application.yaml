@@ -9,8 +9,25 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.204.101:23306/abc-backend?autoReconnect=true&useServerPreparedStmts=true&cachePrepStmts=true&rewriteBatchedStatements=true&allowMultiQueries=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&connectionTimeZone=SERVER
     username: root
-    password: Mysql12345---
+    ### {@code java -cp druid-1.2.19.jar com.alibaba.druid.filter.config.ConfigTools your_db_password }
+    password: ZYWnAmMbaYvdVirAoqbgMXPA7cIytb8tnkJj99CKzkiHJF+V+LawoSj9yuyoy5nmOtoRa9WzWbceKuWoh24VIw==
     type: com.alibaba.druid.pool.DruidDataSource
+    ### 这部分配置可以直接缺省
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      filters: config
+      connection-properties: config.decrypt=true;config.decrypt.key=${spring.datasource.druid.public-key}
+      public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJnI09eW+aUcxZZBHue4GR3DIJ3ulFlWVxYhGJ1Qe5Yax9tox9dBenFybR3dxv1rXR+6h4H2mqupPUdkKGSlLFMCAwEAAQ==
+###  HikariCP
 #    type: com.zaxxer.hikari.HikariDataSource
 #    hikari:
 #      ### 最小空闲连接，默认值10，小于0或大于maximum-pool-size，都会重置为maximum-pool-size
