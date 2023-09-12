@@ -39,6 +39,8 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.2.19</version>
+            <!-- 1.2.19版本2023年9月4日发布，默认关联的autoconfigure版本太低，会导致yaml配置解析失败 -->
+            <!-- 移除默认的autoconfigure，spring-boot-starter、通用mapper、mp、pageHelper都默认引入了较新的autoconfigure，使用那些即可，不必移除后单独再次引入autoconfigure -->
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
