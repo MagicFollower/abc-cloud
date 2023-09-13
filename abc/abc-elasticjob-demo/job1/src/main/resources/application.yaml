@@ -24,7 +24,7 @@ elasticjob:
       overwrite: true
   regCenter:
     namespace: myJob
-    serverLists: localhost:2181
+    serverLists: localhost:2161,localhost:2171,localhost:2181
     max-retries: 3
     base-sleep-time-milliseconds: 1000
     max-sleep-time-milliseconds: 3000
