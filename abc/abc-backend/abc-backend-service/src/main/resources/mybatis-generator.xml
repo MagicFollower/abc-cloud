@@ -15,8 +15,8 @@
         <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
             <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>
             <property name="useMapperCommentGenerator" value="true"/>
-            <property name="beginningDelimiter" value="`"/>
-            <property name="endingDelimiter" value="`"/>
+<!--            <property name="beginningDelimiter" value="`"/>-->
+<!--            <property name="endingDelimiter" value="`"/>-->
             <property name="caseSensitive" value="false"/>
             <property name="forceAnnotation" value="true"/>
             <property name="generateColumnConsts" value="false"/>
