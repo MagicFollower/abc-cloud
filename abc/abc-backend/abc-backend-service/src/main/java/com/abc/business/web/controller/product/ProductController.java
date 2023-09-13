@@ -14,6 +14,7 @@ import com.abc.system.common.response.ResponseProcessor;
 import com.alibaba.druid.pool.DruidDataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +37,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductController {
 
+    // @DubboReference(check = true, retries = 0, timeout = 5000)
     private final IProductService productService;
 
     /**

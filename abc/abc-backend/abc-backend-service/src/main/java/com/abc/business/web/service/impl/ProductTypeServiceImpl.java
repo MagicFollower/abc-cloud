@@ -12,6 +12,7 @@ import com.abc.system.common.exception.ExceptionProcessor;
 import com.abc.system.common.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.List;
  * @Version 1.0
  */
 @Slf4j
-@Service
+@DubboService
 @RequiredArgsConstructor
 public class ProductTypeServiceImpl implements IProductTypeService {
 
