@@ -1,0 +1,49 @@
+server:
+  port: 65500
+spring:
+  application:
+    name: druid-multi-datasource-demo
+  main:
+    banner-mode: off
+  ### Druid多数据源配置
+  datasource:
+    druid:
+      one:
+        url: jdbc:mysql://192.168.204.101:23306/abc-backend?autoReconnect=true&useServerPreparedStmts=true&cachePrepStmts=true&rewriteBatchedStatements=true&allowMultiQueries=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&connectionTimeZone=SERVER
+        username: root
+        ### {@code java -cp druid-1.2.19.jar com.alibaba.druid.filter.config.ConfigTools your_db_password }
+        password: ZYWnAmMbaYvdVirAoqbgMXPA7cIytb8tnkJj99CKzkiHJF+V+LawoSj9yuyoy5nmOtoRa9WzWbceKuWoh24VIw==
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        initial-size: 5
+        min-idle: 5
+        max-active: 20
+        max-wait: 60000
+        time-between-eviction-runs-millis: 60000
+        min-evictable-idle-time-millis: 300000
+        validation-query: SELECT 1
+        test-while-idle: true
+        test-on-borrow: false
+        test-on-return: false
+        filters: config
+        public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJnI09eW+aUcxZZBHue4GR3DIJ3ulFlWVxYhGJ1Qe5Yax9tox9dBenFybR3dxv1rXR+6h4H2mqupPUdkKGSlLFMCAwEAAQ==
+        connection-properties: config.decrypt=true;config.decrypt.key=${spring.datasource.druid.one.public-key}
+      two:
+        url: jdbc:mysql://192.168.204.101:23306/dev_test?autoReconnect=true&useServerPreparedStmts=true&cachePrepStmts=true&rewriteBatchedStatements=true&allowMultiQueries=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&connectionTimeZone=SERVER
+        username: root
+        password: ZYWnAmMbaYvdVirAoqbgMXPA7cIytb8tnkJj99CKzkiHJF+V+LawoSj9yuyoy5nmOtoRa9WzWbceKuWoh24VIw==
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        initial-size: 5
+        min-idle: 5
+        max-active: 20
+        max-wait: 60000
+        time-between-eviction-runs-millis: 60000
+        min-evictable-idle-time-millis: 300000
+        validation-query: SELECT 1
+        test-while-idle: true
+        test-on-borrow: false
+        test-on-return: false
+        filters: config
+        public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJnI09eW+aUcxZZBHue4GR3DIJ3ulFlWVxYhGJ1Qe5Yax9tox9dBenFybR3dxv1rXR+6h4H2mqupPUdkKGSlLFMCAwEAAQ==
+        connection-properties: config.decrypt=true;config.decrypt.key=${spring.datasource.druid.two.public-key}
