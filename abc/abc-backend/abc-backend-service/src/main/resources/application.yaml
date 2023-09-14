@@ -10,7 +10,7 @@ spring:
     url: jdbc:mysql://192.168.204.101:23306/abc-backend?autoReconnect=true&useServerPreparedStmts=true&cachePrepStmts=true&rewriteBatchedStatements=true&allowMultiQueries=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&connectionTimeZone=SERVER
     username: root
     ### {@code java -cp druid-1.2.19.jar com.alibaba.druid.filter.config.ConfigTools your_db_password }
-    password: ZYWnAmMbaYvdVirAoqbgMXPA7cIytb8tnkJj99CKzkiHJF+V+LawoSj9yuyoy5nmOtoRa9WzWbceKuWoh24VIw==
+    #password: ZYWnAmMbaYvdVirAoqbgMXPA7cIytb8tnkJj99CKzkiHJF+V+LawoSj9yuyoy5nmOtoRa9WzWbceKuWoh24VIw==
     type: com.alibaba.druid.pool.DruidDataSource
     ### 这部分配置可以直接缺省
     druid:
@@ -25,8 +25,13 @@ spring:
       test-on-borrow: false
       test-on-return: false
       filters: config
-      connection-properties: config.decrypt=true;config.decrypt.key=${spring.datasource.druid.public-key}
       public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJnI09eW+aUcxZZBHue4GR3DIJ3ulFlWVxYhGJ1Qe5Yax9tox9dBenFybR3dxv1rXR+6h4H2mqupPUdkKGSlLFMCAwEAAQ==
+      ### connection-properties参数中配置多个值需要以分号分隔的properties格式字符串形式存在（该参数值会被解析为Properties），使用YAML换行格式将无法被正常解析。
+      ### 方式一：Druid自动解密
+      #connection-properties: config.decrypt=true;config.decrypt.key=${spring.datasource.druid.public-key}
+      ### 方式二：Druid自定义Callback
+      connection-properties: config.decrypt=true;config.decrypt.key=${spring.datasource.druid.public-key};password=ZYWnAmMbaYvdVirAoqbgMXPA7cIytb8tnkJj99CKzkiHJF+V+LawoSj9yuyoy5nmOtoRa9WzWbceKuWoh24VIw==
+      password-callback-class-name: com.abc.business.web.config.MyDruidPasswordCallback
 ###  HikariCP
 #    type: com.zaxxer.hikari.HikariDataSource
 #    hikari:
