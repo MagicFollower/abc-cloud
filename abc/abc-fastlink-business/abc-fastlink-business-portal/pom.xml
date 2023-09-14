@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.abc</groupId>
         <artifactId>abc-fastlink-business</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>abc-fastlink-business-portal</artifactId>
@@ -27,41 +27,34 @@
         <dependency>
             <groupId>com.abc</groupId>
             <artifactId>abc-common-web</artifactId>
-            <version>${abc-common.version}</version>
         </dependency>
         <dependency>
             <groupId>com.abc</groupId>
             <artifactId>abc-common-dubbo</artifactId>
-            <version>${abc-common.version}</version>
         </dependency>
 
         <!-- Apollo -->
         <dependency>
             <groupId>com.abc</groupId>
             <artifactId>abc-common-apollo-client</artifactId>
-            <version>${abc-common.version}</version>
         </dependency>
 
         <!-- 下方依赖仅供测试使用，随时可以删除 -->
         <dependency>
             <groupId>com.abc</groupId>
             <artifactId>abc-common-distributed-lock</artifactId>
-            <version>${abc-common.version}</version>
         </dependency>
         <dependency>
             <groupId>com.abc</groupId>
             <artifactId>abc-common-excel</artifactId>
-            <version>${abc-common.version}</version>
         </dependency>
         <dependency>
             <groupId>com.abc</groupId>
             <artifactId>abc-common-security</artifactId>
-            <version>${abc-common.version}</version>
         </dependency>
         <dependency>
             <groupId>com.abc</groupId>
             <artifactId>abc-common-test</artifactId>
-            <version>${abc-common.version}</version>
             <scope>test</scope>
         </dependency>
 
