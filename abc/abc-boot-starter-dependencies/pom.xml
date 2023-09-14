@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.abc</groupId>
     <artifactId>abc-boot-starter-dependencies</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <name>abc-boot-starter-dependencies</name>
     <description>
@@ -17,6 +17,7 @@
 
     <modules>
         <module>abc-boot-starter-parent</module>
+        <module>abc-log-agent</module>
     </modules>
 
     <distributionManagement>
@@ -34,9 +35,6 @@
 
     <properties>
         <java.version>1.8</java.version>
-
-        <!-- 统一abc-common中各个模块的版本号 -->
-        <abc-common.version>0.0.1-SNAPSHOT</abc-common.version>
 
         <spring-boot.version>2.7.11</spring-boot.version>
         <janino.version>3.1.10</janino.version>
@@ -119,77 +117,77 @@
             <dependency>
                 <groupId>com.abc</groupId>
                 <artifactId>abc-common-core</artifactId>
-                <version>${abc-common.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.abc</groupId>
                 <artifactId>abc-common-apollo-client</artifactId>
-                <version>${abc-common.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.abc</groupId>
                 <artifactId>abc-common-web</artifactId>
-                <version>${abc-common.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.abc</groupId>
                 <artifactId>abc-common-dao</artifactId>
-                <version>${abc-common.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.abc</groupId>
                 <artifactId>abc-common-dubbo</artifactId>
-                <version>${abc-common.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.abc</groupId>
                 <artifactId>abc-common-security</artifactId>
-                <version>${abc-common.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.abc</groupId>
                 <artifactId>abc-common-file-generator</artifactId>
-                <version>${abc-common.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.abc</groupId>
                 <artifactId>abc-common-minio</artifactId>
-                <version>${abc-common.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.abc</groupId>
                 <artifactId>abc-common-redis</artifactId>
-                <version>${abc-common.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.abc</groupId>
                 <artifactId>abc-common-distributed-lock</artifactId>
-                <version>${abc-common.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.abc</groupId>
                 <artifactId>abc-common-qrcode</artifactId>
-                <version>${abc-common.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.abc</groupId>
                 <artifactId>abc-common-easyexcel</artifactId>
-                <version>${abc-common.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.abc</groupId>
                 <artifactId>abc-common-excel</artifactId>
-                <version>${abc-common.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.abc</groupId>
                 <artifactId>abc-common-rocketmq</artifactId>
-                <version>${abc-common.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.abc</groupId>
                 <artifactId>abc-common-test</artifactId>
-                <version>${abc-common.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
 
