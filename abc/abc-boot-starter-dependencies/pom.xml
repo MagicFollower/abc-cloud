@@ -45,6 +45,7 @@
         <mapper-spring-boot-starter.version>4.2.2</mapper-spring-boot-starter.version>
         <pagehelper-spring-boot-starter.version>1.4.6</pagehelper-spring-boot-starter.version>
         <mysql-connector-java.version>8.0.33</mysql-connector-java.version>
+        <druid-spring-boot-starter.version>1.2.19</druid-spring-boot-starter.version>
         <!-- DAO-end -->
 
         <!-- MINIO-start -->
@@ -309,6 +310,11 @@
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql-connector-java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid-spring-boot-starter.version}</version>
             </dependency>
             <!-- DAO-end -->
 
