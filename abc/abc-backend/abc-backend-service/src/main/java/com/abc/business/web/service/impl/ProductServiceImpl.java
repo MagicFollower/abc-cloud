@@ -33,7 +33,8 @@ import java.util.stream.Collectors;
  * @Version 1.0
  */
 @Slf4j
-@DubboService
+@Service
+//@DubboService
 @RequiredArgsConstructor
 public class ProductServiceImpl implements IProductService {
 

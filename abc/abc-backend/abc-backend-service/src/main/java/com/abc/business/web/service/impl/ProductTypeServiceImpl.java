@@ -26,7 +26,8 @@ import java.util.List;
  * @Version 1.0
  */
 @Slf4j
-@DubboService
+@Service
+//@DubboService
 @RequiredArgsConstructor
 public class ProductTypeServiceImpl implements IProductTypeService {
 

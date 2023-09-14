@@ -31,10 +31,11 @@
             <artifactId>abc-common-dao</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.abc</groupId>
-            <artifactId>abc-common-dubbo</artifactId>
-        </dependency>
+        <!-- 使用dubbo进行微服务化 -->
+<!--        <dependency>-->
+<!--            <groupId>com.abc</groupId>-->
+<!--            <artifactId>abc-common-dubbo</artifactId>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>mysql</groupId>
