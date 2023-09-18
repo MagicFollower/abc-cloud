@@ -31,7 +31,11 @@
 
 ##### 3.2 规范二
 
--  
+-  接`规范一`，关于三个项目的版本号问题
+  -  ![SpringBoot-Maven微服务版本号与继承关系-1](https://github.com/MagicFollower/abc-cloud/blob/main/abc/img/SpringBoot-Maven微服务版本号与继承关系-1.png)
+  -  ![SpringBoot-Maven微服务版本号与继承关系-2](https://github.com/MagicFollower/abc-cloud/blob/main/abc/img/SpringBoot-Maven微服务版本号与继承关系-2.png)
+- 统一更新版本号
+  - `mvn versions:set -DgenerateBackupPoms=false -DautoVersionSubmodules=true`
 
 
 
