@@ -4,14 +4,21 @@ import com.abc.business.api.IProductService;
 import com.abc.business.dto.ProductDTO;
 import com.abc.business.vo.ProductVO;
 import com.abc.business.web.base.URL;
+import com.abc.business.web.dal.entity.AbcProduct;
+import com.abc.business.web.dal.persistence.AbcProductMapper;
 import com.abc.business.web.dto.ProductReq;
 import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.response.BaseResponse;
 import com.abc.system.common.response.DefaultResponse;
 import com.abc.system.common.response.ResponseData;
 import com.abc.system.common.response.ResponseProcessor;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +40,9 @@ public class ProductController {
 
     // @DubboReference(check = true, retries = 0, timeout = 5000)
     private final IProductService productService;
+    private final AbcProductMapper abcProductMapper;
+
+    private final PlatformTransactionManager transactionManager;
 
     /**
      * 查询所有数据
@@ -54,11 +64,23 @@ public class ProductController {
     @PostMapping(URL.PRODUCT_ADD)
     public ResponseData<Void> add(@RequestBody ProductReq<ProductVO> request) {
         final ResponseProcessor<Void> rp = new ResponseProcessor<>();
+        TransactionStatus transactionStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
+
         // TODO
-        DefaultResponse addRes = productService.add(null);
-        if (!SystemRetCodeConstants.OP_SUCCESS.getCode().equals(addRes.getCode())) {
-            return rp.setErrorMsg(addRes.getCode(), addRes.getMsg());
+        List<AbcProduct> abcProducts1 = abcProductMapper.selectAll();
+        System.out.println(">>>>>>>>>>>>>>>>>>>1");
+        System.out.println(JSONObject.toJSONString(abcProducts1, JSONWriter.Feature.PrettyFormat));
+        DefaultResponse addRes1 = productService.add(null);
+        DefaultResponse addRes2 = productService.add(null);
+        DefaultResponse addRes3 = productService.add(null);
+        if (!SystemRetCodeConstants.OP_SUCCESS.getCode().equals(addRes1.getCode())) {
+            return rp.setErrorMsg(addRes1.getCode(), addRes1.getMsg());
         }
+        System.out.println(">>>>>>>>>>>>>>>>>>>2");
+        List<AbcProduct> abcProducts2 = abcProductMapper.selectAll();
+        System.out.println(JSONObject.toJSONString(abcProducts2, JSONWriter.Feature.PrettyFormat));
+
+        transactionManager.commit(transactionStatus);
         return rp.setData(null, SystemRetCodeConstants.OP_SUCCESS.getMessage());
     }
 
