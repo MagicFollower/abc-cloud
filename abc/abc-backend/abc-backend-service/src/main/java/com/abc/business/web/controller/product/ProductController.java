@@ -14,6 +14,7 @@ import com.abc.system.common.response.ResponseData;
 import com.abc.system.common.response.ResponseProcessor;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
+import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -54,11 +55,17 @@ public class ProductController {
     public ResponseData<List<ProductDTO>> queryAll(@RequestBody ProductReq<ProductVO> request) {
         final ResponseProcessor<List<ProductDTO>> rp = new ResponseProcessor<>();
         // TODO
-        BaseResponse<List<ProductDTO>> queryAllRes = productService.queryAll(null);
-        if (!SystemRetCodeConstants.OP_SUCCESS.getCode().equals(queryAllRes.getCode())) {
-            return rp.setErrorMsg(queryAllRes.getCode(), queryAllRes.getMsg());
+        // BaseResponse<List<ProductDTO>> queryAllRes = productService.queryAll(null);
+        // if (!SystemRetCodeConstants.OP_SUCCESS.getCode().equals(queryAllRes.getCode())) {
+        //     return rp.setErrorMsg(queryAllRes.getCode(), queryAllRes.getMsg());
+        // }
+        // return rp.setData(queryAllRes.getResult(), SystemRetCodeConstants.OP_SUCCESS.getMessage());
+
+        BaseResponse<List<ProductDTO>> baseResponse = productService.queryByIds(Lists.newArrayList(1L, 2L, 3L));
+        if (!SystemRetCodeConstants.OP_SUCCESS.getCode().equals(baseResponse.getCode())) {
+            return rp.setErrorMsg(baseResponse.getCode(), baseResponse.getMsg());
         }
-        return rp.setData(queryAllRes.getResult(), SystemRetCodeConstants.OP_SUCCESS.getMessage());
+        return rp.setData(baseResponse.getResult(), SystemRetCodeConstants.OP_SUCCESS.getMessage());
     }
 
     @PostMapping(URL.PRODUCT_ADD)

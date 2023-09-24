@@ -27,6 +27,14 @@ public interface IProductService {
     BaseResponse<List<ProductDTO>> queryAll(ProductRequest<ProductVO> request);
 
     /**
+     * 根据ID列表查询
+     *
+     * @param ids id列表
+     * @return List of ProductDTO
+     */
+    BaseResponse<List<ProductDTO>> queryByIds(List<Long> ids);
+
+    /**
      * 新增商品接口
      *
      * @param request ProductRequest of ProductVO
