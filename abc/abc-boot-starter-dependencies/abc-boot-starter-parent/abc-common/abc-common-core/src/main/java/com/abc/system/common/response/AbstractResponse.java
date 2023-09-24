@@ -25,8 +25,8 @@ public abstract class AbstractResponse implements Serializable {
         msg = systemRetCodeConstants.getMessage();
     }
 
-    public void fill(SystemRetCodeConstants systemRetCodeConstants, String errorMessage) {
+    public void fill(SystemRetCodeConstants systemRetCodeConstants, String message) {
         code = systemRetCodeConstants.getCode();
-        msg = errorMessage;
+        msg = message;
     }
 }
