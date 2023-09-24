@@ -2,6 +2,7 @@ package com.abc.system.dao.base;
 
 import com.abc.system.dao.tkmybatis.idgenerator.AbcTkGlobalIdGen;
 import lombok.Data;
+import lombok.experimental.FieldNameConstants;
 import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
@@ -18,6 +19,7 @@ import java.util.Date;
  * @Version 1.0
  */
 @Data
+@FieldNameConstants
 public class AbcBaseEntity implements Serializable {
     /**
      * 主键ID
