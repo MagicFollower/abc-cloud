@@ -108,17 +108,19 @@ public class UserExcelImportDTO implements Serializable {
 
 
 
-#### 二、下载
+#### 二、下载（`单Sheet`+`多Sheet`）
 
  ![导出Excel示例](https://github.com/MagicFollower/abc-cloud/blob/main/abc/abc-boot-starter-dependencies/abc-boot-starter-parent/abc-common/abc-common-easyexcel/doc/img/Snipaste_2023-08-14_20-57-29.png?raw=true)
 
 ```java
 import com.alibaba.excel.EasyExcel;
-import com.example.springbootdateformat.dto.UserExcelExportDTO;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.example.component.model.UserExcelExportDTO;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -133,11 +135,11 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * EasyExcelController
+ * -
  *
- * @Description EasyExcelController
+ * @Description -
  * @Author -
- * @Date 2023/8/14 19:47
+ * @Date 2023/9/24 21:53
  * @Version 1.0
  */
 @Slf4j
@@ -147,13 +149,13 @@ import java.util.concurrent.ThreadLocalRandom;
 public class EasyExcelController {
 
     /**
-     * 导出Excel
+     * 导出Excel（单Sheet）
      * 1. 设置响应头
      * 2. 获取原始数据，转换为对应DTO
      * 3. 将DTO数据写入响应输出流
      */
-    @GetMapping("/download")
-    public void excelDownload(HttpServletResponse response) {
+    @GetMapping("/singleSheet/download")
+    public void excelSingleSheetDownload(HttpServletResponse response) {
         final String filename = "default.xlsx";
         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Content-Disposition");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" +
@@ -176,6 +178,43 @@ public class EasyExcelController {
                     .doWrite(userExcelExportDTOList);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * 导出Excel（多Sheet）
+     * 1. 设置响应头
+     * 2. 获取原始数据，转换为对应DTO
+     * 3. 将DTO数据写入响应输出流
+     */
+    @GetMapping("/multiSheet/download")
+    public void excelMultiSheetDownload(HttpServletResponse response) {
+        final String filename = "default.xlsx";
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Content-Disposition");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" +
+                URLEncoder.encode(filename, StandardCharsets.UTF_8));
+
+        List<UserExcelExportDTO> userExcelExportDTOList = Lists.newArrayList();
+        for (int i = 0; i < 23; i++) {
+            UserExcelExportDTO userExcelExportDTO = new UserExcelExportDTO();
+            userExcelExportDTO.setName("NAME-".concat(RandomStringUtils.randomAlphanumeric(5)));
+            userExcelExportDTO.setAge(ThreadLocalRandom.current().nextInt(100));
+            userExcelExportDTO.setCreateTime(new Date());
+            userExcelExportDTO.setUpdateTime(new Date());
+            userExcelExportDTO.setIsDeleted(ThreadLocalRandom.current().nextBoolean());
+            userExcelExportDTOList.add(userExcelExportDTO);
+        }
+
+        try (ExcelWriter writer = EasyExcel.write(response.getOutputStream(), UserExcelExportDTO.class).build()) {
+            // Sheet1
+            WriteSheet sheet = EasyExcel.writerSheet(0, "基础信息").build();
+            writer.write(userExcelExportDTOList, sheet);
+            // Sheet2
+            WriteSheet sheet2 = EasyExcel.writerSheet(1, "详细信息").head(UserExcelExportDTO.class).build();
+            writer.write(userExcelExportDTOList, sheet2);
+        } catch (Exception e) {
+            log.error(">>>>>>>>|excelMultiSheetDownload|error|Exception:{}|<<<<<<<<", e.getMessage(), e);
         }
     }
 }
