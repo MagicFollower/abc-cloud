@@ -1,0 +1,17 @@
+server:
+  port: 65500
+spring:
+  application:
+    name: abc-excel-import-demo
+  main:
+    banner-mode: off
+
+abc:
+  excel:
+    rules:
+      - templateCode: abc001
+        titleNum: 1
+        columns: id|long|20|0|id,备注|string|200|0|memo
+      - templateCode: abc002
+        titleNum: 1
+        columns: id|string|20|0|id,姓名|string|200|0|name

@@ -94,6 +94,14 @@ public class ProductServiceImpl implements IProductService {
         List<AbcProduct> productList1 = productMapper.selectByExample(example);
         log.info(JSONObject.toJSONString(productList1, JSONWriter.Feature.PrettyFormat));
 
+        example.createCriteria().andEqualTo(AbcBaseEntity.Fields.id, 9999999L);
+        AbcProduct abcProduct1 = productMapper.selectOneByExample(example);
+        System.out.println("abcProduct1 = " + abcProduct1);
+
+        example.clear();
+        AbcProduct abcProduct2 = productMapper.selectOneByExample(example);
+        System.out.println("abcProduct2 = " + abcProduct2);
+
         response.fill(SystemRetCodeConstants.OP_SUCCESS);
         response.setTotal(dtoList.size());
         response.setResult(dtoList);
