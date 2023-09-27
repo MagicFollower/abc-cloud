@@ -84,14 +84,18 @@ public class ProductServiceImpl implements IProductService {
         }
 
         Example example = new Example(AbcProduct.class)
-                .selectProperties(AbcBaseEntity.Fields.id, AbcProduct.Fields.code, AbcProduct.Fields.name);
+                .selectProperties(AbcBaseEntity.Fields.id, AbcProduct.Fields.code);
         example.createCriteria().andIn(AbcBaseEntity.Fields.id, ids);
         List<AbcProduct> productList = productMapper.selectByExample(example);
         dtoList = productConverter.productEntity2DTO(productList);
+        log.info("1========");
+        log.info(JSONObject.toJSONString(dtoList, JSONWriter.Feature.PrettyFormat));
 
-        // example.clear()是否会清空selectProperties属性？（会）
-        example.clear();
+        // example.clear()是否会清空selectProperties属性？（不会，clear只会清空条件）
+        // example.clear();
+        example = new Example(AbcProduct.class);
         List<AbcProduct> productList1 = productMapper.selectByExample(example);
+        log.info("2========");
         log.info(JSONObject.toJSONString(productList1, JSONWriter.Feature.PrettyFormat));
 
         example.createCriteria().andEqualTo(AbcBaseEntity.Fields.id, 9999999L);
