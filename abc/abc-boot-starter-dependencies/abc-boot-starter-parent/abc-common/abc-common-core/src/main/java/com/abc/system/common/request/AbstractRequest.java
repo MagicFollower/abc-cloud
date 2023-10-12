@@ -55,7 +55,7 @@ public abstract class AbstractRequest<T> implements Serializable {
      * @return PageInfo实例
      */
     protected PageInfo initPageInfo() {
-        if (pageInfo == null) {
+        if (pageInfo == null || pageInfo.getPageNum() <= 0 || pageInfo.getPageSize() <= 0) {
             pageInfo = new PageInfo();
         }
         return pageInfo;
