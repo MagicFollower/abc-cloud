@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: abc-business-goods
+  main:
+    banner-mode: off
+    web-application-type: none
+
+apollo:
+  ### Apollo默认配置
+  bootstrap:
+    enabled: true
+    namespaces: dubbo.yaml
+
+### -Denv=dev -Didc=default -Dapollo.meta=http://127.0.0.1:8080
+#dubbo:
+#  application:
+#    name: ${spring.application.name}
+#    qos-enable: false
+#    qos-port: 22222
+#  registry:
+#    #group: dev-xx
+#    protocol: zookeeper
+#    address: zookeeper://127.0.0.1:2181
+#  protocol:
+#    name: dubbo
+#    port: 20002
+#  scan:
+#    base-packages: org.example.service
