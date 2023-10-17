@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
  * AbcMpServiceImpl
  *
  * @Description AbcMpServiceImpl 详细介绍
- * @Author Trivis
+ * @Author xx
  * @Date 2023/5/1 18:20
  * @Version 1.0
  */

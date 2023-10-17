@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * AbcMpMapper
  *
  * @Description AbcMpMapper 详细介绍
- * @Author Trivis
+ * @Author xx
  * @Date 2023/5/1 18:24
  * @Version 1.0
  */
