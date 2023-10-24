@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<!-- 官方文档：https://gitee.com/free/Mapper/wikis/4.generator/4.1.mappergenerator -->
+<generatorConfiguration>
+
+    <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+
+        <property name="javaFileEncoding" value="UTF-8"/>
+
+<!--        <plugin type="com.abc.system.dao.tkmybatis.generator.plugin.AbcTkMybatisGeneratorPlugin"/>-->
+
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>
+            <property name="useMapperCommentGenerator" value="true"/>
+            <!--            <property name="beginningDelimiter" value="`"/>-->
+            <!--            <property name="endingDelimiter" value="`"/>-->
+            <property name="caseSensitive" value="false"/>
+            <property name="forceAnnotation" value="true"/>
+            <property name="generateColumnConsts" value="false"/>
+            <property name="lombok" value="Data,NoArgsConstructor"/>
+        </plugin>
+
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://192.168.204.101:23306/dev_test?useUnicode=true&amp;characterEncoding=utf8&amp;useOldAliasMetadataBehavior=true&amp;zeroDateTimeBehavior=convertToNull&amp;allowMultiQueries=true&amp;connectionTimeZone=SERVER"
+                        userId="root"
+                        password="Mysql12345">
+            <property name="useInformationSchema" value="true"/>
+            <property name="nullCatalogMeansCurrent" value="true"/>
+        </jdbcConnection>
+
+        <!-- 数值与时间格式：BigDecimal -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="true"/>
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="org.example.dal.entity"
+                            targetProject="src/main/java">
+            <!--继承AbcBaseEntity，父类中属性存在时，子类属性将不再自动生成-->
+            <property name="rootClass" value="com.abc.system.dao.base.AbcBaseEntity"/>
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- XML生成位置，此处保持和java文件在同一目录 -->
+        <sqlMapGenerator targetPackage="org.example.dal.persistence"
+                         targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- ANNOTATEDMAPPER/XMLMAPPER -->
+        <javaClientGenerator targetPackage="org.example.dal.persistence"
+                             targetProject="src/main/java"
+                             type="XMLMAPPER">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+
+        <table tableName="user" enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false">
+        </table>
+
+    </context>
+</generatorConfiguration>
