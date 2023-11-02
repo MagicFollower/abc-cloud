@@ -17,6 +17,39 @@ public class MySqlBatchInsertGenIdSelectiveProvider extends MapperTemplate {
         super(mapperClass, mapperHelper);
     }
 
+    /**
+     * 这里将拼接并生成下方格式的MyBatis配置 ↓
+     * <pre>
+     * {@code
+     *         <bind name="listNotEmptyCheck"
+     *               value="@tk.mybatis.mapper.util.OGNL@notEmptyCollectionCheck(list, 'org.example.dal.persistence.UserMapper.batchInsertGenIdSelective 方法参数为空')"/>
+     *                 INSERT INTO user
+     *         <foreach collection="list" item="columnRecord" separator="," index="index">
+     *         <if test="index == 0">
+     *             <trim prefix="(" suffix=")" suffixOverrides=",">
+     *                 <if test="columnRecord.id != null">id,</if>
+     *                 <if test="columnRecord.name != null">name,</if>
+     *                 <if test="columnRecord.age != null">age,</if>
+     *                 <if test="columnRecord.sex != null">sex,</if>
+     *                 <if test="columnRecord.isStop != null">is_stop,</if>
+     *             </trim>
+     *         </if>
+     *         </foreach>
+     *                 VALUES
+     *         <foreach collection="list" item="it" separator=",">
+     *         <trim prefix="(" suffix=")" suffixOverrides=",">
+     *             <if test="it.id != null">#{it.id},</if>
+     *             <if test="it.name != null">#{it.name},</if>
+     *             <if test="it.age != null">#{it.age},</if>
+     *             <if test="it.sex != null">#{it.sex},</if>
+     *             <if test="it.isStop != null">#{it.isStop},</if>
+     *         </trim>
+     *         </foreach>
+     * }
+     * </pre>
+     * @param ms MappedStatement实例
+     * @return mybatisXML表示的SQL字符串（String）
+     */
     public String batchInsertGenIdSelective(MappedStatement ms) {
         LOGGER.info(">>>>>>>> batch insert selective build sql|start <<<<<<<<");
         Class<?> entityClass = this.getEntityClass(ms);
