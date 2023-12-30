@@ -22,6 +22,19 @@
     </properties>
 
     <dependencies>
+        <!-- 移除mybatis-plus、tk-mapper中jdbc中HikariCP -->
+        <!-- 替换HikariCP为最新版本5.1.0，并移除HikariCP默认引入的slf4j-api2.0 -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+            <version>5.1.0</version>
+        </dependency>
         <!-- IdWorker和其他实用工具😎 -->
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -34,8 +47,8 @@
             <version>${mybatis-plus-boot-starter.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
+                    <groupId>com.zaxxer</groupId>
+                    <artifactId>HikariCP</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -43,6 +56,12 @@
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-spring-boot-starter</artifactId>
             <version>${mapper-spring-boot-starter.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.zaxxer</groupId>
+                    <artifactId>HikariCP</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.github.pagehelper</groupId>
