@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import tk.mybatis.spring.annotation.MapperScan;
 
 import javax.sql.DataSource;
@@ -27,7 +26,7 @@ public class DruidPrimaryConfig {
     /**
      * 多数据源时，第一个数据源指定Primary
      */
-    @Primary
+//    @Primary
     @Bean("dataSourceOne")
     @ConfigurationProperties("spring.datasource.druid.one")
     public DataSource dataSourceOne() {
@@ -35,7 +34,7 @@ public class DruidPrimaryConfig {
     }
 
     @Bean(name = "oneSqlSessionFactory")
-    @Primary
+//    @Primary
     public SqlSessionFactory setSqlSessionFactory(@Qualifier("dataSourceOne") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);

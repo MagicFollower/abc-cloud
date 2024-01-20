@@ -1,5 +1,5 @@
 server:
-  port: 65500
+  port: 50000
 spring:
   application:
     name: druid-multi-datasource-demo
@@ -9,7 +9,7 @@ spring:
   datasource:
     druid:
       one:
-        url: jdbc:mysql://192.168.204.101:23306/abc-backend?autoReconnect=true&useServerPreparedStmts=true&cachePrepStmts=true&rewriteBatchedStatements=true&allowMultiQueries=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&connectionTimeZone=SERVER
+        url: jdbc:mysql://192.168.204.101:23306/dev-test-one?autoReconnect=true&useServerPreparedStmts=true&cachePrepStmts=true&rewriteBatchedStatements=true&allowMultiQueries=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&connectionTimeZone=SERVER
         username: root
         ### {@code java -cp druid-1.2.19.jar com.alibaba.druid.filter.config.ConfigTools your_db_password }
         password: ZYWnAmMbaYvdVirAoqbgMXPA7cIytb8tnkJj99CKzkiHJF+V+LawoSj9yuyoy5nmOtoRa9WzWbceKuWoh24VIw==
