@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.abc.business.web.dal.persistence.AbcProductMapper">
-  <resultMap id="BaseResultMap" type="com.abc.business.web.dal.entity.AbcProduct">
+<mapper namespace="org.example.dal.two.persistence.TwoAbcProductMapper">
+  <resultMap id="BaseResultMap" type="org.example.dal.two.entity.TwoAbcProduct">
     <!--
       WARNING - @mbg.generated
     -->
@@ -17,4 +17,9 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
   </resultMap>
+
+  <select id="test" resultType="java.util.Map">
+      SELECT *
+      FROM abc_product;
+  </select>
 </mapper>

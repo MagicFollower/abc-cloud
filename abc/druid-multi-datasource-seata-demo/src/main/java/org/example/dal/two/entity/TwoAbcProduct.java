@@ -1,4 +1,4 @@
-package com.abc.business.web.dal.entity;
+package org.example.dal.two.entity;
 
 import com.abc.system.dao.base.AbcBaseEntity;
 import lombok.Data;
@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @FieldNameConstants
 @Table(name = "`abc_product`")
-public class AbcProduct extends AbcBaseEntity {
+public class TwoAbcProduct extends AbcBaseEntity {
     /**
      * 类型id
      */

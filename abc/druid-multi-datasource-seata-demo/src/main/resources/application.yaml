@@ -1,0 +1,107 @@
+server:
+  port: 50000
+
+seata:
+  registry:
+    type: zk
+    zk:
+      cluster: default
+      server-addr: localhost:2181
+  tx-service-group: my_test_tx_group
+  service:
+    vgroup-mapping:
+      my_test_tx_group: default
+  enabled: true
+  enable-auto-data-source-proxy: false
+  data-source-proxy-mode: AT
+  application-id: druid-multi-datasource-demo
+
+
+
+spring:
+  application:
+    name: druid-multi-datasource-demo
+  main:
+    banner-mode: off
+  #数据库配置
+  datasource:
+    dynamic:
+      seata: true
+#      primary: one
+      #连接池配置
+      druid:
+        initialSize: 10
+        minIdle: 1
+        maxActive: 20
+        maxWait: 60000
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: select 1 FROM DUAL
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: false
+        filters: stat,log4j,wall
+        useGlobalDataSourceStat: true
+
+      #数据源配置
+      datasource:
+        #主数据源
+        one:
+          url: jdbc:mysql://192.168.204.101:23306/dev-test-one?autoReconnect=true&useServerPreparedStmts=true&cachePrepStmts=true&rewriteBatchedStatements=true&allowMultiQueries=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&connectionTimeZone=SERVER
+          username: root
+          password: Mysql12345
+          type: com.alibaba.druid.pool.DruidDataSource
+          driver-class-name: com.mysql.cj.jdbc.Driver
+
+        #备数据源
+        two:
+          url: jdbc:mysql://192.168.204.101:23306/dev_test?autoReconnect=true&useServerPreparedStmts=true&cachePrepStmts=true&rewriteBatchedStatements=true&allowMultiQueries=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&connectionTimeZone=SERVER
+          username: root
+          password: Mysql12345
+          type: com.alibaba.druid.pool.DruidDataSource
+          driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+#  ### Druid多数据源配置
+#  datasource:
+#    druid:
+#      one:
+#        url: jdbc:mysql://192.168.204.101:23306/dev-test-one?autoReconnect=true&useServerPreparedStmts=true&cachePrepStmts=true&rewriteBatchedStatements=true&allowMultiQueries=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&connectionTimeZone=SERVER
+#        username: root
+#        ### {@code java -cp druid-1.2.19.jar com.alibaba.druid.filter.config.ConfigTools your_db_password }
+#        password: ZYWnAmMbaYvdVirAoqbgMXPA7cIytb8tnkJj99CKzkiHJF+V+LawoSj9yuyoy5nmOtoRa9WzWbceKuWoh24VIw==
+#        type: com.alibaba.druid.pool.DruidDataSource
+#        driver-class-name: com.mysql.cj.jdbc.Driver
+#        initial-size: 5
+#        min-idle: 5
+#        max-active: 20
+#        max-wait: 60000
+#        time-between-eviction-runs-millis: 60000
+#        min-evictable-idle-time-millis: 300000
+#        validation-query: SELECT 1
+#        test-while-idle: true
+#        test-on-borrow: false
+#        test-on-return: false
+#        filters: config
+#        public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJnI09eW+aUcxZZBHue4GR3DIJ3ulFlWVxYhGJ1Qe5Yax9tox9dBenFybR3dxv1rXR+6h4H2mqupPUdkKGSlLFMCAwEAAQ==
+#        connection-properties: config.decrypt=true;config.decrypt.key=${spring.datasource.druid.one.public-key}
+#      two:
+#        url: jdbc:mysql://192.168.204.101:23306/dev_test?autoReconnect=true&useServerPreparedStmts=true&cachePrepStmts=true&rewriteBatchedStatements=true&allowMultiQueries=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&connectionTimeZone=SERVER
+#        username: root
+#        password: ZYWnAmMbaYvdVirAoqbgMXPA7cIytb8tnkJj99CKzkiHJF+V+LawoSj9yuyoy5nmOtoRa9WzWbceKuWoh24VIw==
+#        type: com.alibaba.druid.pool.DruidDataSource
+#        driver-class-name: com.mysql.cj.jdbc.Driver
+#        initial-size: 5
+#        min-idle: 5
+#        max-active: 20
+#        max-wait: 60000
+#        time-between-eviction-runs-millis: 60000
+#        min-evictable-idle-time-millis: 300000
+#        validation-query: SELECT 1
+#        test-while-idle: true
+#        test-on-borrow: false
+#        test-on-return: false
+#        filters: config
+#        public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJnI09eW+aUcxZZBHue4GR3DIJ3ulFlWVxYhGJ1Qe5Yax9tox9dBenFybR3dxv1rXR+6h4H2mqupPUdkKGSlLFMCAwEAAQ==
+#        connection-properties: config.decrypt=true;config.decrypt.key=${spring.datasource.druid.two.public-key}

@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.abc.business.web.dal.persistence.AbcProductTypeMapper">
-  <resultMap id="BaseResultMap" type="com.abc.business.web.dal.entity.AbcProductType">
+<mapper namespace="org.example.dal.one.persistence.OneAbcProductMapper">
+  <resultMap id="BaseResultMap" type="org.example.dal.one.entity.OneAbcProduct">
     <!--
       WARNING - @mbg.generated
     -->
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="type" jdbcType="BIGINT" property="type" />
     <result column="code" jdbcType="VARCHAR" property="code" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="act_price" jdbcType="DECIMAL" property="actPrice" />
+    <result column="sale_price" jdbcType="DECIMAL" property="salePrice" />
     <result column="memo" jdbcType="VARCHAR" property="memo" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
