@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 import tk.mybatis.spring.annotation.MapperScan;
 
 import javax.sql.DataSource;
@@ -41,4 +43,8 @@ public class DruidPrimaryConfig {
         return bean.getObject();
     }
 
+    @Bean(name = "oneTransactionManager")
+    public PlatformTransactionManager oneTransactionManager(@Qualifier("dataSourceOne") DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
+    }
 }
