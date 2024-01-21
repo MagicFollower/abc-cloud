@@ -22,6 +22,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
         <!-- 移除mybatis-plus、tk-mapper中jdbc中HikariCP -->
         <!-- 替换HikariCP为最新版本5.1.0，并移除HikariCP默认引入的slf4j-api2.0 -->
         <dependency>
@@ -50,6 +55,10 @@
                     <groupId>com.zaxxer</groupId>
                     <artifactId>HikariCP</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-jdbc</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -61,12 +70,22 @@
                     <groupId>com.zaxxer</groupId>
                     <artifactId>HikariCP</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-jdbc</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>${pagehelper-spring-boot-starter.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-jdbc</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- 自定义代码生成器插件所需依赖 -->
