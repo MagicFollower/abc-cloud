@@ -1,3 +1,6 @@
+aaa/test.png+
+bbb/test.png+
+ccc/test.png+
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
