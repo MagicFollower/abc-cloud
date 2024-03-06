@@ -12,6 +12,14 @@ spring:
         url: jdbc:mysql://192.168.204.101:23306/dev-test-one?autoReconnect=true&useServerPreparedStmts=true&cachePrepStmts=true&rewriteBatchedStatements=true&allowMultiQueries=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&connectionTimeZone=SERVER
         username: root
         ### {@code java -cp druid-1.2.19.jar com.alibaba.druid.filter.config.ConfigTools your_db_password }
+        ### 1.2.21的ConfigTools不再包含main方法，可以手动获取
+        ### public static void main(String[] args) throws Exception {
+        ###     String password = args[0];
+        ###     String[] arr = genKeyPair(512);
+        ###     System.out.println("privateKey:" + arr[0]);
+        ###     System.out.println("publicKey:" + arr[1]);
+        ###     System.out.println("password:" + encrypt(arr[0], password));
+        ### }
         password: ZYWnAmMbaYvdVirAoqbgMXPA7cIytb8tnkJj99CKzkiHJF+V+LawoSj9yuyoy5nmOtoRa9WzWbceKuWoh24VIw==
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
