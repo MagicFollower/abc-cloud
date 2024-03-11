@@ -29,15 +29,4 @@ public class ExceptionProcessor {
             abstractResponse.fill(SystemRetCodeConstants.SYSTEM_ERROR);
         }
     }
-
-    public static void wrapAndHandleException(AbstractResponse abstractResponse, Throwable e,
-                                              String predictableErrorMsg) {
-        if (e instanceof BaseRuntimeException) {
-            abstractResponse.setCode(((BaseRuntimeException) e).getErrorCode());
-            abstractResponse.setMsg(predictableErrorMsg);
-        } else {
-            // 未预测异常，不处理
-            abstractResponse.fill(SystemRetCodeConstants.SYSTEM_ERROR);
-        }
-    }
 }
