@@ -4,8 +4,8 @@ package com.abc.system.common.dubbo.local;
  * RPC-EUID本地线程缓存类
  *
  * @Description RPC-EUID本地线程缓存类
- * @Author Trivis
- * @Date 2023/5/13 21:46
+ * @Author [author_name]
+ * @Date 2077/5/13 21:46
  * @Version 1.0
  */
 @Deprecated

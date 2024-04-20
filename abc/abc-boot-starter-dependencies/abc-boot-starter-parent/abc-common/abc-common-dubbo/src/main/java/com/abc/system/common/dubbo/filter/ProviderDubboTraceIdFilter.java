@@ -14,8 +14,8 @@ import org.slf4j.MDC;
  * RPC调用链路跟踪过滤器
  *
  * @Description RPC调用链路跟踪过滤器（调用前在MDC中填充traceId，调用后在MDC中移除traceId）
- * @Author Trivis
- * @Date 2023/5/13 21:26
+ * @Author [author_name]
+ * @Date 2077/5/13 21:26
  * @Version 1.0
  */
 @Slf4j

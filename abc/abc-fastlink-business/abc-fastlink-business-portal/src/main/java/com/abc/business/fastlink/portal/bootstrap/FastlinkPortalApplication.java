@@ -9,8 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
  * FastlinkPortalApplication
  *
  * @Description FastlinkPortalApplication 详细介绍
- * @Author Trivis
- * @Date 2023/5/14 21:34
+ * @Author [author_name]
+ * @Date 2077/5/14 21:34
  * @Version 1.0
  */
 @ComponentScan(basePackages = {"com.abc.business.fastlink"})

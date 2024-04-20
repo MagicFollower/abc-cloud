@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
  * CellVerifyValue
  *
  * @Description CellVerifyValue 详细介绍
- * @Author Trivis
- * @Date 2023/5/21 20:20
+ * @Author [author_name]
+ * @Date 2077/5/21 20:20
  * @Version 1.0
  */
 @Data

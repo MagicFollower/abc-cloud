@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit;
  * DistributedLockService
  *
  * @Description DistributedLockService 分布式锁服务接口
- * @Author Trivis
- * @Date 2023/5/19 14:53
+ * @Author [author_name]
+ * @Date 2077/5/19 14:53
  * @Version 1.0
  */
 public interface DistributedLockService {

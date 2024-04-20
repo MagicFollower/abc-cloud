@@ -10,8 +10,8 @@ package com.abc.system.common.constant;
  *   1.2 001 核心模块响应编码
  *   1.3 002 Redis缓存模块响应编码
  * </pre>
- * @Author Trivis
- * @Date 2023/5/1 10:53
+ * @Author [author_name]
+ * @Date 2077/5/1 10:53
  * @Version 1.0
  */
 public enum SystemRetCodeConstants {

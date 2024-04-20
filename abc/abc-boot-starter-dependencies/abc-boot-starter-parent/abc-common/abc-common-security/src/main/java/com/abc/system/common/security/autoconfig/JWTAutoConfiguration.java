@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
  * JWTAutoConfiguration
  *
  * @Description JWTAutoConfiguration 详细介绍
- * @Author Trivis
- * @Date 2023/5/27 23:54
+ * @Author [author_name]
+ * @Date 2077/5/27 23:54
  * @Version 1.0
  */
 @Configuration

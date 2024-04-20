@@ -76,8 +76,8 @@ import static javax.crypto.Cipher.ENCRYPT_MODE;
  * </pre>
  *
  * @Description AES工具包
- * @Author Trivis
- * @Date 2023/5/28 8:38
+ * @Author [author_name]
+ * @Date 2077/5/28 8:38
  * @Version 1.0
  */
 public class AESUtils {

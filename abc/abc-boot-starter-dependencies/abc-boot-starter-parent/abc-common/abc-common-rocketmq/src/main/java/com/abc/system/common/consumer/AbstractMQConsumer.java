@@ -54,7 +54,7 @@ import java.util.List;
  *
  * @Description AbstractMQConsumer
  * @Author -
- * @Date 2023/8/17 20:56
+ * @Date 2077/8/17 20:56
  * @Version 1.0
  */
 public abstract class AbstractMQConsumer implements MessageListenerConcurrently, ApplicationContextAware {

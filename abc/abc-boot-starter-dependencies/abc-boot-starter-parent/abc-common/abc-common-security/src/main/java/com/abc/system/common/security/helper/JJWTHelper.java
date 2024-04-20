@@ -35,8 +35,8 @@ import java.util.Objects;
  * 3.{@code String parseUserInfo(String jwt))}
  *   {@code String parseUserInfo(String jwt, String currentSystemName))}
  * </pre>
- * @Author Trivis
- * @Date 2023/5/28 8:30
+ * @Author [author_name]
+ * @Date 2077/5/28 8:30
  * @Version 1.0
  */
 @Slf4j

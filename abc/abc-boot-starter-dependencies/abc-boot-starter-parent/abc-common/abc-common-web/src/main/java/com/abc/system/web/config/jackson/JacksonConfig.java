@@ -17,8 +17,8 @@ import java.time.format.DateTimeFormatter;
  * JacksonConfig
  *
  * @Description JacksonConfig
- * @Author Trivis
- * @Date 2023/5/19 11:23
+ * @Author [author_name]
+ * @Date 2077/5/19 11:23
  * @Version 1.0
  */
 @Configuration

@@ -10,7 +10,7 @@ import java.util.Date;
  *
  * @Description 商品类型DTO
  * @Author -
- * @Date 2023/8/20 23:05
+ * @Date 2077/8/20 23:05
  * @Version 1.0
  */
 @Data

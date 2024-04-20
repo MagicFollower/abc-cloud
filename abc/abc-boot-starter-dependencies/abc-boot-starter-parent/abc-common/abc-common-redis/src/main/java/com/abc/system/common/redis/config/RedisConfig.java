@@ -14,8 +14,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * RedisConfig
  *
  * @Description RedisConfig
- * @Author Trivis
- * @Date 2023/5/1 15:40
+ * @Author [author_name]
+ * @Date 2077/5/1 15:40
  * @Version 1.0
  */
 @EnableCaching

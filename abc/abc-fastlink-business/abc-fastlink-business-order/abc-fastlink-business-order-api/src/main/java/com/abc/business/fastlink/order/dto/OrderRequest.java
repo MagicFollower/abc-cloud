@@ -11,8 +11,8 @@ import lombok.EqualsAndHashCode;
  * OrderRequest
  *
  * @Description OrderRequest 详细介绍
- * @Author Trivis
- * @Date 2023/5/16 21:25
+ * @Author [author_name]
+ * @Date 2077/5/16 21:25
  * @Version 1.0
  */
 @EqualsAndHashCode(callSuper = true)

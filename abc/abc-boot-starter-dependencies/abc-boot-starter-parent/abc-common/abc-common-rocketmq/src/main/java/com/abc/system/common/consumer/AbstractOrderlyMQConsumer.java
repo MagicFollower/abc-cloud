@@ -24,7 +24,7 @@ import java.util.List;
  *
  * @Description AbstractOrderlyMQConsumer
  * @Author -
- * @Date 2023/8/17 21:13
+ * @Date 2077/8/17 21:13
  * @Version 1.0
  */
 public abstract class AbstractOrderlyMQConsumer implements MessageListenerOrderly {

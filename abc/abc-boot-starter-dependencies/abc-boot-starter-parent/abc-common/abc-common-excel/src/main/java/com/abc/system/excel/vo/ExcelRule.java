@@ -6,8 +6,8 @@ import lombok.Data;
  * Excel自定义配置规则
  *
  * @Description ExcelRule Excel自定义配置规则
- * @Author Trivis
- * @Date 2023/5/21 17:00
+ * @Author [author_name]
+ * @Date 2077/5/21 17:00
  * @Version 1.0
  */
 @Data

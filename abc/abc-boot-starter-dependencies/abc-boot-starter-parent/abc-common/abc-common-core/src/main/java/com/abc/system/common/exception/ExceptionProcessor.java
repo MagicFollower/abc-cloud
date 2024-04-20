@@ -11,8 +11,8 @@ import com.abc.system.common.response.AbstractResponse;
  *   1.用于微服务Service层对异常（服务层可预测异常BaseException的子类）信息的包装，将异常编码+信息写入到AbstractResponse中；
  *   2.命名风格和ResponseProcessor保持一致。
  * </pre>
- * @Author Trivis
- * @Date 2023/7/3 13:10
+ * @Author [author_name]
+ * @Date 2077/7/3 13:10
  * @Version 1.0
  */
 public class ExceptionProcessor {

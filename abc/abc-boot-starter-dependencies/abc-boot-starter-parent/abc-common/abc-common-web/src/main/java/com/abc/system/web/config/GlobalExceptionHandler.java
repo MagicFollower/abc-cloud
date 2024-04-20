@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
  * 全局异常拦截器
  *
  * @Description 全局异常拦截器
- * @Author Rake
- * @Date 2023/8/1 21:42
+ * @Author [author_name]
+ * @Date 2077/8/1 21:42
  * @Version 1.0
  */
 @ControllerAdvice

@@ -16,8 +16,8 @@ import java.util.List;
  *   1.apollo.system.namespaces
  *   2.多个namespace使用逗号分隔
  * </pre>
- * @Author Trivis
- * @Date 2023/5/12 20:36
+ * @Author [author_name]
+ * @Date 2077/5/12 20:36
  * @Version 1.0
  */
 @ConfigurationProperties(prefix = "apollo.system")

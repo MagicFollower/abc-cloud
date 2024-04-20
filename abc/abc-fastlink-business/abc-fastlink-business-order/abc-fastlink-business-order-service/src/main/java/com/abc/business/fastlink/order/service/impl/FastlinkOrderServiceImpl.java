@@ -14,8 +14,8 @@ import org.apache.dubbo.config.annotation.DubboService;
  * FastlinkGoodsServiceImpl
  *
  * @Description FastlinkGoodsServiceImpl 详细介绍
- * @Author Trivis
- * @Date 2023/5/13 22:49
+ * @Author [author_name]
+ * @Date 2077/5/13 22:49
  * @Version 1.0
  */
 @Slf4j

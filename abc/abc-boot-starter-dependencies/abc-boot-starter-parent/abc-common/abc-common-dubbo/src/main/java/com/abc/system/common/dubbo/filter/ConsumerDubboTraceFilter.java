@@ -15,8 +15,8 @@ import org.slf4j.MDC;
  * Dubbo RPC Consumer过滤器
  *
  * @Description Dubbo RPC Consumer过滤器, 实现euid、traceId上下文传递，防止多次调用RPC时上下文参数丢失
- * @Author Trivis
- * @Date 2023/5/13 21:42
+ * @Author [author_name]
+ * @Date 2077/5/13 21:42
  * @Version 1.0
  */
 @Slf4j

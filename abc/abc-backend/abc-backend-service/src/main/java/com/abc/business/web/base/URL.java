@@ -5,7 +5,7 @@ package com.abc.business.web.base;
  *
  * @Description URL
  * @Author -
- * @Date 2023/8/20 22:58
+ * @Date 2077/8/20 22:58
  * @Version 1.0
  */
 public class URL {

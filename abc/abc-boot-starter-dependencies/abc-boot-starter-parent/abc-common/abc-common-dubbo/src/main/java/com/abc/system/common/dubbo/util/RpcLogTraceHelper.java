@@ -12,8 +12,8 @@ import java.util.UUID;
  * RPC服务traceId生成
  *
  * @Description RPC服务traceId生成
- * @Author Trivis
- * @Date 2023/5/13 21:33
+ * @Author [author_name]
+ * @Date 2077/5/13 21:33
  * @Version 1.0
  */
 @Component

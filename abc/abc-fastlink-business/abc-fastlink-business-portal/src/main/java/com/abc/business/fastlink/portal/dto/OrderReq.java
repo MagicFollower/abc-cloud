@@ -10,8 +10,8 @@ import java.io.Serializable;
  * Controller层请求实体
  *
  * @Description OrderReq
- * @Author Rake
- * @Date 2023/7/30 15:56
+ * @Author [author_name]
+ * @Date 2077/7/30 15:56
  * @Version 1.0
  */
 @EqualsAndHashCode(callSuper = true)

@@ -7,8 +7,8 @@ import com.abc.system.common.exception.base.BaseRuntimeException;
  * JWTException
  *
  * @Description JWTException
- * @Author Trivis
- * @Date 2023/5/28 8:50
+ * @Author [author_name]
+ * @Date 2077/5/28 8:50
  * @Version 1.0
  */
 public class JWTException extends BaseRuntimeException {

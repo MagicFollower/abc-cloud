@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Configuration;
  * 生成文件服务自动配置类
  *
  * @Description 生成文件服务自动配置类（将GeneratorFileService注入到SpringIOC容器中）
- * @Author Trivis
- * @Date 2023/5/10 21:03
+ * @Author [author_name]
+ * @Date 2077/5/10 21:03
  * @Version 1.0
  */
 @Configuration

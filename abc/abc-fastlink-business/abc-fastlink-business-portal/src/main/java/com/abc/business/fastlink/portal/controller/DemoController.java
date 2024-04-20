@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
  * 测试用Controller
  *
  * @Description 测试用Controller
- * @Author Rake
- * @Date 2023/8/4 19:11
+ * @Author [author_name]
+ * @Date 2077/8/4 19:11
  * @Version 1.0
  */
 @Slf4j

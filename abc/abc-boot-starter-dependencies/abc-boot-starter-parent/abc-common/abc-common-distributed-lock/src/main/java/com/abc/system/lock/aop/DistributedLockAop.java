@@ -20,8 +20,8 @@ import org.redisson.api.RLock;
  * DistributedLockAop
  *
  * @Description DistributedLockAop分布式锁切面，将在AutoConfiguration中注入IOC
- * @Author Trivis
- * @Date 2023/5/19 14:20
+ * @Author [author_name]
+ * @Date 2077/5/19 14:20
  * @Version 1.0
  */
 @Aspect

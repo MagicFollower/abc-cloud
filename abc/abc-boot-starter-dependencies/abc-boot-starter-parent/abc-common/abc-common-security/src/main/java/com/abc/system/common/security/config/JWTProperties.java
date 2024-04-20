@@ -8,8 +8,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * JWTProperties
  *
  * @Description JWTProperties 详细介绍
- * @Author Trivis
- * @Date 2023/5/27 23:52
+ * @Author [author_name]
+ * @Date 2077/5/27 23:52
  * @Version 1.0
  */
 @Data

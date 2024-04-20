@@ -21,8 +21,8 @@ import java.util.Locale;
  * Freemarker自动配置类
  *
  * @Description Freemarker自动配置类
- * @Author Trivis
- * @Date 2023/5/10 20:20
+ * @Author [author_name]
+ * @Date 2077/5/10 20:20
  * @Version 1.0
  */
 @Slf4j

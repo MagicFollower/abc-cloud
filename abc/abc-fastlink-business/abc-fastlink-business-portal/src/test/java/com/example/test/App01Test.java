@@ -10,8 +10,8 @@ import org.springframework.core.env.Environment;
  * App01Test
  *
  * @Description App01Test
- * @Author Rake
- * @Date 2023/7/14 20:17
+ * @Author [author_name]
+ * @Date 2077/7/14 20:17
  * @Version 1.0
  */
 @SpringBootTest(classes = {FastlinkPortalApplication.class})

@@ -37,8 +37,8 @@ import com.abc.system.common.exception.base.BaseRuntimeException;
  * </pre>
  *
  * @Description 远程文件服务--文件下载异常
- * @Author Rake
- * @Date 2023/8/12 0:32
+ * @Author [author_name]
+ * @Date 2077/8/12 0:32
  * @Version 1.0
  */
 public class RemoteFileDownloadException extends BaseRuntimeException {

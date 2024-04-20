@@ -41,8 +41,8 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  *
  * @Description MinioService 详细介绍
- * @Author Trivis
- * @Date 2023/5/2 12:22
+ * @Author [author_name]
+ * @Date 2077/5/2 12:22
  * @Version 1.0
  */
 @Slf4j

@@ -19,8 +19,8 @@ import java.util.Objects;
  * 条形码生成工具类
  *
  * @Description 条形码生成工具类
- * @Author Trivis
- * @Date 2023/5/12 18:41
+ * @Author [author_name]
+ * @Date 2077/5/12 18:41
  * @Version 1.0
  */
 @Slf4j

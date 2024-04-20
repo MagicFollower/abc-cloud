@@ -8,7 +8,7 @@ import com.abc.system.common.exception.base.BaseRuntimeException;
  *
  * @Description RocketMQException
  * @Author -
- * @Date 2023/8/18 13:28
+ * @Date 2077/8/18 13:28
  * @Version 1.0
  */
 public class RocketMQException extends BaseRuntimeException {

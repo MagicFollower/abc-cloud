@@ -6,8 +6,8 @@ import lombok.Getter;
  * ImageTypeEnum
  *
  * @Description ImageTypeEnum
- * @Author Trivis
- * @Date 2023/5/12 18:40
+ * @Author [author_name]
+ * @Date 2077/5/12 18:40
  * @Version 1.0
  */
 @Getter

@@ -6,8 +6,8 @@ import com.abc.system.lock.constant.DistributedLockConstants;
  * DistributedLockUtils
  *
  * @Description DistributedLockUtils 详细介绍
- * @Author Trivis
- * @Date 2023/5/19 14:32
+ * @Author [author_name]
+ * @Date 2077/5/19 14:32
  * @Version 1.0
  */
 public class DistributedLockUtils {

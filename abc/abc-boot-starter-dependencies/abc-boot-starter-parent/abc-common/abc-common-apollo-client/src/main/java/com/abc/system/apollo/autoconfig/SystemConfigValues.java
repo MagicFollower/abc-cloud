@@ -25,8 +25,8 @@ import java.util.concurrent.ConcurrentHashMap;
  *     }
  * }
  * </pre>
- * @Author Trivis
- * @Date 2023/05/21 14:18
+ * @Author [author_name]
+ * @Date 2077/05/21 14:18
  * @Version 1.0
  */
 @Slf4j

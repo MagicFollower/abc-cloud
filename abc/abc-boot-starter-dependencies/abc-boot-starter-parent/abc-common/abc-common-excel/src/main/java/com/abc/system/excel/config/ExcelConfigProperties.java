@@ -22,8 +22,8 @@ import java.util.List;
  * </pre>
  *
  * @Description ExcelConfigProperties Excel上传自定义配置
- * @Author Trivis
- * @Date 2023/5/21 16:14
+ * @Author [author_name]
+ * @Date 2077/5/21 16:14
  * @Version 1.0
  */
 @ConfigurationProperties(prefix = "abc.excel")

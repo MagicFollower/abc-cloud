@@ -7,8 +7,8 @@ import com.abc.system.common.response.BaseResponse;
  * FastlinkOrderService
  *
  * @Description FastlinkOrderService 详细介绍
- * @Author Trivis
- * @Date 2023/5/14 21:13
+ * @Author [author_name]
+ * @Date 2077/5/14 21:13
  * @Version 1.0
  */
 public interface FastlinkOrderService {

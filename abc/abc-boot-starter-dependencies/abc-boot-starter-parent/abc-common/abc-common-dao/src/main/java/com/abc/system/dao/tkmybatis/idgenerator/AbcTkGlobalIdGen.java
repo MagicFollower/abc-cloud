@@ -21,8 +21,8 @@ import tk.mybatis.mapper.genid.GenId;
  * </pre>
  *
  * @Description AbcTkGlobalIdGen TkID自动生成器，使用MybatisPlus的雪花算法生成器
- * @Author Trivis
- * @Date 2023/5/1 18:33
+ * @Author [author_name]
+ * @Date 2077/5/1 18:33
  * @Version 1.0
  */
 public class AbcTkGlobalIdGen implements GenId<Long> {

@@ -17,8 +17,8 @@ import java.io.IOException;
  * I18nJsonSerializer
  *
  * @Description I18nJsonSerializer
- * @Author Rake
- * @Date 2023/7/30 18:39
+ * @Author [author_name]
+ * @Date 2077/7/30 18:39
  * @Version 1.0
  */
 @Configuration

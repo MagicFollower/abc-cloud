@@ -20,8 +20,8 @@ import java.util.Arrays;
  * Apollo自动配置类
  *
  * @Description 自动刷新Apollo配置信息，监听apollo中{apollo.bootstrap.namespaces}配置的namespaces
- * @Author Trivis
- * @Date 2023/5/12 20:25
+ * @Author [author_name]
+ * @Date 2077/5/12 20:25
  * @Version 1.0
  */
 @Slf4j

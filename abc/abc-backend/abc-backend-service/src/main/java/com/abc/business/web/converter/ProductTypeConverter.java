@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @Description ProductTypeConverter
  * @Author -
- * @Date 2023/8/21 8:22
+ * @Date 2077/8/21 8:22
  * @Version 1.0
  */
 @Mapper(componentModel = "spring")

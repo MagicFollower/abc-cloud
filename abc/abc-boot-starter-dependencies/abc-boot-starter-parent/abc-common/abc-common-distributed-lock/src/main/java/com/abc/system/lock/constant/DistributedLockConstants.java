@@ -4,8 +4,8 @@ package com.abc.system.lock.constant;
  * DistributedLockConstants
  *
  * @Description DistributedLockConstants 分布式锁常量
- * @Author Trivis
- * @Date 2023/5/19 15:23
+ * @Author [author_name]
+ * @Date 2077/5/19 15:23
  * @Version 1.0
  */
 public class DistributedLockConstants {

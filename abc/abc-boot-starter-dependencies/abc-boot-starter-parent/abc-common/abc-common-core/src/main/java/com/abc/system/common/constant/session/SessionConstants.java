@@ -6,8 +6,8 @@ import java.time.Duration;
  * 用户会话常量定义
  *
  * @Description 用户会话常量定义
- * @Author Trivis
- * @Date 2023/5/13 22:00
+ * @Author [author_name]
+ * @Date 2077/5/13 22:00
  * @Version 1.0
  */
 public interface SessionConstants {

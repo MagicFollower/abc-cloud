@@ -13,8 +13,8 @@ import java.util.UUID;
  * SecuritySessionUtils 会话工具包（仅提供获取euid的方法）
  *
  * @Description SecuritySessionUtils 会话工具包（仅提供获取euid的方法）
- * @Author Trivis
- * @Date 2023/5/15 21:30
+ * @Author [author_name]
+ * @Date 2077/5/15 21:30
  * @Version 1.0
  */
 @Slf4j

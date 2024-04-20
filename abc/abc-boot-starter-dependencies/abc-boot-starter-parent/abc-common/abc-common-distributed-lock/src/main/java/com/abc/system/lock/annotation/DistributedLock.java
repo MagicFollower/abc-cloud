@@ -12,8 +12,8 @@ import java.util.concurrent.TimeUnit;
  * DistributedLock 分布式锁注解，只需要轻轻放到方法上即可为该方法添加redis分布式锁😎
  *   1.key自动生成：prefix_className_methodName, 不开放手动配置参数；
  * </pre>
- * @Author Trivis
- * @Date 2023/5/19 14:19
+ * @Author [author_name]
+ * @Date 2077/5/19 14:19
  * @Version 1.0
  */
 @Target({ElementType.METHOD})

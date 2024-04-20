@@ -1,10 +1,8 @@
 package com.abc.system.common.request;
 
-import com.abc.system.common.page.PageInfo;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 系统内部Controller层请求抽象基类（业务Controller请求实体直接继承该抽象类）
@@ -14,8 +12,8 @@ import java.util.List;
  * </pre>
  *
  * @Description AbstractReq
- * @Author Rake
- * @Date 2023/7/30 15:46
+ * @Author [author_name]
+ * @Date 2077/7/30 15:46
  * @Version 1.0
  */
 @Data
@@ -25,11 +23,4 @@ public abstract class AbstractReq<T> implements Serializable {
     // private String controller_level_tag1;
     // private String controller_level_tag2;
     // private String controller_level_tag3;
-
-    /* 基础属性，同AbstractRequest属性保持一致 */
-    protected T item;
-    protected List<T> saveItems;
-    protected List<T> addItems;
-    protected List<T> updateItems;
-    protected PageInfo pageInfo;
 }

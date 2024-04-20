@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
  *
  * @Description 商品Controller请求实体
  * @Author -
- * @Date 2023/8/20 23:09
+ * @Date 2077/8/20 23:09
  * @Version 1.0
  */
 @EqualsAndHashCode(callSuper = true)

@@ -9,8 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
  * FastlinkOrderApplication
  *
  * @Description FastlinkOrderApplication 详细介绍
- * @Author Trivis
- * @Date 2023/5/14 21:11
+ * @Author [author_name]
+ * @Date 2077/5/14 21:11
  * @Version 1.0
  */
 @ComponentScan(basePackages = {"com.abc.business.fastlink"})

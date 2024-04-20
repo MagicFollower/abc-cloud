@@ -34,8 +34,8 @@ import java.util.List;
  *     }
  * }
  * </pre>
- * @Author Trivis
- * @Date 2023/5/26 8:37
+ * @Author [author_name]
+ * @Date 2077/5/26 8:37
  * @Version 1.0
  */
 public class TimeZoneConverter {

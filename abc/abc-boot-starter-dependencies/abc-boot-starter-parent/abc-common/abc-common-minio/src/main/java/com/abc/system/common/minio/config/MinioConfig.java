@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Bean;
  * MinioConfig
  *
  * @Description MinioConfig 详细介绍
- * @Author Trivis
- * @Date 2023/5/2 12:15
+ * @Author [author_name]
+ * @Date 2077/5/2 12:15
  * @Version 1.0
  */
 @Data

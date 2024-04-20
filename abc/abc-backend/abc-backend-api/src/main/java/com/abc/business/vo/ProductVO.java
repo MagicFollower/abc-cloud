@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  *
  * @Description 商品VO
  * @Author -
- * @Date 2023/8/20 23:03
+ * @Date 2077/8/20 23:03
  * @Version 1.0
  */
 @Data

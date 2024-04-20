@@ -15,8 +15,8 @@ import java.util.concurrent.TimeUnit;
  *   1.这是本项目中的一种开发约定，Helper是对Utils的抽象，Helper是工具中使用到SpringIOC中的容器服务的Utils;
  *   2.相对Utils，你可以将Helper理解为与SpringIOC容器深度关联的Utils。
  * </pre>
- * @Author Trivis
- * @Date 2023/5/19 15:01
+ * @Author [author_name]
+ * @Date 2077/5/19 15:01
  * @Version 1.0
  */
 public class DistributedLockHelper {

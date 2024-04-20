@@ -31,8 +31,8 @@ import java.util.Map;
  * 3.{@code String parseUserInfo(String jwt))}
  *   {@code String parseUserInfo(String jwt, String currentSystemName))}
  * </pre>
- * @Author Trivis
- * @Date 2023/5/28 11:26
+ * @Author [author_name]
+ * @Date 2077/5/28 11:26
  * @Version 1.0
  */
 @Slf4j

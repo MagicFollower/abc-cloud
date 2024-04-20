@@ -14,8 +14,8 @@ import java.time.format.DateTimeFormatter;
  * LocalDateTimeSerializer
  *
  * @Description LocalDateTimeSerializer
- * @Author Trivis
- * @Date 2023/5/19 11:20
+ * @Author [author_name]
+ * @Date 2077/5/19 11:20
  * @Version 1.0
  */
 public class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {

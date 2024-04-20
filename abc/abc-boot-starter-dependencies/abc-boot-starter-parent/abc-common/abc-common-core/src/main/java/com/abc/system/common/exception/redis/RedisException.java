@@ -7,8 +7,8 @@ import com.abc.system.common.exception.base.BaseRuntimeException;
  * RedisException
  *
  * @Description RedisException
- * @Author Trivis
- * @Date 2023/5/15 23:27
+ * @Author [author_name]
+ * @Date 2077/5/15 23:27
  * @Version 1.0
  */
 public class RedisException extends BaseRuntimeException {

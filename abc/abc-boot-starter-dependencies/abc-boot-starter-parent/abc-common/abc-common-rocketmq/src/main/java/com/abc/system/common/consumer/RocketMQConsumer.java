@@ -7,7 +7,7 @@ import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
  *
  * @Description RocketMQConsumer
  * @Author -
- * @Date 2023/8/17 21:06
+ * @Date 2077/8/17 21:06
  * @Version 1.0
  */
 public class RocketMQConsumer extends DefaultMQPushConsumer {

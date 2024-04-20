@@ -27,8 +27,8 @@ import java.util.Objects;
  * 二维码生成工具类
  *
  * @Description 二维码生成工具类
- * @Author Trivis
- * @Date 2023/5/12 18:50
+ * @Author [author_name]
+ * @Date 2077/5/12 18:50
  * @Version 1.0
  */
 @Slf4j

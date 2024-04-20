@@ -13,8 +13,8 @@ import java.io.Serializable;
  * </pre>
  *
  * @Description PageResponse 详细介绍
- * @Author Trivis
- * @Date 2023/5/4 20:38
+ * @Author [author_name]
+ * @Date 2077/5/4 20:38
  * @Version 1.0
  */
 @Data

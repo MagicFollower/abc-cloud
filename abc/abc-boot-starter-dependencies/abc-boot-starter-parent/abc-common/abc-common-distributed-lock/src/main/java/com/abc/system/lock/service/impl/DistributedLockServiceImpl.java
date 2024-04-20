@@ -13,8 +13,8 @@ import java.util.concurrent.TimeUnit;
  * DistributedLockServiceImpl
  *
  * @Description DistributedLockServiceImpl 分布式锁服务接口实现
- * @Author Trivis
- * @Date 2023/5/19 14:54
+ * @Author [author_name]
+ * @Date 2077/5/19 14:54
  * @Version 1.0
  */
 public class DistributedLockServiceImpl implements DistributedLockService {

@@ -6,8 +6,8 @@ import lombok.Getter;
  * ImageTypeMimeEnum
  *
  * @Description ImageTypeMimeEnum
- * @Author Rake
- * @Date 2023/8/12 16:23
+ * @Author [author_name]
+ * @Date 2077/8/12 16:23
  * @Version 1.0
  */
 @Getter

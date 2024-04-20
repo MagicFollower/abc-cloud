@@ -30,8 +30,8 @@ import javax.servlet.http.HttpServletResponse;
  * }
  * </pre>
  * @Description 文件生成业务接口
- * @Author Trivis
- * @Date 2023/5/10 19:32
+ * @Author [author_name]
+ * @Date 2077/5/10 19:32
  * @Version 1.0
  */
 public interface GenerateFileService {

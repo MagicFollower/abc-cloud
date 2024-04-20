@@ -9,8 +9,8 @@ import org.springframework.http.MediaType;
  * 启动类
  *
  * @Description 启动类
- * @Author Trivis
- * @Date 2023/5/13 22:39
+ * @Author [author_name]
+ * @Date 2077/5/13 22:39
  * @Version 1.0
  */
 @ComponentScan(basePackages = {"com.abc.business.fastlink"})

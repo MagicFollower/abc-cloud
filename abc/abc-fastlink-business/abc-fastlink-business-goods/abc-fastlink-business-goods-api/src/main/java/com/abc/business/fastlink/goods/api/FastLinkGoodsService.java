@@ -7,8 +7,8 @@ import com.abc.system.common.response.BaseResponse;
  * FastLinkGoodsService
  *
  * @Description FastLinkGoodsService 详细介绍
- * @Author Trivis
- * @Date 2023/5/13 22:50
+ * @Author [author_name]
+ * @Date 2077/5/13 22:50
  * @Version 1.0
  */
 public interface FastLinkGoodsService {

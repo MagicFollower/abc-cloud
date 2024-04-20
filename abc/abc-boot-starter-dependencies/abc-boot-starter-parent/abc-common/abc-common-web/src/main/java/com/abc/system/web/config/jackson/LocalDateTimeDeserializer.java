@@ -14,8 +14,8 @@ import java.time.format.DateTimeFormatter;
  * LocalDateTimeDeserializer
  *
  * @Description LocalDateTimeDeserializer
- * @Author Trivis
- * @Date 2023/5/19 11:21
+ * @Author [author_name]
+ * @Date 2077/5/19 11:21
  * @Version 1.0
  */
 public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {

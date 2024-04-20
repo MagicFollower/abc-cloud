@@ -6,8 +6,8 @@ import lombok.Getter;
  * GenerateFileContentTypeEnum
  *
  * @Description GenerateFileContentTypeEnum
- * @Author Trivis
- * @Date 2023/5/10 19:44
+ * @Author [author_name]
+ * @Date 2077/5/10 19:44
  * @Version 1.0
  */
 @Getter

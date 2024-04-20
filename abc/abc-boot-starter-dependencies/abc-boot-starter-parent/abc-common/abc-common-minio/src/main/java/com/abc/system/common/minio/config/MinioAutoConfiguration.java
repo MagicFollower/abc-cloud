@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Configuration;
  * MinioAutoConfiguration
  *
  * @Description MinioAutoConfiguration 详细介绍
- * @Author Trivis
- * @Date 2023/5/2 12:25
+ * @Author [author_name]
+ * @Date 2077/5/2 12:25
  * @Version 1.0
  */
 @Configuration

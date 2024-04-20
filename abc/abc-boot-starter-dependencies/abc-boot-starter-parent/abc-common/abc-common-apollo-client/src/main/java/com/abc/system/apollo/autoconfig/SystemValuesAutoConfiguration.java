@@ -22,8 +22,8 @@ import javax.annotation.PostConstruct;
  * </pre>
  *
  * @Description 系统级缓存自定义配置自动配置类
- * @Author Trivis
- * @Date 2023/5/12 20:37
+ * @Author [author_name]
+ * @Date 2077/5/12 20:37
  * @Version 1.0
  */
 @Slf4j

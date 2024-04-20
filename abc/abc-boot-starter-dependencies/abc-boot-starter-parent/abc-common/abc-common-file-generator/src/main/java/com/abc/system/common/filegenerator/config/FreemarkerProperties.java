@@ -9,8 +9,8 @@ import java.nio.charset.StandardCharsets;
  * Freemarker属性配置
  *
  * @Description Freemarker属性配置
- * @Author Trivis
- * @Date 2023/5/10 20:18
+ * @Author [author_name]
+ * @Date 2077/5/10 20:18
  * @Version 1.0
  */
 @Data

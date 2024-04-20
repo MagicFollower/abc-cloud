@@ -9,8 +9,8 @@ import java.util.Set;
  * EnvironmentChangeEvent
  *
  * @Description EnvironmentChangeEvent
- * @Author Trivis
- * @Date 2023/5/12 20:45
+ * @Author [author_name]
+ * @Date 2077/5/12 20:45
  * @Version 1.0
  */
 @Getter

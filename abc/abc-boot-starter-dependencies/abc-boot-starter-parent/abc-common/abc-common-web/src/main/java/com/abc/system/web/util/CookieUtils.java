@@ -35,8 +35,8 @@ import java.time.Duration;
  *        → 2. Secure：表示该Cookie只能在HTTPS安全连接中发送到服务器。
  *        → 3. HttpOnly：表示该Cookie只能通过HTTP或HTTPS协议访问，而无法通过JavaScript等客户端脚本来访问。
  * </pre>
- * @Author Trivis
- * @Date 2023/5/15 21:06
+ * @Author [author_name]
+ * @Date 2077/5/15 21:06
  * @Version 1.0
  */
 public class CookieUtils {

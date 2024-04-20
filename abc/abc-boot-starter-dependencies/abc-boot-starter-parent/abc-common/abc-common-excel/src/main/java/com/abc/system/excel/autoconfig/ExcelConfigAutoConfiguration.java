@@ -14,8 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
  * ExcelConfig自动配置类
  *
  * @Description ExcelConfigAutoConfiguration 自动配置类
- * @Author Trivis
- * @Date 2023/5/21 17:03
+ * @Author [author_name]
+ * @Date 2077/5/21 17:03
  * @Version 1.0
  */
 @Configuration

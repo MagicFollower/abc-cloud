@@ -13,8 +13,8 @@ import java.util.List;
  * </pre>
  *
  * @Description ExcelColumnRule Excel自定义配置列规则
- * @Author Trivis
- * @Date 2023/5/21 17:02
+ * @Author [author_name]
+ * @Date 2077/5/21 17:02
  * @Version 1.0
  */
 @Data
