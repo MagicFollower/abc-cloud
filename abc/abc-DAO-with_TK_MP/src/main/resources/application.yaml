@@ -29,3 +29,7 @@ spring:
       max-lifetime: 1800000
       ### 自动提交从池中返回的连接，默认值为true
       auto-commit: true
+
+logging:
+  level:
+    root: debug

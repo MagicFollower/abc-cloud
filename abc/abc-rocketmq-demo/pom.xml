@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.abc</groupId>
         <artifactId>abc-boot-starter-parent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <groupId>org.example</groupId>
@@ -24,13 +24,13 @@
         <dependency>
             <groupId>com.abc</groupId>
             <artifactId>abc-common-web</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>
             <groupId>com.abc</groupId>
             <artifactId>abc-common-rocketmq</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 
