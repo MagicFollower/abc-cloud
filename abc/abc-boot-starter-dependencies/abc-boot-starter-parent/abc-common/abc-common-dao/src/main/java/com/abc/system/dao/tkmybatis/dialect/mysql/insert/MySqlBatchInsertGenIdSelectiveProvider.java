@@ -3,9 +3,11 @@ package com.abc.system.dao.tkmybatis.dialect.mysql.insert;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.EntityColumn;
-import tk.mybatis.mapper.mapperhelper.*;
+import tk.mybatis.mapper.mapperhelper.EntityHelper;
+import tk.mybatis.mapper.mapperhelper.MapperHelper;
+import tk.mybatis.mapper.mapperhelper.MapperTemplate;
+import tk.mybatis.mapper.mapperhelper.SqlHelper;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -47,6 +49,7 @@ public class MySqlBatchInsertGenIdSelectiveProvider extends MapperTemplate {
      *         </foreach>
      * }
      * </pre>
+     *
      * @param ms MappedStatement实例
      * @return mybatisXML表示的SQL字符串（String）
      */
@@ -54,17 +57,18 @@ public class MySqlBatchInsertGenIdSelectiveProvider extends MapperTemplate {
         LOGGER.info(">>>>>>>> batch insert selective build sql|start <<<<<<<<");
         Class<?> entityClass = this.getEntityClass(ms);
         StringBuilder batchSql = new StringBuilder();
-        batchSql.append("<bind name=\"listNotEmptyCheck\" value=\"@tk.mybatis.mapper.util.OGNL@notEmptyCollectionCheck(list, '" + ms.getId() + " 方法参数为空')\"/>");
+        batchSql.append("<bind name=\"listNotEmptyCheck\" value=\"@tk.mybatis.mapper.util.OGNL@notEmptyCollectionCheck(list, '").append(ms.getId()).append(" 方法参数为空')\"/>");
         batchSql.append(SqlHelper.insertIntoTable(entityClass, this.tableName(entityClass), "list[0]"));
         batchSql.append("<foreach collection=\"list\" item=\"columnRecord\" separator=\",\" index=\"index\">");
         batchSql.append("<if test=\"index == 0\">");
         batchSql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
-        Iterator var5 = columnList.iterator();
+        Iterator<EntityColumn> columnIterator = columnList.iterator();
 
         EntityColumn column;
-        while (var5.hasNext()) {
-            column = (EntityColumn) var5.next();
+        while (columnIterator.hasNext()) {
+            column = columnIterator.next();
+            // 标记主键生成策略时
             if (column.getGenIdClass() != null) {
                 batchSql.append("<bind name=\"").append(column.getColumn()).append("GenIdBind\" value=\"@tk.mybatis.mapper.genid.GenIdUtil@genId(");
                 batchSql.append("columnRecord").append(", '").append(column.getProperty()).append("'");
@@ -73,7 +77,8 @@ public class MySqlBatchInsertGenIdSelectiveProvider extends MapperTemplate {
                 batchSql.append(", '").append(column.getColumn()).append("')");
                 batchSql.append("\"/>");
             }
-
+            // 未标记主键生成策略时
+            // 当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
             if (column.isInsertable()) {
                 batchSql.append(SqlHelper.getIfNotNull("columnRecord", column, column.getColumn() + ",", this.isNotEmpty()));
             }
@@ -85,10 +90,11 @@ public class MySqlBatchInsertGenIdSelectiveProvider extends MapperTemplate {
         batchSql.append(" VALUES ");
         batchSql.append("<foreach collection=\"list\" item=\"it\" separator=\",\" >");
         batchSql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
-        var5 = columnList.iterator();
+        columnIterator = columnList.iterator();
 
-        while (var5.hasNext()) {
-            column = (EntityColumn) var5.next();
+        while (columnIterator.hasNext()) {
+            column = columnIterator.next();
+            // 标记主键生成策略时
             if (column.getGenIdClass() != null) {
                 batchSql.append("<bind name=\"").append(column.getColumn()).append("GenIdBind\" value=\"@tk.mybatis.mapper.genid.GenIdUtil@genId(");
                 batchSql.append("it").append(", '").append(column.getProperty()).append("'");
@@ -97,7 +103,8 @@ public class MySqlBatchInsertGenIdSelectiveProvider extends MapperTemplate {
                 batchSql.append(", '").append(column.getColumn()).append("')");
                 batchSql.append("\"/>");
             }
-
+            // 未标记主键生成策略时
+            // 当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
             if (column.isInsertable()) {
                 batchSql.append(SqlHelper.getIfNotNull("it", column, column.getColumnHolder("it") + ",", this.isNotEmpty()));
             }
@@ -107,40 +114,5 @@ public class MySqlBatchInsertGenIdSelectiveProvider extends MapperTemplate {
         batchSql.append("</foreach>");
         LOGGER.info(">>>>>>>> batch insert selective build sql|end <<<<<<<<");
         return batchSql.toString();
-    }
-
-    private void processKey(StringBuilder sql, Class<?> entityClass, MappedStatement ms, Set<EntityColumn> columnList) {
-        Boolean hasIdentityKey = false;
-        Iterator var6 = columnList.iterator();
-
-        EntityColumn column;
-        label34:
-        do {
-            while (true) {
-                while (var6.hasNext()) {
-                    column = (EntityColumn) var6.next();
-                    if (column.isIdentity()) {
-                        sql.append(SqlHelper.getBindCache(column));
-                        if (hasIdentityKey) {
-                            continue label34;
-                        }
-
-                        SelectKeyHelper.newSelectKeyMappedStatement(ms, column, entityClass, this.isBEFORE(), this.getIDENTITY(column));
-                        hasIdentityKey = true;
-                    } else if (column.getGenIdClass() != null) {
-                        sql.append("<bind name=\"").append(column.getColumn()).append("GenIdBind\" value=\"@tk.mybatis.mapper.genid.GenIdUtil@genId(");
-                        sql.append("_parameter").append(", '").append(column.getProperty()).append("'");
-                        sql.append(", @").append(column.getGenIdClass().getCanonicalName()).append("@class");
-                        sql.append(", '").append(this.tableName(entityClass)).append("'");
-                        sql.append(", '").append(column.getColumn()).append("')");
-                        sql.append("\"/>");
-                    }
-                }
-
-                return;
-            }
-        } while (column.getGenerator() != null && "JDBC".equals(column.getGenerator()));
-
-        throw new MapperException(ms.getId() + "对应的实体类" + entityClass.getCanonicalName() + "中包含多个MySql的自动增长列,最多只能有一个!");
     }
 }
