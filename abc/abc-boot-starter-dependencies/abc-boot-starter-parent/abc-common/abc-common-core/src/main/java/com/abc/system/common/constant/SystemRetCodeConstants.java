@@ -1,5 +1,7 @@
 package com.abc.system.common.constant;
 
+import lombok.Getter;
+
 /**
  * 系统响应编码
  *
@@ -14,6 +16,7 @@ package com.abc.system.common.constant;
  * @Date 2077/5/1 10:53
  * @Version 1.0
  */
+@Getter
 public enum SystemRetCodeConstants {
     //##############################################
     //#####操作编码 000
@@ -48,13 +51,16 @@ public enum SystemRetCodeConstants {
     //##############################################
     //#####Excel模块响应编码 005
     //##############################################
-    EXCEL_TEMPLATE_CODE_LOST("005001", "缺少templateCode"),
-    EXCEL_NOT_SUPPORT_ERROR("005002", "文件格式不支持"),
-    EXCEL_NUM_ERROR("005003", "上传文件数量非法"),
-    EXCEL_IS_NULL("005004", "上传Excel无法解析"),
-    EXCEL_RULE_ERROR("005005", "Excel规则解析出错"),
-    EXCEL_TYPE_ERROR("005006", "Excel数据类型解析校验异常"),
-    EXCEL_COLUMN_MISMATCH("005007", "Excel字段与配置字段不匹配"),
+    EXCEL_TEMPLATE_CODE_LOST("005001", "无法从请求中解析模板编码"),
+    EXCEL_TEMPLATE_CODE_NOT_CONFIG("005002", "模板编码解析规则未配置"),
+    EXCEL_TEMPLATE_CODE_DUPLICATE_CONFIG("005003", "模板编码解析规则配置重复"),
+    EXCEL_NOT_SUPPORT_ERROR("005011", "上传Excel文件格式不支持（仅支持.xls/.xlsx）"),
+    EXCEL_NUM_ERROR("005012", "上传Excel文件数量异常"),
+    EXCEL_IS_NULL("005021", "上传Excel文件内容为空"),
+    EXCEL_RULE_ERROR("005022", "Excel规则解析出错"),
+    EXCEL_TYPE_ERROR("005023", "Excel数据类型解析校验异常"),
+    EXCEL_COLUMN_MISMATCH("005024", "Excel字段与配置字段不匹配"),
+    EXCEL_PARSE_TERMINATED("005999", "Excel解析异常终止"),
 
 
     //##############################################
@@ -125,16 +131,8 @@ public enum SystemRetCodeConstants {
         return null;
     }
 
-    public String getCode() {
-        return this.code;
-    }
-
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getMessage() {
-        return this.message;
     }
 
     public void setMessage(String message) {
