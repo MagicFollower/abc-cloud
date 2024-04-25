@@ -1,6 +1,7 @@
 package com.abc.system.excel.service.impl;
 
 import com.abc.system.common.constant.SystemRetCodeConstants;
+import com.abc.system.common.exception.base.BaseRuntimeException;
 import com.abc.system.common.exception.business.ValidateException;
 import com.abc.system.common.response.ResponseData;
 import com.abc.system.common.response.ResponseProcessor;
@@ -15,7 +16,12 @@ import com.alibaba.fastjson2.JSONObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -23,7 +29,11 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -83,13 +93,14 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             // 文件后缀校验
             // 仅支持.xlsx、.xls
             String originalFilename = file.getOriginalFilename();
-            if (!StringUtils.endsWithIgnoreCase(originalFilename, ".xlsx")
-                    && !StringUtils.endsWithIgnoreCase(originalFilename, ".xls")) {
+            if (!StringUtils.endsWithIgnoreCase(originalFilename, ".xlsx") && !StringUtils.endsWithIgnoreCase(originalFilename, ".xls")) {
                 throw new ValidateException(SystemRetCodeConstants.EXCEL_NOT_SUPPORT_ERROR);
             }
 
             // 解析Excel列规则
-            Map<String, ExcelColumnRule> excelRuleMap = ResolveExcelHelper.resolveCellColumnRule();
+            // 1.resolveCellColumnRule提供两个重载，无参数会解析所有数据，支持一个参数指定templateCode
+            // 2.这里使用指定templateCode的重载
+            Map<String, ExcelColumnRule> excelRuleMap = ResolveExcelHelper.resolveCellColumnRule(templateCode);
 
             try (InputStream inputStream = file.getInputStream()) {
                 Workbook workbook = WorkbookFactory.create(inputStream);
@@ -117,8 +128,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                             // 跳过空行
                             if (ResolveExcelHelper.isRowEmpty(row)) continue;
                             // 解析标题行
-                            ResolveExcelHelper.resolveExcelTitle(row, templateCode, excelRuleMap,
-                                    realTitleMap, displayTitleMap);
+                            ResolveExcelHelper.resolveExcelTitle(row, templateCode, excelRuleMap, realTitleMap, displayTitleMap);
                             // 标记之后的所有数据为记录行
                             rowTypeEnum = RowTypeEnum.DATA;
                             continue;
@@ -129,13 +139,12 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                         StringBuilder stringBuilder = new StringBuilder();
                         // Cell校验
                         for (Cell cell : row) {
-                            if (StringUtils.isEmpty(displayTitleMap.get(cell.getColumnIndex()))
-                                    || cell.getCellType() == CellType.BLANK) {
+                            if (StringUtils.isEmpty(displayTitleMap.get(cell.getColumnIndex())) || cell.getCellType() == CellType.BLANK) {
                                 continue;
                             }
                             // 校验Cell类型
-                            CellVerifyValue cellVerifyValue = ResolveExcelHelper.verifyCellType(templateCode,
-                                    displayTitleMap, excelRuleMap, cell);
+                            // 1.根据模板编码_配置的列名获取指定配置规则，首先校验单元格类型是否为指定类型（当前仅支持数值类型和字符串类型）
+                            CellVerifyValue cellVerifyValue = ResolveExcelHelper.verifyCellType(templateCode, displayTitleMap, excelRuleMap, cell);
                             if (!cellVerifyValue.isVerify()) {
                                 throw new ValidateException(SystemRetCodeConstants.EXCEL_TYPE_ERROR);
                             }
@@ -151,12 +160,14 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                         realExcelResultList.add(realResultObj);
                     }
                 }
+            } catch (BaseRuntimeException e) {
+                throw e;
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
+                throw new ValidateException(SystemRetCodeConstants.EXCEL_PARSE_TERMINATED);
             }
         }
-        return new ResponseProcessor<ExcelResponse>().setData(new ExcelResponse(displayTitleMap.values(),
-                displayData, realExcelResultList));
+        return new ResponseProcessor<ExcelResponse>().setData(new ExcelResponse(displayTitleMap.values(), displayData, realExcelResultList));
     }
 
     enum RowTypeEnum {
