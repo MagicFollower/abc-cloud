@@ -8,11 +8,22 @@ import com.abc.system.excel.vo.CellVerifyValue;
 import com.abc.system.excel.vo.ExcelColumnRule;
 import com.abc.system.excel.vo.ExcelRule;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * ResolveExcelHelper
@@ -39,7 +50,7 @@ public class ResolveExcelHelper {
     }
 
     /**
-     * 解析Excel列配置规则
+     * 解析Excel列配置规则（所有）
      *
      * @return {@code Map<String, ExcelColumnRule>} 映射格式 → templateCode_stringCellValue: ExcelColumnRule实体
      * @throws ValidateException 校验异常
@@ -60,19 +71,65 @@ public class ResolveExcelHelper {
                     case "string":
                     case "double":
                         result.put(rule.getTemplateCode() + "_" + data.get(0),
-                                ExcelColumnRuleWrapper(null, data.get(2), data.get(3), data.get(4), CellType.STRING, CellType.NUMERIC));
+                                ExcelColumnRuleWrapper(data.get(0), null, data.get(2), data.get(3), data.get(4), CellType.STRING, CellType.NUMERIC));
                         break;
                     case "int":
                     case "integer":
                     case "long":
                         result.put(rule.getTemplateCode() + "_" + data.get(0),
-                                ExcelColumnRuleWrapper(data.get(1).toLowerCase(), data.get(2), data.get(3), data.get(4), CellType.STRING, CellType.NUMERIC));
+                                ExcelColumnRuleWrapper(data.get(0), data.get(1).toLowerCase(), data.get(2), data.get(3), data.get(4), CellType.STRING, CellType.NUMERIC));
                         break;
                     default:
                         throw new ValidateException(SystemRetCodeConstants.EXCEL_RULE_ERROR);
                 }
 
             }
+        }
+        return result;
+    }
+
+    /**
+     * 解析Excel列配置规则（指定templateCode）
+     *
+     * @return {@code Map<String, ExcelColumnRule>} 映射格式 → templateCode_stringCellValue: ExcelColumnRule实体
+     * @throws ValidateException 校验异常
+     */
+    public static Map<String, ExcelColumnRule> resolveCellColumnRule(String templateCode) throws ValidateException {
+        Map<String, ExcelColumnRule> result = new HashMap<>();
+        ExcelConfigProperties excelConfig = getExcelConfig();
+        List<ExcelRule> rules = excelConfig.getRules();
+        rules = rules.stream().filter(rule -> templateCode.equals(rule.getTemplateCode())).collect(Collectors.toList());
+        if (rules.isEmpty()) {
+            throw new ValidateException(SystemRetCodeConstants.EXCEL_TEMPLATE_CODE_NOT_CONFIG);
+        } else if (rules.size() > 1) {
+            throw new ValidateException(SystemRetCodeConstants.EXCEL_TEMPLATE_CODE_DUPLICATE_CONFIG);
+        }
+        ExcelRule rule = rules.get(0);
+        for (String str : rule.getColumns().split(",")) {
+            String[] split = str.split("\\|");
+            if (split.length != 5) {
+                throw new ValidateException(SystemRetCodeConstants.EXCEL_RULE_ERROR);
+            }
+            List<String> data = new ArrayList<>(split.length);
+            Collections.addAll(data, split);
+            switch (data.get(1).toLowerCase()) {
+                // string和double使用同一种解析方式
+                case "string":
+                case "double":
+                    result.put(rule.getTemplateCode() + "_" + data.get(0),
+                            ExcelColumnRuleWrapper(data.get(0), null, data.get(2), data.get(3), data.get(4), CellType.STRING, CellType.NUMERIC));
+                    break;
+                // 整型/长整型使用一种解析方式
+                case "int":
+                case "integer":
+                case "long":
+                    result.put(rule.getTemplateCode() + "_" + data.get(0),
+                            ExcelColumnRuleWrapper(data.get(0), data.get(1).toLowerCase(), data.get(2), data.get(3), data.get(4), CellType.STRING, CellType.NUMERIC));
+                    break;
+                default:
+                    throw new ValidateException(SystemRetCodeConstants.EXCEL_RULE_ERROR);
+            }
+
         }
         return result;
     }
@@ -87,7 +144,7 @@ public class ResolveExcelHelper {
      * @param cellTypes  CellType变长数组
      * @return {@code ExcelColumnRule} Excel列配置规则
      */
-    public static ExcelColumnRule ExcelColumnRuleWrapper(String configType, String length, String accuracy, String realName, CellType... cellTypes) {
+    public static ExcelColumnRule ExcelColumnRuleWrapper(String columnName, String configType, String length, String accuracy, String realName, CellType... cellTypes) {
         if (StringUtils.isEmpty(length)) throw new ValidateException(SystemRetCodeConstants.EXCEL_RULE_ERROR);
         Integer len = Integer.parseInt(length);
         int accuracyInt = 0;
@@ -95,9 +152,9 @@ public class ResolveExcelHelper {
             accuracyInt = Integer.parseInt(accuracy);
         }
         if (StringUtils.isEmpty(configType)) {
-            return new ExcelColumnRule(Arrays.asList(cellTypes), len, accuracyInt, realName);
+            return new ExcelColumnRule(columnName, Arrays.asList(cellTypes), len, accuracyInt, realName);
         } else {
-            return new ExcelColumnRule(Arrays.asList(cellTypes), configType, len, accuracyInt, realName);
+            return new ExcelColumnRule(columnName, Arrays.asList(cellTypes), configType, len, accuracyInt, realName);
         }
 
     }
@@ -129,9 +186,9 @@ public class ResolveExcelHelper {
      * @param row             标题行
      * @param templateCode    模板编码
      * @param ruleMap         <pre>
-     *                                                                                                                                           规则Map，用于解析字段真实名称，填充displayFieldMap;
-     *                                                                                                                                             → Map中数据格式：templateCode_stringCellValue: ExcelColumnRule实体
-     *                                                                                                                                           </pre>
+     *                                                                                                                                                                                                                                                                                                            规则Map，用于解析字段真实名称，填充displayFieldMap;
+     *                                                                                                                                                                                                                                                                                                              → Map中数据格式：templateCode_stringCellValue: ExcelColumnRule实体
+     *                                                                                                                                                                                                                                                                                                            </pre>
      * @param realFieldMap    realFieldMap 真实字段Map
      * @param displayFieldMap displayFieldMap 显示字段Map
      */
@@ -163,8 +220,7 @@ public class ResolveExcelHelper {
      */
     public static CellVerifyValue verifyCellType(String templateCode, Map<Integer, String> displayTitleMap,
                                                  Map<String, ExcelColumnRule> excelColumnRuleMap, Cell cell) {
-        ExcelColumnRule excelColumnRule = excelColumnRuleMap.get(templateCode + "_" +
-                displayTitleMap.get(cell.getColumnIndex()).toLowerCase());
+        ExcelColumnRule excelColumnRule = excelColumnRuleMap.get(templateCode + "_" + displayTitleMap.get(cell.getColumnIndex()).toLowerCase());
         if (!excelColumnRule.getCellTypeList().contains(cell.getCellType())) {
             return new CellVerifyValue(false, null, excelColumnRule);
         }
@@ -186,17 +242,27 @@ public class ResolveExcelHelper {
                     result = new CellVerifyValue(true, new SimpleDateFormat(dataFormatString)
                             .format(DateUtil.getJavaDate(cell.getNumericCellValue())), rule);
                 } else {
-                    BigDecimal data = new BigDecimal(String.valueOf(cell.getNumericCellValue())).stripTrailingZeros();
+                    double doubleCellValue = cell.getNumericCellValue();
+                    BigDecimal data = new BigDecimal(String.valueOf(doubleCellValue)).stripTrailingZeros();
                     int scale = data.scale();
                     int length = data.toPlainString().length();
-                    if (scale > rule.getAccuracy() || length > rule.getLength()) {
-                        result = new CellVerifyValue(false, cell.getNumericCellValue(), rule, "精度或长度异常");
+                    if (scale > rule.getAccuracy()) {
+                        result = new CellVerifyValue(false, doubleCellValue, rule, String.format("[%s列]部分数据精度超出[%d]阈值", rule.getColumnName(), rule.getAccuracy()));
+                    } else if (length > rule.getLength()) {
+                        result = new CellVerifyValue(false, doubleCellValue, rule, String.format("[%s列]部分数据长度超出[%d]阈值", rule.getColumnName(), rule.getLength()));
                     } else {
-                        if ("int".equals(rule.getConfigType()) || "long".equals(rule.getConfigType()) ||
-                                "integer".equals(rule.getConfigType())) {
+                        if ("int".equals(rule.getConfigType()) || "integer".equals(rule.getConfigType()) || "long".equals(rule.getConfigType())) {
+                            // 使用long解析配置的整型/长整型数据
                             result = new CellVerifyValue(true, Long.parseLong(dataFormatter.formatCellValue(cell)), rule);
+                        } else if ("double".equals(rule.getConfigType())) {
+                            // getNumericCellValue将返回一个double值，如果处理不当会导致在部分场景下出现异常
+                            // 1.当存在一个内容为100的name单元格，这里的逻辑将会将其解析为100.0，如果同时在配置项中指定了: "姓名|string|255|0|name"，这将会导致解析到的字符串为100.0
+                            result = new CellVerifyValue(true, doubleCellValue, rule);
                         } else {
-                            result = new CellVerifyValue(true, cell.getNumericCellValue(), rule);
+                            // 2.所以，这里将单独为string类型分配一个额外的分支
+                            //   2.1 注意：直接使用getStringCellValue会导致 "Cannot get a STRING value from a NUMERIC cell"
+                            String stringCellValue = String.valueOf(doubleCellValue);
+                            result = new CellVerifyValue(true, stringCellValue.endsWith(".0") ? stringCellValue.replace(".0", "") : stringCellValue, rule);
                         }
                     }
 
@@ -206,10 +272,9 @@ public class ResolveExcelHelper {
             case STRING:
                 String data = cell.getStringCellValue();
                 if (StringUtils.isNotEmpty(data) && data.length() > rule.getLength()) {
-                    result = new CellVerifyValue(false, data, rule, "精度出错");
+                    result = new CellVerifyValue(false, data, rule, String.format("[%s列]部分数据长度超出[%d]阈值", rule.getColumnName(), rule.getLength()));
                 } else {
-                    if (!StringUtils.isEmpty(rule.getConfigType()) &&
-                            "long".equalsIgnoreCase(rule.getConfigType())) {
+                    if (!StringUtils.isEmpty(rule.getConfigType()) && "long".equalsIgnoreCase(rule.getConfigType())) {
                         try {
                             result = new CellVerifyValue(true, Long.parseLong(data), rule);
                         } catch (NumberFormatException e) {

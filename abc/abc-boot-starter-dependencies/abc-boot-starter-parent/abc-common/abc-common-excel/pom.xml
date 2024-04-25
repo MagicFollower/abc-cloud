@@ -48,14 +48,16 @@
             <artifactId>log4j-core</artifactId>
             <version>2.20.0</version>
         </dependency>
+        <!-- 创建一个通用的多部分解析器CommonsMultipartResolver使用，引入后spring会自动关联处理 -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
+
 
         <dependency>
             <groupId>com.abc</groupId>
             <artifactId>abc-common-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
         </dependency>
     </dependencies>
 
