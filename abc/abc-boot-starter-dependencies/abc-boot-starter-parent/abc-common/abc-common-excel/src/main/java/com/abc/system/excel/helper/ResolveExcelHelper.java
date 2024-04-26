@@ -186,9 +186,9 @@ public class ResolveExcelHelper {
      * @param row             标题行
      * @param templateCode    模板编码
      * @param ruleMap         <pre>
-     *                                                                                                                                                                                                                                                                                                            规则Map，用于解析字段真实名称，填充displayFieldMap;
-     *                                                                                                                                                                                                                                                                                                              → Map中数据格式：templateCode_stringCellValue: ExcelColumnRule实体
-     *                                                                                                                                                                                                                                                                                                            </pre>
+     *                                                                                                                                                                                                                                                                                                                                   规则Map，用于解析字段真实名称，填充displayFieldMap;
+     *                                                                                                                                                                                                                                                                                                                                     → Map中数据格式：templateCode_stringCellValue: ExcelColumnRule实体
+     *                                                                                                                                                                                                                                                                                                                                   </pre>
      * @param realFieldMap    realFieldMap 真实字段Map
      * @param displayFieldMap displayFieldMap 显示字段Map
      */
@@ -262,7 +262,7 @@ public class ResolveExcelHelper {
                             // 2.所以，这里将单独为string类型分配一个额外的分支
                             //   2.1 注意：直接使用getStringCellValue会导致 "Cannot get a STRING value from a NUMERIC cell"
                             String stringCellValue = String.valueOf(doubleCellValue);
-                            result = new CellVerifyValue(true, stringCellValue.endsWith(".0") ? stringCellValue.replace(".0", "") : stringCellValue, rule);
+                            result = new CellVerifyValue(true, stringCellValue.endsWith(".0") ? stringCellValue.substring(0, stringCellValue.length() - 2) : stringCellValue, rule);
                         }
                     }
 
