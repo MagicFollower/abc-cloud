@@ -29,11 +29,10 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -63,9 +62,9 @@ public class ExcelFileServiceImpl implements ExcelFileService {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
         // 保存excel处理结果
         // 逗号分隔的数据
-        Set<String> displayData = new HashSet<>();
+        List<String> displayData = new ArrayList<>();
         // List#字段名:值
-        Set<JSONObject> realExcelResultList = new HashSet<>();
+        List<JSONObject> realExcelResultList = new ArrayList<>();
 
         // 真实Title字段Map、Title显示数据Map
         Map<Integer, String> realTitleMap = new HashMap<>();
