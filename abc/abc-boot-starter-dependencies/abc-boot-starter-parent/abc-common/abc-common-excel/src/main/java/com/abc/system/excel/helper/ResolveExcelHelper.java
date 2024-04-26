@@ -186,9 +186,9 @@ public class ResolveExcelHelper {
      * @param row             标题行
      * @param templateCode    模板编码
      * @param ruleMap         <pre>
-     *                                                                                                                                                                                                                                                                                                                                   规则Map，用于解析字段真实名称，填充displayFieldMap;
-     *                                                                                                                                                                                                                                                                                                                                     → Map中数据格式：templateCode_stringCellValue: ExcelColumnRule实体
-     *                                                                                                                                                                                                                                                                                                                                   </pre>
+     *                        规则Map，用于解析字段真实名称，填充displayFieldMap;
+     *                          → Map中数据格式：templateCode_stringCellValue: ExcelColumnRule实体
+     *                        </pre>
      * @param realFieldMap    realFieldMap 真实字段Map
      * @param displayFieldMap displayFieldMap 显示字段Map
      */
