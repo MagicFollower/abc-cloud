@@ -28,7 +28,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -101,8 +100,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             // 2.这里使用指定templateCode的重载
             Map<String, ExcelColumnRule> excelRuleMap = ResolveExcelHelper.resolveCellColumnRule(templateCode);
 
-            try (InputStream inputStream = file.getInputStream()) {
-                Workbook workbook = WorkbookFactory.create(inputStream);
+            try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) {
                 // 获取与templateCode唯一匹配的规则配置信息
                 List<ExcelRule> excelRules = excelConfigProperties.getRules().stream()
                         .filter(e -> StringUtils.equalsIgnoreCase(e.getTemplateCode(), templateCode))
