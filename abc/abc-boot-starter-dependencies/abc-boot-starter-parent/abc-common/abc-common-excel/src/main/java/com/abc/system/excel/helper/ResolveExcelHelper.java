@@ -274,11 +274,11 @@ public class ResolveExcelHelper {
                 if (StringUtils.isNotEmpty(data) && data.length() > rule.getLength()) {
                     result = new CellVerifyValue(false, data, rule, String.format("[%s列]部分数据长度超出[%d]阈值", rule.getColumnName(), rule.getLength()));
                 } else {
-                    if (!StringUtils.isEmpty(rule.getConfigType()) && "long".equalsIgnoreCase(rule.getConfigType())) {
+                    if (!StringUtils.isEmpty(rule.getConfigType()) && (StringUtils.containsAnyIgnoreCase(rule.getConfigType(), "long", "int", "integer"))) {
                         try {
-                            result = new CellVerifyValue(true, Long.parseLong(data), rule);
+                            result = new CellVerifyValue(true, Long.parseLong(data.trim()), rule);
                         } catch (NumberFormatException e) {
-                            result = new CellVerifyValue(true, data, rule);
+                            result = new CellVerifyValue(false, data, rule, String.format("[%s列]部分数据长度超出[%d]阈值", rule.getColumnName(), rule.getLength()));
                         }
                     } else {
                         result = new CellVerifyValue(true, data, rule);
