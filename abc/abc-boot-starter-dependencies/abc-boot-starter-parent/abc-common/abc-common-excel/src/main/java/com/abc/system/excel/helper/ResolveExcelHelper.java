@@ -253,7 +253,7 @@ public class ResolveExcelHelper {
                     } else {
                         if ("int".equals(rule.getConfigType()) || "integer".equals(rule.getConfigType()) || "long".equals(rule.getConfigType())) {
                             // 使用long解析配置的整型/长整型数据
-                            result = new CellVerifyValue(true, Long.parseLong(dataFormatter.formatCellValue(cell)), rule);
+                            result = new CellVerifyValue(true, data.longValue(), rule);
                         } else if ("double".equals(rule.getConfigType())) {
                             // getNumericCellValue将返回一个double值，如果处理不当会导致在部分场景下出现异常
                             // 1.当存在一个内容为100的name单元格，这里的逻辑将会将其解析为100.0，如果同时在配置项中指定了: "姓名|string|255|0|name"，这将会导致解析到的字符串为100.0
@@ -261,7 +261,7 @@ public class ResolveExcelHelper {
                         } else {
                             // 2.所以，这里将单独为string类型分配一个额外的分支
                             //   2.1 注意：直接使用getStringCellValue会导致 "Cannot get a STRING value from a NUMERIC cell"
-                            String stringCellValue = String.valueOf(doubleCellValue);
+                            String stringCellValue = data.toPlainString();
                             result = new CellVerifyValue(true, stringCellValue.endsWith(".0") ? stringCellValue.substring(0, stringCellValue.length() - 2) : stringCellValue, rule);
                         }
                     }
