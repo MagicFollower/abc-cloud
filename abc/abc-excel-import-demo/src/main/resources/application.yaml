@@ -9,9 +9,6 @@ spring:
 abc:
   excel:
     rules:
-      - templateCode: abc001
-        titleNum: 1
-        columns: id|long|20|0|id,备注|string|200|0|memo
-      - templateCode: abc002
-        titleNum: 1
-        columns: id|string|20|0|id,姓名|string|200|0|name
+      - template-code: parseExcel
+        title-num: 1
+        columns: 姓名|string|255|255|name,年龄|string|3|0|age,备注|date|1|255|memo
