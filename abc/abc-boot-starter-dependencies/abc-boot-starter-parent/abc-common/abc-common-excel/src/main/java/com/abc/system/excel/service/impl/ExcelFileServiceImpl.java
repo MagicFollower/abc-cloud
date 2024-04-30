@@ -148,7 +148,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                             // 解析Cell数据
                             CellVerifyValue cellValue = ResolveExcelHelper.getCellValue(cell, cellVerifyValue.getRule());
                             if (!cellValue.isVerify()) {
-                                throw new ValidateException(SystemRetCodeConstants.EXCEL_TYPE_ERROR);
+                                throw new ValidateException(SystemRetCodeConstants.EXCEL_TYPE_ERROR.getCode(), cellValue.getErrorMsg());
                             }
                             realResultObj.put(realTitleMap.get(cell.getColumnIndex()), cellValue.getValue());
                             stringBuilder.append(",").append(cellValue.getValue().toString().trim());

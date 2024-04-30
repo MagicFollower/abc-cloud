@@ -15,7 +15,9 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -113,16 +115,12 @@ public class ResolveExcelHelper {
             List<String> data = new ArrayList<>(split.length);
             Collections.addAll(data, split);
             switch (data.get(1).toLowerCase()) {
-                // string和double使用同一种解析方式
                 case "string":
                 case "double":
-                    result.put(rule.getTemplateCode() + "_" + data.get(0),
-                            ExcelColumnRuleWrapper(data.get(0), null, data.get(2), data.get(3), data.get(4), CellType.STRING, CellType.NUMERIC));
-                    break;
-                // 整型/长整型使用一种解析方式
                 case "int":
                 case "integer":
                 case "long":
+                case "date":
                     result.put(rule.getTemplateCode() + "_" + data.get(0),
                             ExcelColumnRuleWrapper(data.get(0), data.get(1).toLowerCase(), data.get(2), data.get(3), data.get(4), CellType.STRING, CellType.NUMERIC));
                     break;
@@ -185,10 +183,7 @@ public class ResolveExcelHelper {
      *
      * @param row             标题行
      * @param templateCode    模板编码
-     * @param ruleMap         <pre>
-     *                        规则Map，用于解析字段真实名称，填充displayFieldMap;
-     *                          → Map中数据格式：templateCode_stringCellValue: ExcelColumnRule实体
-     *                        </pre>
+     * @param ruleMap         规则Map
      * @param realFieldMap    realFieldMap 真实字段Map
      * @param displayFieldMap displayFieldMap 显示字段Map
      */
@@ -238,9 +233,14 @@ public class ResolveExcelHelper {
             // 数字
             case NUMERIC:
                 if (DateUtil.isCellDateFormatted(cell)) {
-                    String dataFormatString = cell.getCellStyle().getDataFormatString();
-                    result = new CellVerifyValue(true, new SimpleDateFormat(dataFormatString)
-                            .format(DateUtil.getJavaDate(cell.getNumericCellValue())), rule);
+                    // 时间解析
+                    // 1.这里对导入excel的时间格式进行硬性限制：可自定义但必须被excel中解析为时间（yyyy/mm/dd hh:mm:ss.000）=> 暂不支持文本格式的时间解析
+                    // 2.时区将按照东8区解析。
+                    // 获取单元格格式
+                    // String dataFormatString = cell.getCellStyle().getDataFormatString();
+                    final ZoneId EAST_8 = ZoneOffset.ofHours(8);
+                    LocalDateTime localDateTime = LocalDateTime.ofInstant(DateUtil.getJavaDate(cell.getNumericCellValue()).toInstant(), EAST_8);
+                    result = new CellVerifyValue(true, localDateTime, rule);
                 } else {
                     double doubleCellValue = cell.getNumericCellValue();
                     BigDecimal data = new BigDecimal(String.valueOf(doubleCellValue)).stripTrailingZeros();
@@ -251,38 +251,55 @@ public class ResolveExcelHelper {
                     } else if (length > rule.getLength()) {
                         result = new CellVerifyValue(false, doubleCellValue, rule, String.format("[%s列]部分数据长度超出[%d]阈值", rule.getColumnName(), rule.getLength()));
                     } else {
-                        if ("int".equals(rule.getConfigType()) || "integer".equals(rule.getConfigType()) || "long".equals(rule.getConfigType())) {
+                        String configType = rule.getConfigType();
+                        if ((StringUtils.containsAny(configType, "long", "int", "integer"))) {
                             // 使用long解析配置的整型/长整型数据
                             result = new CellVerifyValue(true, data.longValue(), rule);
-                        } else if ("double".equals(rule.getConfigType())) {
-                            // getNumericCellValue将返回一个double值，如果处理不当会导致在部分场景下出现异常
-                            // 1.当存在一个内容为100的name单元格，这里的逻辑将会将其解析为100.0，如果同时在配置项中指定了: "姓名|string|255|0|name"，这将会导致解析到的字符串为100.0
+                        } else if ("double".equals(configType)) {
+                            // 浮点型数据
                             result = new CellVerifyValue(true, doubleCellValue, rule);
                         } else {
-                            // 2.所以，这里将单独为string类型分配一个额外的分支
-                            //   2.1 注意：直接使用getStringCellValue会导致 "Cannot get a STRING value from a NUMERIC cell"
-                            String stringCellValue = data.toPlainString();
-                            result = new CellVerifyValue(true, stringCellValue.endsWith(".0") ? stringCellValue.substring(0, stringCellValue.length() - 2) : stringCellValue, rule);
+                            // 将数值转换为字符串
+                            // 使用BigDecimal避免尾部的".0"
+                            result = new CellVerifyValue(true, data.toPlainString(), rule);
                         }
                     }
-
                 }
                 break;
             // 字符串
             case STRING:
                 String data = cell.getStringCellValue();
-                if (StringUtils.isNotEmpty(data) && data.length() > rule.getLength()) {
-                    result = new CellVerifyValue(false, data, rule, String.format("[%s列]部分数据长度超出[%d]阈值", rule.getColumnName(), rule.getLength()));
-                } else {
-                    if (!StringUtils.isEmpty(rule.getConfigType()) && (StringUtils.containsAnyIgnoreCase(rule.getConfigType(), "long", "int", "integer"))) {
-                        try {
-                            result = new CellVerifyValue(true, Long.parseLong(data.trim()), rule);
-                        } catch (NumberFormatException e) {
-                            result = new CellVerifyValue(false, data, rule, String.format("[%s列]部分数据长度超出[%d]阈值", rule.getColumnName(), rule.getLength()));
-                        }
+                String configType = rule.getConfigType();
+                if (StringUtils.equals(configType, "string")) {
+                    // 正常的字符串
+                    if (data.length() > rule.getLength()) {
+                        result = new CellVerifyValue(false, data, rule, String.format("[%s列]部分数据长度超出[%d]阈值", rule.getColumnName(), rule.getLength()));
                     } else {
                         result = new CellVerifyValue(true, data, rule);
                     }
+                } else if ((StringUtils.containsAny(configType, "long", "int", "integer", "double"))) {
+                    // 数值型字符串
+                    BigDecimal bigDecimalData = new BigDecimal(data.trim()).stripTrailingZeros();
+                    int scale = bigDecimalData.scale();
+                    int length = bigDecimalData.toPlainString().length();
+                    if (scale > rule.getAccuracy()) {
+                        result = new CellVerifyValue(false, data, rule, String.format("[%s列]部分数据精度超出[%d]阈值", rule.getColumnName(), rule.getAccuracy()));
+                    } else if (length > rule.getLength()) {
+                        result = new CellVerifyValue(false, data, rule, String.format("[%s列]部分数据长度超出[%d]阈值", rule.getColumnName(), rule.getLength()));
+                    } else {
+                        if ("double".equals(rule.getConfigType())) {
+                            result = new CellVerifyValue(true, bigDecimalData.doubleValue(), rule);
+                        } else {
+                            // 使用long解析配置的整型/长整型数据
+                            result = new CellVerifyValue(true, bigDecimalData.longValue(), rule);
+                        }
+                    }
+                } else if (StringUtils.equals(configType, "date")) {
+                    // 时间型字符串，暂不支持
+                    result = new CellVerifyValue(false, data, rule, String.format("[%s列]部分数据非日期时间格式", rule.getColumnName()));
+                } else {
+                    // 配置的格式不支持
+                    result = new CellVerifyValue(false, data, rule, String.format("[%s列]配置的数据格式不支持", rule.getColumnName()));
                 }
                 break;
             // 空值
