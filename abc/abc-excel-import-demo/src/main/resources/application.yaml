@@ -1,11 +1,15 @@
+### 应用端口号
 server:
   port: 65500
+
+### 应用基础配置
 spring:
   application:
     name: abc-excel-import-demo
   main:
     banner-mode: off
 
+### EXCEL导入解析配置项
 abc:
   excel:
     rules:
