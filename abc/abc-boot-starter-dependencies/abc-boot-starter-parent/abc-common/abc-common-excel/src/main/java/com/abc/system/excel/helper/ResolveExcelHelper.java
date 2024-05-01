@@ -230,7 +230,7 @@ public class ResolveExcelHelper {
     public static CellVerifyValue getCellValue(Cell cell, ExcelColumnRule rule) {
         CellVerifyValue result;
         switch (cell.getCellType()) {
-            // 数字
+            // 数值类型单元格
             case NUMERIC:
                 if (DateUtil.isCellDateFormatted(cell)) {
                     // 时间解析
@@ -266,7 +266,7 @@ public class ResolveExcelHelper {
                     }
                 }
                 break;
-            // 字符串
+            // 文本类型单元格
             case STRING:
                 String data = cell.getStringCellValue();
                 String configType = rule.getConfigType();
