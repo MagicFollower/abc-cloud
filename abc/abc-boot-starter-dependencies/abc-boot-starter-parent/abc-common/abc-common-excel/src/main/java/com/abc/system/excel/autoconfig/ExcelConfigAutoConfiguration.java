@@ -12,6 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * ExcelConfig自动配置类
+ * <pre>
+ * 1.自动注入名称为excelFileService的ExcelFileService实例
+ * </pre>
  *
  * @Description ExcelConfigAutoConfiguration 自动配置类
  * @Author [author_name]
