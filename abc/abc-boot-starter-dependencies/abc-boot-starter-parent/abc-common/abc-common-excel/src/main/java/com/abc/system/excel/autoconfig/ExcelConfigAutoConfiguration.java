@@ -35,7 +35,7 @@ public class ExcelConfigAutoConfiguration {
      * @return ExcelFileService
      */
     @Bean("excelFileService")
-    public ExcelFileService uploadFile() {
+    public ExcelFileService excelFileService() {
         return new ExcelFileServiceImpl(excelConfigProperties);
     }
 }
