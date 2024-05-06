@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * ResolveExcelHelper
+ * ExcelHelper解析器
  *
  * @Description ResolveExcelHelper 详细介绍
  * @Author [author_name]
@@ -51,44 +51,43 @@ public class ResolveExcelHelper {
         return SpringHelper.getBean(ExcelConfigProperties.class);
     }
 
-    /**
-     * 解析Excel列配置规则（所有）
-     *
-     * @return {@code Map<String, ExcelColumnRule>} 映射格式 → templateCode_stringCellValue: ExcelColumnRule实体
-     * @throws ValidateException 校验异常
-     */
-    public static Map<String, ExcelColumnRule> resolveCellColumnRule() throws ValidateException {
-        Map<String, ExcelColumnRule> result = new HashMap<>();
-        ExcelConfigProperties excelConfig = getExcelConfig();
-        List<ExcelRule> rules = excelConfig.getRules();
-        for (ExcelRule rule : rules) {
-            for (String str : rule.getColumns().split(",")) {
-                String[] split = str.split("\\|");
-                if (split.length != 5) {
-                    throw new ValidateException(SystemRetCodeConstants.EXCEL_RULE_ERROR);
-                }
-                List<String> data = new ArrayList<>(split.length);
-                Collections.addAll(data, split);
-                switch (data.get(1).toLowerCase()) {
-                    case "string":
-                    case "double":
-                        result.put(rule.getTemplateCode() + "_" + data.get(0),
-                                ExcelColumnRuleWrapper(data.get(0), null, data.get(2), data.get(3), data.get(4), CellType.STRING, CellType.NUMERIC));
-                        break;
-                    case "int":
-                    case "integer":
-                    case "long":
-                        result.put(rule.getTemplateCode() + "_" + data.get(0),
-                                ExcelColumnRuleWrapper(data.get(0), data.get(1).toLowerCase(), data.get(2), data.get(3), data.get(4), CellType.STRING, CellType.NUMERIC));
-                        break;
-                    default:
-                        throw new ValidateException(SystemRetCodeConstants.EXCEL_RULE_ERROR);
-                }
-
-            }
-        }
-        return result;
-    }
+    // /**
+    //  * 解析Excel列配置规则（所有）
+    //  *
+    //  * @return {@code Map<String, ExcelColumnRule>} 映射格式 → templateCode_stringCellValue: ExcelColumnRule实体
+    //  * @throws ValidateException 校验异常
+    //  */
+    // public static Map<String, ExcelColumnRule> resolveCellColumnRule() throws ValidateException {
+    //     Map<String, ExcelColumnRule> result = new HashMap<>();
+    //     ExcelConfigProperties excelConfig = getExcelConfig();
+    //     List<ExcelRule> rules = excelConfig.getRules();
+    //     for (ExcelRule rule : rules) {
+    //         for (String str : rule.getColumns().split(",")) {
+    //             String[] split = str.split("\\|");
+    //             if (split.length != 5) {
+    //                 throw new ValidateException(SystemRetCodeConstants.EXCEL_RULE_ERROR);
+    //             }
+    //             List<String> data = new ArrayList<>(split.length);
+    //             Collections.addAll(data, split);
+    //             switch (data.get(1).toLowerCase()) {
+    //                 case "string":
+    //                 case "double":
+    //                     result.put(rule.getTemplateCode() + "_" + data.get(0),
+    //                             ExcelColumnRuleWrapper(data.get(0), null, data.get(2), data.get(3), data.get(4), CellType.STRING, CellType.NUMERIC));
+    //                     break;
+    //                 case "int":
+    //                 case "integer":
+    //                 case "long":
+    //                     result.put(rule.getTemplateCode() + "_" + data.get(0),
+    //                             ExcelColumnRuleWrapper(data.get(0), data.get(1).toLowerCase(), data.get(2), data.get(3), data.get(4), CellType.STRING, CellType.NUMERIC));
+    //                     break;
+    //                 default:
+    //                     throw new ValidateException(SystemRetCodeConstants.EXCEL_RULE_ERROR);
+    //             }
+    //         }
+    //     }
+    //     return result;
+    // }
 
     /**
      * 解析Excel列配置规则（指定templateCode）
