@@ -50,7 +50,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
     private final ExcelConfigProperties excelConfigProperties;
 
     @Override
-    public ResponseData<ExcelResponse> dealWith(HttpServletRequest request) {
+    public ResponseData<ExcelResponse> parseExcel(HttpServletRequest request) {
         // 从请求头中解析templateCode
         String templateCode = request.getHeader(TEMPLATE_CODE_KEY);
         if (StringUtils.isEmpty(templateCode)) {

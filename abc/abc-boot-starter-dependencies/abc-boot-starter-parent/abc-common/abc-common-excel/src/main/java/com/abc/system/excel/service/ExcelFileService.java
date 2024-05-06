@@ -15,6 +15,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface ExcelFileService {
 
-    ResponseData<ExcelResponse> dealWith(HttpServletRequest request);
+    ResponseData<ExcelResponse> parseExcel(HttpServletRequest request);
 
 }
