@@ -1,4 +1,4 @@
-package com.abc.system.excel.helper;
+package com.abc.system.excel.util;
 
 import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.business.ValidateException;
@@ -35,11 +35,11 @@ import java.util.stream.Collectors;
  * @Date 2077/5/21 17:10
  * @Version 1.0
  */
-public class ResolveExcelHelper {
+public class ResolveExcelUtils {
 
     private static final DataFormatter dataFormatter = new DataFormatter();
 
-    private ResolveExcelHelper() {
+    private ResolveExcelUtils() {
     }
 
     /**
