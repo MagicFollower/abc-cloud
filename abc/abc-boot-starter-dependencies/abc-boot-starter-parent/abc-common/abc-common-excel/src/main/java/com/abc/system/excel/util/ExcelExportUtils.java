@@ -114,7 +114,7 @@ import java.util.function.Function;
  *       ExcelExportUtils.init(titleList, sheetNameToSheetDataMap).fillData((dataMap, sheetMap) -> {
  *           dataMap.forEach((sheetName, dataList) -> {
  *               HSSFSheet sheet = sheetMap.get(sheetName);
- *               // 👉为[收货全地址]、[收货人手机号]、[款号]三列设置自定义宽度(N*256表示N个字符宽度)
+ *               // 👉为[收货全地址]、[收货人手机号]、[款号]三列设置自定义宽度(N*256表示N个字符宽度，N默认10)
  *               // 10/12一般情况下是默认宽度
  *               sheet.setColumnWidth(9, 20 * 256);
  *               sheet.setColumnWidth(11, 10 * 256);
@@ -171,9 +171,13 @@ public class ExcelExportUtils<T> {
      */
     public Map<String, HSSFSheet> sheetNameToSheetMap;
     /**
-     * 统一的单元格Cell样式，内部使用
+     * 统一的标题单元格Cell样式，内部使用
      */
-    private HSSFCellStyle defaultCellStyle;
+    private HSSFCellStyle defaultHealerDataCellStyle;
+    /**
+     * 统一的数据单元格Cell样式，内部使用
+     */
+    private HSSFCellStyle defaultDataCellStyle;
     /**
      * HSSFWorkbook实例，内部使用
      */
@@ -195,23 +199,25 @@ public class ExcelExportUtils<T> {
      */
     public static <T> ExcelExportUtils<T> init(@NonNull List<String> titles,
                                                @NonNull Map<String, List<T>> sheetNameToSheetDataMap) {
-        return init(titles, sheetNameToSheetDataMap, null, null, null);
+        return init(titles, sheetNameToSheetDataMap, null, null, null, null);
     }
 
     /**
      * Step 1-1-FULL 初始化多Sheet及每个Sheet中的Header
      *
-     * @param titles                   标题列表
-     * @param sheetNameToSheetDataMap  sheetName到数据集的映射
-     * @param defaultCellStyleFunction 单元格样式回调Function，开放配置默认单元格样式
-     * @param defaultColumnWidth       默认列宽（单位：字符宽度）
-     * @param defaultRowHeight         默认行高（单位：磅）
-     * @param <T>                      泛型T，数据集实体类型
+     * @param titles                         标题列表
+     * @param sheetNameToSheetDataMap        sheetName到数据集的映射
+     * @param defaultHeaderCellStyleFunction 标题单元格样式回调Function，开放配置默认单元格样式
+     * @param defaultDataCellStyleFunction   数据单元格样式回调Function，开放配置默认单元格样式
+     * @param defaultColumnWidth             默认列宽（单位：字符宽度）
+     * @param defaultRowHeight               默认行高（单位：磅）
+     * @param <T>                            泛型T，数据集实体类型
      * @return ExcelExportUtils实例，支持链式调用
      */
     public static <T> ExcelExportUtils<T> init(@NonNull List<String> titles,
                                                @NonNull Map<String, List<T>> sheetNameToSheetDataMap,
-                                               Function<HSSFWorkbook, HSSFCellStyle> defaultCellStyleFunction,
+                                               Function<HSSFWorkbook, HSSFCellStyle> defaultHeaderCellStyleFunction,
+                                               Function<HSSFWorkbook, HSSFCellStyle> defaultDataCellStyleFunction,
                                                Integer defaultColumnWidth,
                                                Integer defaultRowHeight
     ) {
@@ -219,15 +225,17 @@ public class ExcelExportUtils<T> {
         ExcelExportUtils<T> thisUtil = new ExcelExportUtils<>();
         thisUtil.sheetNameToSheetMap = new HashMap<>(sheetNameToSheetDataMap.size());
         thisUtil.workbook = new HSSFWorkbook();
-        if (defaultCellStyleFunction == null) {
-            // 默认单元格样式（数据部分）
-            thisUtil.defaultCellStyle = thisUtil.getDefaultDataCellStyle();
+        if (defaultHeaderCellStyleFunction == null) {
+            thisUtil.defaultHealerDataCellStyle = thisUtil.getDefaultHeaderCellStyle();
         } else {
-            thisUtil.defaultCellStyle = defaultCellStyleFunction.apply(thisUtil.workbook);
+            thisUtil.defaultHealerDataCellStyle = defaultHeaderCellStyleFunction.apply(thisUtil.workbook);
+        }
+        if (defaultDataCellStyleFunction == null) {
+            thisUtil.defaultDataCellStyle = thisUtil.getDefaultDataCellStyle();
+        } else {
+            thisUtil.defaultDataCellStyle = defaultDataCellStyleFunction.apply(thisUtil.workbook);
         }
         thisUtil.sheetNameToSheetDataMap = sheetNameToSheetDataMap;
-        // 默认单元格样式（标题部分）
-        HSSFCellStyle headerCellStyle = thisUtil.getDefaultHeaderCellStyle();
         sheetNameToSheetDataMap.keySet().forEach(sheetName -> {
             HSSFSheet sheet = thisUtil.workbook.createSheet(sheetName);
             // 设置列宽（默认12个字符宽度）
@@ -238,7 +246,7 @@ public class ExcelExportUtils<T> {
             for (int i = 0; i < headers.size(); i++) {
                 HSSFCell cell = row.createCell(i);
                 cell.setCellValue(headers.get(i));
-                cell.setCellStyle(headerCellStyle);
+                cell.setCellStyle(thisUtil.defaultHealerDataCellStyle);
             }
             // 数据填充阶段使用
             thisUtil.sheetNameToSheetMap.put(sheetName, sheet);
@@ -254,46 +262,50 @@ public class ExcelExportUtils<T> {
      * @return ExcelExportUtils实例，支持链式调用
      */
     public static <T> ExcelExportUtils<T> init(@NonNull Map<String, List<String>> sheetNameToHeaderList) {
-        return init(sheetNameToHeaderList, null, null, null);
+        return init(sheetNameToHeaderList, null, null, null, null);
     }
 
     /**
      * Step 2-1-FULL 初始化多Sheet的Excel模板，之后直接调用Step 2-2导出
      *
-     * @param sheetNameToHeaderList    sheetName到表头列表
-     * @param defaultCellStyleFunction 单元格样式回调Function，开放配置默认单元格样式
-     * @param defaultColumnWidth       默认列宽（单位：字符宽度）
-     * @param defaultRowHeight         默认行高（单位：磅）
-     * @param <T>                      泛型T，数据集实体类型
+     * @param sheetNameToHeaderList          sheetName到表头列表
+     * @param defaultHeaderCellStyleFunction 标题单元格样式回调Function，开放配置默认单元格样式
+     * @param defaultDataCellStyleFunction   数据单元格样式回调Function，开放配置默认单元格样式
+     * @param defaultColumnWidth             默认列宽（单位：字符宽度）
+     * @param defaultRowHeight               默认行高（单位：磅）
+     * @param <T>                            泛型T，数据集实体类型
      * @return ExcelExportUtils实例，支持链式调用
      */
     public static <T> ExcelExportUtils<T> init(@NonNull Map<String, List<String>> sheetNameToHeaderList,
-                                               Function<HSSFWorkbook, HSSFCellStyle> defaultCellStyleFunction,
+                                               Function<HSSFWorkbook, HSSFCellStyle> defaultHeaderCellStyleFunction,
+                                               Function<HSSFWorkbook, HSSFCellStyle> defaultDataCellStyleFunction,
                                                Integer defaultColumnWidth,
                                                Integer defaultRowHeight) {
         ExcelExportUtils<T> thisUtil = new ExcelExportUtils<>();
         thisUtil.sheetNameToSheetMap = new HashMap<>(sheetNameToHeaderList.size());
         thisUtil.workbook = new HSSFWorkbook();
-        if (defaultCellStyleFunction == null) {
-            // 默认单元格样式（数据部分）
-            thisUtil.defaultCellStyle = thisUtil.getDefaultDataCellStyle();
+        if (defaultHeaderCellStyleFunction == null) {
+            thisUtil.defaultHealerDataCellStyle = thisUtil.getDefaultHeaderCellStyle();
         } else {
-            thisUtil.defaultCellStyle = defaultCellStyleFunction.apply(thisUtil.workbook);
+            thisUtil.defaultHealerDataCellStyle = defaultHeaderCellStyleFunction.apply(thisUtil.workbook);
         }
-        // 默认单元格样式（标题部分）
-        HSSFCellStyle headerCellStyle = thisUtil.getDefaultHeaderCellStyle();
+        if (defaultDataCellStyleFunction == null) {
+            thisUtil.defaultDataCellStyle = thisUtil.getDefaultDataCellStyle();
+        } else {
+            thisUtil.defaultDataCellStyle = defaultDataCellStyleFunction.apply(thisUtil.workbook);
+        }
         sheetNameToHeaderList.forEach((sheetName, titles) -> {
             List<String> headers = new ArrayList<>(titles);
             HSSFSheet sheet = thisUtil.workbook.createSheet(sheetName);
             // 设置列宽（默认12个字符宽度）
-            sheet.setDefaultColumnWidth(Optional.ofNullable(defaultColumnWidth).orElse(9));
+            sheet.setDefaultColumnWidth(Optional.ofNullable(defaultColumnWidth).orElse(10));
             // 设置行高（默认17.25磅）
             sheet.setDefaultRowHeight(Optional.ofNullable(defaultRowHeight).orElse((int) (17.25 * 20)).shortValue());
             HSSFRow row = sheet.createRow(0);
             for (int i = 0; i < headers.size(); i++) {
                 HSSFCell cell = row.createCell(i);
                 cell.setCellValue(headers.get(i));
-                cell.setCellStyle(headerCellStyle);
+                cell.setCellStyle(thisUtil.defaultHealerDataCellStyle);
             }
             thisUtil.sheetNameToSheetMap.put(sheetName, sheet);
         });
@@ -324,7 +336,7 @@ public class ExcelExportUtils<T> {
                     for (int cellIndex = 0; cellIndex < row.getLastCellNum(); cellIndex++) {
                         HSSFCell cell = row.getCell(cellIndex);
                         if (cell != null) {
-                            cell.setCellStyle(defaultCellStyle);
+                            cell.setCellStyle(defaultDataCellStyle);
                         }
                     }
                 }
@@ -338,7 +350,7 @@ public class ExcelExportUtils<T> {
      * step 1-3 写入HttpServletResponse
      * step 2-2 写入HttpServletResponse
      * <pre>
-     * 该方法已废弃，请使用不含 encodeFileName 参数的版本，这个参数会导致中文文件名无法被response正常处理
+     * 该方法已弃用，请使用不含 encodeFileName 参数的版本，这个参数会导致中文文件名无法被response正常处理
      * </pre>
      *
      * @param servletResponse HttpServletResponse
@@ -420,25 +432,6 @@ public class ExcelExportUtils<T> {
         }
     }
 
-
-    private HSSFCellStyle getDefaultDataCellStyle() {
-        HSSFCellStyle dataCellStyle = this.workbook.createCellStyle();
-        dataCellStyle.setBorderTop(BorderStyle.THIN);
-        dataCellStyle.setBorderBottom(BorderStyle.THIN);
-        dataCellStyle.setBorderLeft(BorderStyle.THIN);
-        dataCellStyle.setBorderRight(BorderStyle.THIN);
-        dataCellStyle.setTopBorderColor(IndexedColors.BLACK.getIndex());
-        dataCellStyle.setBottomBorderColor(IndexedColors.BLACK.getIndex());
-        dataCellStyle.setLeftBorderColor(IndexedColors.BLACK.getIndex());
-        dataCellStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());
-        // font
-        HSSFFont font = this.workbook.createFont();
-        font.setFontName("微软雅黑");
-        font.setColor(IndexedColors.BLACK.getIndex());
-        dataCellStyle.setFont(font);
-        return dataCellStyle;
-    }
-
     private HSSFCellStyle getDefaultHeaderCellStyle() {
         HSSFCellStyle headerCellStyle = this.workbook.createCellStyle();
         headerCellStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
@@ -451,11 +444,29 @@ public class ExcelExportUtils<T> {
         headerCellStyle.setBottomBorderColor(IndexedColors.BLACK.getIndex());
         headerCellStyle.setLeftBorderColor(IndexedColors.BLACK.getIndex());
         headerCellStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());
-        // font
+        // FONT
         HSSFFont font = this.workbook.createFont();
         font.setFontName("微软雅黑");
         font.setColor(IndexedColors.BLACK.getIndex());
         headerCellStyle.setFont(font);
         return headerCellStyle;
+    }
+
+    private HSSFCellStyle getDefaultDataCellStyle() {
+        HSSFCellStyle dataCellStyle = this.workbook.createCellStyle();
+        dataCellStyle.setBorderTop(BorderStyle.THIN);
+        dataCellStyle.setBorderBottom(BorderStyle.THIN);
+        dataCellStyle.setBorderLeft(BorderStyle.THIN);
+        dataCellStyle.setBorderRight(BorderStyle.THIN);
+        dataCellStyle.setTopBorderColor(IndexedColors.BLACK.getIndex());
+        dataCellStyle.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        dataCellStyle.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+        dataCellStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        // FONT
+        HSSFFont font = this.workbook.createFont();
+        font.setFontName("微软雅黑");
+        font.setColor(IndexedColors.BLACK.getIndex());
+        dataCellStyle.setFont(font);
+        return dataCellStyle;
     }
 }
