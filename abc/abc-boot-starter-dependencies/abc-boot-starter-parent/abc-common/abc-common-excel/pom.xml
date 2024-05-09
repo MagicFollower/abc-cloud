@@ -6,10 +6,11 @@
     <parent>
         <groupId>com.abc</groupId>
         <artifactId>abc-common</artifactId>
-        <version>1.0.1.2</version>
+        <version>2024.1.1.1</version>
     </parent>
 
     <artifactId>abc-common-excel</artifactId>
+    <version>2024.1.1.1</version>
     <description>
         excel导入导出模块
         1.excel导入 → 自定义属性
