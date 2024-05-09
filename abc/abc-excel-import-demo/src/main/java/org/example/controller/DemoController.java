@@ -1,6 +1,5 @@
 package org.example.controller;
 
-import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.response.ResponseData;
 import com.abc.system.excel.service.ExcelFileService;
 import com.abc.system.excel.vo.ExcelResponse;
@@ -9,7 +8,6 @@ import com.alibaba.fastjson2.JSONWriter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.compress.utils.Lists;
 import org.example.dal.entity.User;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -50,7 +47,7 @@ public class DemoController {
         System.out.println(request.getRequestURL());
         System.out.println(type);
 
-        ResponseData<ExcelResponse> excelRes = excelFileService.dealWith(request);
+        ResponseData<ExcelResponse> excelRes = excelFileService.parseExcel(request);
         if(excelRes.getSuccess()) {
             ExcelResponse result = excelRes.getResult();
             Collection<String> displayData = result.getDisplayData();
