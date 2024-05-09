@@ -1,4 +1,4 @@
-package com.abc.system.excel.util;
+package com.abc.system.excel.service.impl;
 
 import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.business.ValidateException;
@@ -28,14 +28,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Excel解析工具
+ * Excel解析工具(Service实现使用，不对外暴露)
  *
  * @Description ExcelResolveUtils 详细介绍
  * @Author [author_name]
  * @Date 2077/5/21 17:10
  * @Version 1.0
  */
-public class ExcelResolveUtils {
+class ExcelResolveUtils {
 
     private static final DataFormatter dataFormatter = new DataFormatter();
 
