@@ -28,18 +28,18 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * ExcelHelper解析器
+ * Excel解析工具
  *
- * @Description ResolveExcelHelper 详细介绍
+ * @Description ExcelResolveUtils 详细介绍
  * @Author [author_name]
  * @Date 2077/5/21 17:10
  * @Version 1.0
  */
-public class ResolveExcelUtils {
+public class ExcelResolveUtils {
 
     private static final DataFormatter dataFormatter = new DataFormatter();
 
-    private ResolveExcelUtils() {
+    private ExcelResolveUtils() {
     }
 
     /**

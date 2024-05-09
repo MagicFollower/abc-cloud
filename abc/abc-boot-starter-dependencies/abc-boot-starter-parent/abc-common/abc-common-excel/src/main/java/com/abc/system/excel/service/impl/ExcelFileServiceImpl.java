@@ -6,7 +6,7 @@ import com.abc.system.common.exception.business.ValidateException;
 import com.abc.system.common.response.ResponseData;
 import com.abc.system.common.response.ResponseProcessor;
 import com.abc.system.excel.config.ExcelConfigProperties;
-import com.abc.system.excel.util.ResolveExcelUtils;
+import com.abc.system.excel.util.ExcelResolveUtils;
 import com.abc.system.excel.service.ExcelFileService;
 import com.abc.system.excel.vo.CellVerifyValue;
 import com.abc.system.excel.vo.ExcelColumnRule;
@@ -73,7 +73,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             // 转换成多部分request
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
             // 取得request中的所有文件名
-            List<String> fileList = ResolveExcelUtils.copyIterator(multipartRequest.getFileNames());
+            List<String> fileList = ExcelResolveUtils.copyIterator(multipartRequest.getFileNames());
             // 文件数量是否超过限制数量（只支持单文件上传）
             if (fileList.size() != 1) {
                 throw new ValidateException(SystemRetCodeConstants.EXCEL_NUM_ERROR);
@@ -98,7 +98,7 @@ public class ExcelFileServiceImpl implements ExcelFileService {
             // 解析Excel列规则
             // 1.resolveCellColumnRule提供两个重载，无参数会解析所有数据，支持一个参数指定templateCode
             // 2.这里使用指定templateCode的重载
-            Map<String, ExcelColumnRule> excelRuleMap = ResolveExcelUtils.resolveCellColumnRule(templateCode);
+            Map<String, ExcelColumnRule> excelRuleMap = ExcelResolveUtils.resolveCellColumnRule(templateCode);
 
             try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) {
                 // 获取与templateCode唯一匹配的规则配置信息
@@ -123,15 +123,15 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                             // 定位至标题行
                             if (row.getRowNum() + 1 < titleNum) continue;
                             // 跳过空行
-                            if (ResolveExcelUtils.isRowEmpty(row)) continue;
+                            if (ExcelResolveUtils.isRowEmpty(row)) continue;
                             // 解析标题行
-                            ResolveExcelUtils.resolveExcelTitle(row, templateCode, excelRuleMap, realTitleMap, displayTitleMap);
+                            ExcelResolveUtils.resolveExcelTitle(row, templateCode, excelRuleMap, realTitleMap, displayTitleMap);
                             // 标记之后的所有数据为记录行
                             rowTypeEnum = RowTypeEnum.DATA;
                             continue;
                         }
                         // 跳过空行
-                        if (ResolveExcelUtils.isRowEmpty(row)) continue;
+                        if (ExcelResolveUtils.isRowEmpty(row)) continue;
                         JSONObject realResultObj = new JSONObject();
                         StringBuilder stringBuilder = new StringBuilder();
                         // Cell校验
@@ -141,12 +141,12 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                             }
                             // 校验Cell类型
                             // 1.根据模板编码_配置的列名获取指定配置规则，首先校验单元格类型是否为指定类型（当前仅支持数值类型和字符串类型）
-                            CellVerifyValue cellVerifyValue = ResolveExcelUtils.verifyCellType(templateCode, displayTitleMap, excelRuleMap, cell);
+                            CellVerifyValue cellVerifyValue = ExcelResolveUtils.verifyCellType(templateCode, displayTitleMap, excelRuleMap, cell);
                             if (!cellVerifyValue.isVerify()) {
                                 throw new ValidateException(SystemRetCodeConstants.EXCEL_TYPE_ERROR);
                             }
                             // 解析Cell数据
-                            CellVerifyValue cellValue = ResolveExcelUtils.getCellValue(cell, cellVerifyValue.getRule());
+                            CellVerifyValue cellValue = ExcelResolveUtils.getCellValue(cell, cellVerifyValue.getRule());
                             if (!cellValue.isVerify()) {
                                 throw new ValidateException(SystemRetCodeConstants.EXCEL_TYPE_ERROR.getCode(), cellValue.getErrorMsg());
                             }
