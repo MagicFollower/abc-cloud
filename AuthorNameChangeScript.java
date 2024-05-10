@@ -16,7 +16,7 @@ public class AuthorNameChangeScript {
             walk.forEach(path -> {
                 try {
                     File file = path.toFile();
-                    if (file.isFile() || file.getName().endsWith(".java")) {
+                    if (file.isFile() && file.getName().endsWith(".java")) {
                         Path dstPath = Paths.get(file.getAbsolutePath() + ".modified");
                         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
                         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(dstPath.toFile()));
