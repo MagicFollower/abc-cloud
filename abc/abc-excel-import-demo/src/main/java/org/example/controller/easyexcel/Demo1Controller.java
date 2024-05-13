@@ -14,6 +14,11 @@ import java.util.List;
 
 /**
  * 测试MultipartFile接收文件
+ * <pre>
+ * 1.多文件接收，可以使用数组和List;
+ * 2.文件缺省时 && required=false，接收到的数据是null;
+ * 3.MultipartFile的transferTo要求参数的File指定绝对路径，如果指定相对路径可以使用Files.copy(is, file);
+ * </pre>
  */
 @RestController
 @RequestMapping("/multipartFile")
@@ -22,7 +27,7 @@ public class Demo1Controller {
 
     @PostMapping("/uploadTest1")
     public void uploadTest1(@RequestParam(name = "file", required = false) MultipartFile[] files,
-                             @RequestParam(name = "file", required = false) MultipartFile[] files1) {
+                            @RequestParam(name = "file", required = false) MultipartFile[] files1) {
         // 参数没传：null
         System.out.println("files = " + files);    // [Lorg.springframework.web.multipart.MultipartFile;@6d711871
         System.out.println("files1 = " + files1);  // [Lorg.springframework.web.multipart.MultipartFile;@4a5fc50
