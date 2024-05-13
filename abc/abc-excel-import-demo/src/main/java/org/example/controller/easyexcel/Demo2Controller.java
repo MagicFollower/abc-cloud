@@ -16,11 +16,14 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;
 
 /**
- * 测试 EasyExcel 解析 Excel (⚠️⚠️⚠️EasyExcel数据所有cell处理时，都会自动移除数据首尾的空格⚠️⚠️⚠️)
+ * 测试 EasyExcel 解析 Excel
+ * <pre>
+ * ⚠️⚠️⚠️EasyExcel数据所有cell处理时，都会自动移除数据首尾的空格⚠️⚠️⚠️
  * 1.类型为Long/Integer时，对于小数会自动截断取整;
  * 2.类型为Boolean时，只会处理EXCEL中的TRUE/FALSE;
  * 3.类型为String时，会自动移除首尾空格;
  * 4.类型为Date时，需要确保时间能被Excel解析为时间。
+ * </pre>
  */
 @Slf4j
 @RestController
