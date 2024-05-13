@@ -4,16 +4,16 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * -
+ * ExcelImportDemoApplication
  *
- * @Description -
+ * @Description ExcelImportDemoApplication
  * @Author -
  * @Date 2077/9/26 22:39
  * @Version 1.0
  */
 @SpringBootApplication
-public class Main {
+public class ExcelImportDemoApplication {
     public static void main(String[] args) {
-        SpringApplication.run(Main.class, args);
+        SpringApplication.run(ExcelImportDemoApplication.class, args);
     }
 }
