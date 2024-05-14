@@ -35,35 +35,25 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- web模块 + commons-fileupload -->
+        <dependency>
+            <groupId>com.abc</groupId>
+            <artifactId>abc-common-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
+
         <!-- apache-poi, 该框架依赖log4j日志接口与实现 -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.20.0</version>
         </dependency>
-        <!--        &lt;!&ndash; 创建一个通用的多部分解析器CommonsMultipartResolver使用，引入后spring会自动关联处理 &ndash;&gt;-->
-        <!--        &lt;!&ndash; {@code CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());}&ndash;&gt;-->
-        <!--        <dependency>-->
-        <!--            <groupId>commons-fileupload</groupId>-->
-        <!--            <artifactId>commons-fileupload</artifactId>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>com.abc</groupId>-->
-        <!--            <artifactId>abc-common-web</artifactId>-->
-        <!--        </dependency>-->
-
-        <dependency>
-            <groupId>com.abc</groupId>
-            <artifactId>abc-common-core</artifactId>
-        </dependency>
     </dependencies>
-
 </project>
