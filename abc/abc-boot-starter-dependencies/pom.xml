@@ -73,6 +73,7 @@
 
         <!-- Excel-POI、alibaba-easy-excel -->
         <excel-resolver.version>5.2.3</excel-resolver.version>
+        <commons-fileupload.version>1.5</commons-fileupload.version>
         <easyexcel.version>3.3.2</easyexcel.version>
 
         <!-- LOG-Agent(Java-Agent) -->
@@ -343,9 +344,9 @@
                 <version>${excel-resolver.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi-ooxml</artifactId>
-                <version>${excel-resolver.version}</version>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${commons-fileupload.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
