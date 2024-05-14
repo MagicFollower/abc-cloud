@@ -345,44 +345,6 @@ public class ExcelExportUtils<T> {
         return this;
     }
 
-
-    /**
-     * step 1-3 写入HttpServletResponse
-     * step 2-2 写入HttpServletResponse
-     * <pre>
-     * 该方法已弃用，请使用不含 encodeFileName 参数的版本，这个参数会导致中文文件名无法被response正常处理
-     * </pre>
-     *
-     * @param servletResponse HttpServletResponse
-     * @param fileName        文件名（默认：template.xls），参数需要指定文件后缀
-     * @param encodeFileName  文件名是否需要使用URLEncoder编码 (❌)
-     */
-    @Deprecated
-    public void export(@NonNull HttpServletResponse servletResponse,
-                       String fileName,
-                       boolean encodeFileName) {
-        if (StringUtils.isEmpty(fileName)) {
-            fileName = "template.xls";
-        }
-        try {
-            if (encodeFileName) {
-                String[] split = fileName.split("\\.");
-                if (split.length == 1) return;
-                fileName = URLEncoder.encode(split[0], StandardCharsets.UTF_8.name()) + "." + split[1];
-            }
-            OutputStream outputStream = servletResponse.getOutputStream();
-            servletResponse.reset();
-            servletResponse.setContentType("application/vnd.ms-excel");
-            servletResponse.setHeader("Content-Disposition", "attachment;filename=" + fileName);
-            this.workbook.write(outputStream);
-            outputStream.flush();
-            outputStream.close();
-        } catch (IOException e) {
-            log.error(">>>>>>>>|export to HttpServletResponse|failed|exception:{}|<<<<<<<<", e.getMessage(), e);
-            throw new BizException(SystemRetCodeConstants.OP_FAILED.getCode(), e.getMessage());
-        }
-    }
-
     /**
      * step 1-3 写入HttpServletResponse
      * step 2-2 写入HttpServletResponse

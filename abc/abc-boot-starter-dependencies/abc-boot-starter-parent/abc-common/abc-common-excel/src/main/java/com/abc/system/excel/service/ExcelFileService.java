@@ -3,6 +3,7 @@ package com.abc.system.excel.service;
 import com.abc.system.common.response.ResponseData;
 import com.abc.system.excel.vo.ExcelResponse;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
 
 /**
@@ -14,6 +15,17 @@ import java.io.InputStream;
  * @Version 1.0
  */
 public interface ExcelFileService {
+    /**
+     * 从HttpServletRequest中解析Excel
+     * <pre>
+     * 1.限制单个文件解析；
+     * 2.模板编码默认从Header中解析名为"templateCode"的属性值。
+     * </pre>
+     *
+     * @param request HttpServletRequest
+     * @return ExcelResponse
+     */
+    ResponseData<ExcelResponse> parseExcel(HttpServletRequest request);
 
     /**
      * 从InputStream中解析Excel
