@@ -3,7 +3,7 @@ package com.abc.system.excel.service;
 import com.abc.system.common.response.ResponseData;
 import com.abc.system.excel.vo.ExcelResponse;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
 
 /**
  * Excel上传解析服务
@@ -15,6 +15,12 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface ExcelFileService {
 
-    ResponseData<ExcelResponse> parseExcel(HttpServletRequest request);
-
+    /**
+     * 从InputStream中解析Excel
+     *
+     * @param inputStream  输入流
+     * @param templateCode 模板编码
+     * @return ExcelResponse
+     */
+    ResponseData<ExcelResponse> parseExcel(InputStream inputStream, String templateCode);
 }
