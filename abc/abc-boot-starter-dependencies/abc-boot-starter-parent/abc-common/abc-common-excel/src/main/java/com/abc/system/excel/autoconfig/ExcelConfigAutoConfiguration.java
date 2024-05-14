@@ -4,11 +4,9 @@ import com.abc.system.excel.config.ExcelConfigProperties;
 import com.abc.system.excel.service.ExcelFileService;
 import com.abc.system.excel.service.impl.ExcelFileServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * ExcelConfig自动配置类
@@ -24,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Configuration
 @RequiredArgsConstructor
 @EnableConfigurationProperties(ExcelConfigProperties.class)
-@ConditionalOnClass(MultipartFile.class)
 public class ExcelConfigAutoConfiguration {
 
     private final ExcelConfigProperties excelConfigProperties;

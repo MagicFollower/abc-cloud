@@ -51,9 +51,9 @@ public enum SystemRetCodeConstants {
     //##############################################
     //#####Excel模块响应编码 005
     //##############################################
-    EXCEL_TEMPLATE_CODE_LOST("005001", "无法从请求中解析模板编码"),
-    EXCEL_TEMPLATE_CODE_NOT_CONFIG("005002", "模板编码解析规则未配置"),
-    EXCEL_TEMPLATE_CODE_DUPLICATE_CONFIG("005003", "模板编码解析规则配置重复"),
+    EXCEL_TEMPLATE_CODE_LOST("005001", "Excel模板解析编码为空"),
+    EXCEL_TEMPLATE_CODE_NOT_CONFIG("005002", "Excel模板解析规则未配置"),
+    EXCEL_TEMPLATE_CODE_DUPLICATE_CONFIG("005003", "Excel模板解析规则配置重复"),
     EXCEL_NOT_SUPPORT_ERROR("005011", "上传Excel文件格式不支持（仅支持.xls/.xlsx）"),
     EXCEL_NUM_ERROR("005012", "上传Excel文件数量异常"),
     EXCEL_IS_NULL("005021", "上传Excel文件内容为空"),

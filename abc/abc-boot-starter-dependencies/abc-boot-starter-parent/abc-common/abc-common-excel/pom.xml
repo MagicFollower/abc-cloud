@@ -6,11 +6,11 @@
     <parent>
         <groupId>com.abc</groupId>
         <artifactId>abc-common</artifactId>
-        <version>2024.1.2</version>
+        <version>2024.1.3</version>
     </parent>
 
     <artifactId>abc-common-excel</artifactId>
-    <version>2024.1.2</version>
+    <version>2024.1.3</version>
     <description>
         excel导入导出模块
         1.excel导入 → 自定义属性
@@ -49,17 +49,20 @@
             <artifactId>log4j-core</artifactId>
             <version>2.20.0</version>
         </dependency>
-        <!-- 创建一个通用的多部分解析器CommonsMultipartResolver使用，引入后spring会自动关联处理 -->
-        <!-- {@code CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());}-->
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-        </dependency>
-
+        <!--        &lt;!&ndash; 创建一个通用的多部分解析器CommonsMultipartResolver使用，引入后spring会自动关联处理 &ndash;&gt;-->
+        <!--        &lt;!&ndash; {@code CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());}&ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>commons-fileupload</groupId>-->
+        <!--            <artifactId>commons-fileupload</artifactId>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.abc</groupId>-->
+        <!--            <artifactId>abc-common-web</artifactId>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>com.abc</groupId>
-            <artifactId>abc-common-web</artifactId>
+            <artifactId>abc-common-core</artifactId>
         </dependency>
     </dependencies>
 
