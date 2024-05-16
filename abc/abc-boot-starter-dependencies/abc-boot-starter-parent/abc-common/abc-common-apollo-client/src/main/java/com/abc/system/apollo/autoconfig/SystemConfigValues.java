@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Description
  * <pre>
  * 系统级缓存，独立于Spring自动配置，从Apollo配置加载全局配置（apollo.system.namespaces）
- *   → 示例：{@code com.abc.business.fastlink.portal.controller.order.OrderController#testSystemValues}
+ *   → 示例：{@code com.abc.business.abc.portal.controller.order.OrderController#testSystemValues}
  * {@code
  *     @LogAnchor
  *     @PostMapping("/testSystemValues")

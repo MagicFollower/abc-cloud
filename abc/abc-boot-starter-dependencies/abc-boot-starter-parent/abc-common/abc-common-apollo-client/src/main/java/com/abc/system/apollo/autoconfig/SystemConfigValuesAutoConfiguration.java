@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.annotation.PostConstruct;
 
 /**
- * 系统级缓存自定义配置自动配置类
+ * Apollo自定义系统级配置自动配置类
  * <pre>
  * 🤗建议每一个配置项值都使用双引号字符串表示
  * 1.自动监听Apollo中属性变动
@@ -21,7 +21,7 @@ import javax.annotation.PostConstruct;
  * 3.Apollo中属性被删除时，程序会监听到新值为null，这里会根据新值为null来在全局缓存中移除对应key
  * </pre>
  *
- * @Description 系统级缓存自定义配置自动配置类
+ * @Description Apollo自定义系统级配置自动配置类
  * @Author [author_name]
  * @Date 2077/5/12 20:37
  * @Version 1.0
@@ -31,12 +31,12 @@ import javax.annotation.PostConstruct;
 @Configuration
 @EnableConfigurationProperties(SystemConfigValuesProperties.class)
 @ConditionalOnClass(ConfigService.class)
-public class SystemValuesAutoConfiguration {
+public class SystemConfigValuesAutoConfiguration {
 
     private final SystemConfigValuesProperties systemConfigValuesProperties;
 
     /**
-     * 自动监听Apollo配置信息变化事件
+     * 加载系统级缓存自定义配置
      */
     @PostConstruct
     public void loadApolloConfig() {
@@ -48,6 +48,25 @@ public class SystemValuesAutoConfiguration {
             initConfig(config, namespaces);
             // 注册change事件
             addReferenceListener(config);
+        });
+    }
+
+    /**
+     * 初始化加载配置信息
+     *
+     * @param config     配置信息
+     * @param namespaces 命名空间
+     */
+    private void initConfig(Config config, String namespaces) {
+        // 处理对应namespaces中每个KEY
+        config.getPropertyNames().forEach(key -> {
+            // 取得配置值
+            String value = config.getProperty(key, "");
+            // 将Apollo配置放入缓存
+            SystemConfigValues.put(key, value);
+
+            log.info(">>>>>>>>>>> init system config start|sourceType:{}|namespaces:{}|key:{}|value:{} <<<<<<<<<<<",
+                    config.getSourceType().getDescription(), namespaces, key, value);
         });
     }
 
@@ -71,24 +90,5 @@ public class SystemValuesAutoConfiguration {
                     changeEvent.getNamespace(), configChange.getChangeType(), key,
                     configChange.getOldValue(), configChange.getNewValue());
         }));
-    }
-
-    /**
-     * 初始化加载配置信息
-     *
-     * @param config     配置信息
-     * @param namespaces 命名空间
-     */
-    private void initConfig(Config config, String namespaces) {
-        // 处理对应namespaces中每个KEY
-        config.getPropertyNames().forEach(key -> {
-            // 取得配置值
-            String value = config.getProperty(key, "");
-            // 将Apollo配置放入缓存
-            SystemConfigValues.put(key, value);
-
-            log.info(">>>>>>>>>>> init system config start|sourceType:{}|namespaces:{}|key:{}|value:{} <<<<<<<<<<<",
-                    config.getSourceType().getDescription(), namespaces, key, value);
-        });
     }
 }

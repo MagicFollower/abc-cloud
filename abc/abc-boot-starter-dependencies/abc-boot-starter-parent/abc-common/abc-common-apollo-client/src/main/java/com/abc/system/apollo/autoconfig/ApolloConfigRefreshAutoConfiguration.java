@@ -17,7 +17,7 @@ import javax.annotation.PostConstruct;
 import java.util.Arrays;
 
 /**
- * Apollo自动配置类
+ * Apollo原生配置自动配置类
  *
  * @Description 自动刷新Apollo配置信息，监听apollo中{apollo.bootstrap.namespaces}配置的namespaces
  * @Author [author_name]
@@ -26,9 +26,8 @@ import java.util.Arrays;
  */
 @Slf4j
 @Configuration
-@ConditionalOnClass(ConfigService.class)
-@ConditionalOnProperty(prefix = ApolloConfigRefreshAutoConfiguration.APOLLO_CONFIG_PREFIX,
-        name = "enabled", havingValue = "true")
+@ConditionalOnClass(ConfigService.class)  // {@code com.ctrip.framework.apollo.ConfigService }
+@ConditionalOnProperty(prefix = ApolloConfigRefreshAutoConfiguration.APOLLO_CONFIG_PREFIX, name = "enabled", havingValue = "true")
 public class ApolloConfigRefreshAutoConfiguration implements ApplicationContextAware {
 
     /**
