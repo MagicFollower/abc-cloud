@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>abc-common-apollo-client</artifactId>
+    <version>2024.1.6.X1</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
