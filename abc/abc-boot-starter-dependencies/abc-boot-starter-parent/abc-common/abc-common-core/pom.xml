@@ -32,6 +32,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
+        <!-- janino用于支持logback配置文件中使用特定逻辑语法 -->
         <dependency>
             <groupId>org.codehaus.janino</groupId>
             <artifactId>janino</artifactId>
@@ -44,6 +45,10 @@
 
 
         <!-- 核心工具包 -->
+        <!-- 1.fastjson2 + gson -->
+        <!-- 2.guava -->
+        <!-- 3.commons-lang3、commons-collection4、commons-io -->
+        <!-- 4.lombok*1 + mapstruct*2 + 兼容包*1 -->
         <dependency>
             <groupId>com.alibaba.fastjson2</groupId>
             <artifactId>fastjson2</artifactId>
