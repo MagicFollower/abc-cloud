@@ -135,23 +135,32 @@ public class ExcelFileServiceImpl implements ExcelFileService {
                         JSONObject realResultObj = new JSONObject();
                         StringBuilder stringBuilder = new StringBuilder();
                         // Cell校验
-                        for (Cell cell : row) {
-                            if (StringUtils.isEmpty(displayTitleMap.get(cell.getColumnIndex())) || cell.getCellType() == CellType.BLANK) {
-                                continue;
+                        // for (Cell cell : row) {  // => 会自动跳过BLANK-CELL的迭代
+                        for (int columnIndex = 0; columnIndex < realTitleMap.size(); columnIndex++) {
+                            String displayTitle = displayTitleMap.get(columnIndex);
+                            if (StringUtils.isNotEmpty(displayTitle)) {
+                                String realTitle = realTitleMap.get(columnIndex);
+                                Cell cell = row.getCell(columnIndex);
+                                if (cell == null || cell.getCellType() == CellType.BLANK) {
+                                    // 避免跳过BLANK导致JSONObject中不存在对应属性
+                                    realResultObj.put(realTitle, null);
+                                    stringBuilder.append(",").append("null");
+                                } else {
+                                    /* 校验Cell类型 */
+                                    // 根据模板编码_配置的列名获取指定配置规则，首先校验单元格类型是否为指定类型（当前仅支持数值类型和字符串类型）
+                                    CellVerifyValue cellVerifyValue = ExcelResolveUtils.verifyCellType(templateCode, displayTitleMap, excelRuleMap, cell);
+                                    if (!cellVerifyValue.isVerify()) {
+                                        throw new ValidateException(SystemRetCodeConstants.EXCEL_TYPE_ERROR);
+                                    }
+                                    /* 解析Cell数据 */
+                                    CellVerifyValue cellValue = ExcelResolveUtils.getCellValue(cell, cellVerifyValue.getRule());
+                                    if (!cellValue.isVerify()) {
+                                        throw new ValidateException(SystemRetCodeConstants.EXCEL_TYPE_ERROR.getCode(), cellValue.getErrorMsg());
+                                    }
+                                    realResultObj.put(realTitle, cellValue.getValue());
+                                    stringBuilder.append(",").append(cellValue.getValue().toString().trim());
+                                }
                             }
-                            // 校验Cell类型
-                            // 1.根据模板编码_配置的列名获取指定配置规则，首先校验单元格类型是否为指定类型（当前仅支持数值类型和字符串类型）
-                            CellVerifyValue cellVerifyValue = ExcelResolveUtils.verifyCellType(templateCode, displayTitleMap, excelRuleMap, cell);
-                            if (!cellVerifyValue.isVerify()) {
-                                throw new ValidateException(SystemRetCodeConstants.EXCEL_TYPE_ERROR);
-                            }
-                            // 解析Cell数据
-                            CellVerifyValue cellValue = ExcelResolveUtils.getCellValue(cell, cellVerifyValue.getRule());
-                            if (!cellValue.isVerify()) {
-                                throw new ValidateException(SystemRetCodeConstants.EXCEL_TYPE_ERROR.getCode(), cellValue.getErrorMsg());
-                            }
-                            realResultObj.put(realTitleMap.get(cell.getColumnIndex()), cellValue.getValue());
-                            stringBuilder.append(",").append(cellValue.getValue().toString().trim());
                         }
                         displayData.add(stringBuilder.substring(1));
                         realExcelResultList.add(realResultObj);
