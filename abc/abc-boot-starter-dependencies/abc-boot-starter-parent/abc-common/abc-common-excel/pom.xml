@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>abc-common-excel</artifactId>
-    <version>2024.1.6</version>
+    <version>2024.1.6.build0010</version>
     <description>
         excel导入导出模块
         1.excel导入 → 自定义属性
