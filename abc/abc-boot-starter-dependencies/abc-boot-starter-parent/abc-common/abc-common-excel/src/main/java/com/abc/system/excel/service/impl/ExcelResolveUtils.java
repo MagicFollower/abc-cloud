@@ -15,9 +15,7 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -79,7 +77,7 @@ class ExcelResolveUtils {
     //                 case "integer":
     //                 case "long":
     //                     result.put(rule.getTemplateCode() + "_" + data.get(0),
-    //                             ExcelColumnRuleWrapper(data.get(0), data.get(1).toLowerCase(), data.get(2), data.get(3), data.get(4), CellType.STRING, CellType.NUMERIC));
+    //                             ExcelColumnRuleWrapper(data.get(0), data.get(1), data.get(2), data.get(3), data.get(4), CellType.STRING, CellType.NUMERIC));
     //                     break;
     //                 default:
     //                     throw new ValidateException(SystemRetCodeConstants.EXCEL_RULE_ERROR);
@@ -121,7 +119,7 @@ class ExcelResolveUtils {
                 case "long":
                 case "date":
                     result.put(rule.getTemplateCode() + "_" + data.get(0),
-                            ExcelColumnRuleWrapper(data.get(0), data.get(1).toLowerCase(), data.get(2), data.get(3), data.get(4), CellType.STRING, CellType.NUMERIC));
+                            ExcelColumnRuleWrapper(data.get(0), data.get(1), data.get(2), data.get(3), data.get(4), CellType.STRING, CellType.NUMERIC));
                     break;
                 default:
                     throw new ValidateException(SystemRetCodeConstants.EXCEL_RULE_ERROR);
@@ -214,7 +212,7 @@ class ExcelResolveUtils {
      */
     public static CellVerifyValue verifyCellType(String templateCode, Map<Integer, String> displayTitleMap,
                                                  Map<String, ExcelColumnRule> excelColumnRuleMap, Cell cell) {
-        ExcelColumnRule excelColumnRule = excelColumnRuleMap.get(templateCode + "_" + displayTitleMap.get(cell.getColumnIndex()).toLowerCase());
+        ExcelColumnRule excelColumnRule = excelColumnRuleMap.get(templateCode + "_" + displayTitleMap.get(cell.getColumnIndex()));
         if (!excelColumnRule.getCellTypeList().contains(cell.getCellType())) {
             return new CellVerifyValue(false, null, excelColumnRule);
         }
@@ -235,11 +233,12 @@ class ExcelResolveUtils {
                     // 时间解析
                     // 1.这里对导入excel的时间格式进行硬性限制：可自定义但必须被excel中解析为时间（yyyy/mm/dd hh:mm:ss.000）=> 暂不支持文本格式的时间解析
                     // 2.时区将按照东8区解析。
-                    // 获取单元格格式
-                    // String dataFormatString = cell.getCellStyle().getDataFormatString();
-                    final ZoneId EAST_8 = ZoneOffset.ofHours(8);
-                    LocalDateTime localDateTime = LocalDateTime.ofInstant(DateUtil.getJavaDate(cell.getNumericCellValue()).toInstant(), EAST_8);
-                    result = new CellVerifyValue(true, localDateTime, rule);
+                    /* 使用LocalDateTime */
+                    // final ZoneId EAST_8 = ZoneOffset.ofHours(8);
+                    // LocalDateTime localDateTime = LocalDateTime.ofInstant(DateUtil.getJavaDate(cell.getNumericCellValue()).toInstant(), EAST_8);
+                    // result = new CellVerifyValue(true, localDateTime, rule);
+                    /* 使用Date */
+                    result = new CellVerifyValue(true, Date.from(DateUtil.getJavaDate(cell.getNumericCellValue()).toInstant()), rule);
                 } else {
                     double doubleCellValue = cell.getNumericCellValue();
                     BigDecimal data = new BigDecimal(String.valueOf(doubleCellValue)).stripTrailingZeros();
