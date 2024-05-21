@@ -5,19 +5,19 @@ import com.abc.system.excel.service.ExcelFileService;
 import com.abc.system.excel.vo.ExcelResponse;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.compress.utils.Lists;
-import org.example.dal.entity.User;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * DemoController
@@ -33,16 +33,8 @@ public class DemoController {
 
     private final ExcelFileService excelFileService;
 
-    @PostMapping("/demo01")
-    public String demo01(@RequestBody User user, HttpServletRequest request) {
-        System.out.println(request.getRequestURI());
-        System.out.println(request.getRequestURL());
-
-        return JSONObject.toJSONString(user, JSONWriter.Feature.PrettyFormat);
-    }
-
-    @PostMapping("/demo02")
-    public String demo02(@RequestParam String type, HttpServletRequest request) {
+    @PostMapping("/import1Test")
+    public String import1Test(@RequestParam String type, HttpServletRequest request) {
         System.out.println(request.getRequestURI());
         System.out.println(request.getRequestURL());
         System.out.println(type);
@@ -57,35 +49,34 @@ public class DemoController {
             System.out.println(JSONObject.toJSONString(displayData, JSONWriter.Feature.PrettyFormat));
             System.out.println(JSONObject.toJSONString(displayTitle, JSONWriter.Feature.PrettyFormat));
             System.out.println(JSONObject.toJSONString(realData, JSONWriter.Feature.PrettyFormat));
+
+            /* 使用GSON序列化null为指定字符串 */
+            Gson gson = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .serializeNulls()
+                    .registerTypeAdapter(String.class, new StringTypeNullToEmptyStringAdapter()).create();
+            String json = gson.toJson(realData);
+            System.out.println("json = " + json);
+            System.out.println("DemoController.import1Test");
         }
 
         return "200";
     }
 
-    @PostMapping("/demo03")
-    public String demo03() {
-        List<User> userList = Lists.newArrayList();
-        for (int i = 0; i < 10; i++) {
-            User user = new User();
-            user.setId("1");
-            user.setName("name-"+(10-i));
-            userList.add(user);
+
+    /**
+     * GSON字符串类型自定义序列化器
+     */
+    static class StringTypeNullToEmptyStringAdapter extends TypeAdapter<String> {
+
+        @Override
+        public void write(JsonWriter jsonWriter, String s) throws IOException {
+            jsonWriter.value(s == null ? "" : s);
         }
-        User user = new User();
-        user.setId("1");
-        user.setName("name-999");
-        userList.add(user);
 
-        User user1 = new User();
-        user1.setId("1");
-        user1.setName("name-1");
-        userList.add(user1);
-
-        Map<String, List<User>> idToUserListMap = userList.stream()
-                .collect(Collectors.groupingBy(User::getId));
-        System.out.println(JSONObject.toJSONString(idToUserListMap, JSONWriter.Feature.PrettyFormat));
-
-
-        return "200";
+        @Override
+        public String read(JsonReader jsonReader) throws IOException {
+            return jsonReader.nextString();
+        }
     }
 }
