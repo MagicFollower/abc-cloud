@@ -9,14 +9,23 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+/**
+ * 替换指定目录下指定文件的部分文本（可用来统一替换作者名称或其他标记）
+ *
+ * @Description AuthorNameChangeScript
+ * @Author Filo
+ * @Version 1.0
+ */
 public class AuthorNameChangeScript {
     public static void main(String[] args) throws IOException {
-        Path srcPath = Paths.get("M:\\WORK_SPACE\\abc-cloud\\abc");
-        try (Stream<Path> walk = Files.walk(srcPath)) {
+        final Path dirPath = Paths.get("M:\\WORK_SPACE\\abc-cloud\\abc");
+        final String fileSuffix = ".java";
+
+        try (Stream<Path> walk = Files.walk(dirPath)) {
             walk.forEach(path -> {
                 try {
                     File file = path.toFile();
-                    if (file.isFile() && file.getName().endsWith(".java")) {
+                    if (file.isFile() && file.getName().endsWith(fileSuffix)) {
                         Path dstPath = Paths.get(file.getAbsolutePath() + ".modified");
                         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
                         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(dstPath.toFile()));
