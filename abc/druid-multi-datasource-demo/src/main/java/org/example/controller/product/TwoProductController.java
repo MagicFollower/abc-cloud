@@ -47,7 +47,12 @@ public class TwoProductController {
 
     /**
      * 多数据源事务回滚测试
-     *
+     * <pre>
+     * 手动控制事务提交与回滚的注意事项：
+     * 1.PlatformTransactionManager是一个接口，继承了TransactionManager接口；
+     * 2.PlatformTransactionManager提供了三个API：开启事务(获取事务_返回TransactionStatus)、提交事务commit、混滚事务rollback；
+     * 3.提交与混滚顺序要和声明事务顺序相反。
+     * </pre>
      * @return ResponseData
      */
     @PostMapping("/add")
