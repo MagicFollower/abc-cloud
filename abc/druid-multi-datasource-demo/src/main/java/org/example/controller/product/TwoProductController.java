@@ -61,18 +61,18 @@ public class TwoProductController {
         TransactionDefinition definitionOne = new DefaultTransactionDefinition();
         TransactionDefinition definitionTwo = new DefaultTransactionDefinition();
 
-        TransactionStatus txStatusTwo = txManagerTwo.getTransaction(definitionTwo);
         TransactionStatus txStatusOne = txManagerOne.getTransaction(definitionOne);
+        TransactionStatus txStatusTwo = txManagerTwo.getTransaction(definitionTwo);
         try {
             twoAbcProductMapper.insert(new TwoAbcProduct());
             oneAbcProductMapper.insert(new OneAbcProduct());
-            int x = 1 / 0;
+            // int x = 1 / 0;
         } catch (Exception e) {
-            txManagerOne.rollback(txStatusOne);
             txManagerTwo.rollback(txStatusTwo);
+            txManagerOne.rollback(txStatusOne);
         }
-        txManagerOne.commit(txStatusOne);
         txManagerTwo.commit(txStatusTwo);
+        txManagerOne.commit(txStatusOne);
         return null;
     }
 
